@@ -11,27 +11,27 @@ const Createpage = () => {
   const { authUser } = useAuthStore();
 
   const [formdata, setformdata] = useState({
-    pname: '',
-    ppass: '',
+    name: '',
+    password: '',
     description: '',
     createdby: authUser?._id,
   });
 
   const handleclick = (e) => {
     e.preventDefault();
-    if (!(formdata.pname && formdata.ppass && formdata.description)) {
+    if (!(formdata.name && formdata.password && formdata.description)) {
       return toast.error('All fields are required');
     }
     createpass(formdata);
     navigate('/home');
-    setformdata({ pname: '', ppass: '', description: '' });
+    setformdata({ name: '', password: '', description: '' });
   };
 
   const handleupdate = (e) => {
     e.preventDefault();
     updatepass(formdata);
     navigate('/home');
-    setformdata({ pname: '', ppass: '', description: '' });
+    setformdata({ name: '', password: '', description: '' });
   };
 
   return (
@@ -46,8 +46,8 @@ const Createpage = () => {
               type="text"
               className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter name of password"
-              value={formdata.pname}
-              onChange={(e) => setformdata({ ...formdata, pname: e.target.value })}
+              value={formdata.name}
+              onChange={(e) => setformdata({ ...formdata, name: e.target.value })}
             />
           </div>
 
@@ -57,8 +57,8 @@ const Createpage = () => {
               type="text"
               className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter password"
-              value={formdata.ppass}
-              onChange={(e) => setformdata({ ...formdata, ppass: e.target.value })}
+              value={formdata.password}
+              onChange={(e) => setformdata({ ...formdata, password: e.target.value })}
             />
           </div>
 

@@ -12,6 +12,7 @@ export const usePasStore = create((set,get) => ({
     createpass: async(data) =>{
         try{
             const {passes} = get();
+            console.log(passes)
             const newpass=await axiosinstance.post("/pass/create",data)
             set({passes:[...passes,newpass.data]})
             toast.success("password created successfully")

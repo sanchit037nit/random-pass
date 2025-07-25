@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 export const   Homepage=  () => {
     const {authUser,logout} = useAuthStore()
     const {getpass ,passes} = usePasStore()
-
+    console.log(passes)
     const id=authUser._id
  
     useEffect(() => {
