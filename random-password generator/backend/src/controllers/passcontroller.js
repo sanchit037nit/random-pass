@@ -83,16 +83,16 @@ export const deletepass = async(req,res)=>{
 }
 
 export const getpass= async(req,res)=>{
-    const {userid}=req.params
-
+    const {userId}=req.params
+    // console.log(userid)
    
     try {
-        const user=await User.findOne(userid)
+        const user=await User.findById(userId)
         if(!user){
          return res.status(400).json({message:"invalid user"})
         }
 
-        const passwords=await Password.find({createdby:userid})
+        const passwords=await Password.find({createdby:userId})
 
         if(!passwords){
               return res.status(200).json({message:"no passwords available"})

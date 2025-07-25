@@ -6,11 +6,11 @@ const router = express.Router();
 
 router.post("/create", protectroute, createpass);
 
-router.post("/get/:userId", protectroute, getpass);
+router.get("/get/:userId", protectroute, getpass);
 
-router.post("/delete/:id", protectroute, deletepass);
+router.delete("/delete/:id", protectroute, deletepass);
 
-router.post("/view/:id", protectroute, viewpass);
+router.get("/view/:id", protectroute, viewpass);
 
 router.patch("/update/:id", protectroute, updatepass);
 

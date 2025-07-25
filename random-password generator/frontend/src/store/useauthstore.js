@@ -9,17 +9,37 @@ export const useAuthStore = create((set) => ({
 
   signup: async(data) => {
 
-    try{
-       toast.success("successfully")
-        const res=await axiosinstance.post("/auth/signup",data)
+    // try{
+    //     const res=await axiosinstance.post("/auth/signup",data)
+    //     console.log(res)
+    //     set({authUser:res.data})
+    //     toast.success("signed up successfully")
+    // }
+    // catch(error){
+    //     toast.error(error.response.data.message)
+    // }
+    
+    try {
+        const res = await axiosinstance.post("/auth/signup", data);
 
-        set({authUser:res.data})
+        console.log("RESPONSE RECEIVED:", res);
+        console.log("STATUS:", res.status);
 
-        toast.success("signed up successfully")
+        // Force success only on 201
+        if (res.status === 201) {
+            set({ authUser: res.data });
+            toast.success("Signed up successfully");
+        } else {
+            console.log("UNEXPECTED STATUS:", res.status);
+            toast.error("Unexpected status received: " + res.status);
+        }
+    } catch (error) {
+        console.log("CAUGHT IN CATCH 🔥:", error);
+        console.log("Error response:", error?.response);
+        const message = error?.response?.data?.message || "Signup failed";
+        toast.error(message);
     }
-    catch(error){
-        toast.error(error.response.data.message)
-    }
+
   },
 
   login: async(data)=>{

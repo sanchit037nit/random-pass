@@ -18,7 +18,7 @@ const App=()=>{
     checkauth()
   },[checkauth]);
 
-    console.log( authUser)
+    // console.log( authUser)
   return (
     <div>
     <Routes>
@@ -28,6 +28,7 @@ const App=()=>{
       <Route path="/ranpass" element={authUser ? <Ranpass /> : <Navigate to="/" />} />
       <Route path="/home" element={authUser ? <Homepage /> : <Navigate to="/" />} />
       <Route path="/create" element={authUser ? <Createpage /> : <Navigate to="/" />} />
+      <Route path="/view" element={authUser ? <Createpage /> : <Navigate to="/" />} />
    
     </Routes>
 

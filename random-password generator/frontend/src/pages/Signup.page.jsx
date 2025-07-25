@@ -31,7 +31,7 @@ export const Signuppage = () => {
 
         // if(success) {await }
          await signup(formdata)
-            return toast.success("signed up successfully")
+            // return toast.success("signed up successfully")
     }
 
     return (

@@ -54,9 +54,9 @@ export const usePasStore = create((set,get) => ({
 
     getpass: async(id) =>{
         try{
-            const res = await axiosinstance.get(`/pass/${id}`)
-            // console.log(res.data.userpasses)
-            set({ passes: res.data.userpasses })
+            const res = await axiosinstance.get(`/pass/get/${id}`)
+            // console.log(res.data.passwords)
+            set({ passes: res.data.passwords })
             toast.success("password retrieved successfully")
         }
         catch(error){

@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 
 export const   Homepage=  () => {
     const {authUser,logout} = useAuthStore()
-    const {getpass ,passes} = usePasStore()
+    const {getpass ,passes,viewpass} = usePasStore()
     console.log(passes)
     const id=authUser._id
  
@@ -17,6 +17,18 @@ export const   Homepage=  () => {
       e.preventDefault()
        logout()
     }
+
+ 
+    const handledelete=(e)=>{
+      e.preventDefault()
+       logout()
+    }
+
+    const handleview=(e,id)=>{
+      e.preventDefault()
+        viewpass(id)
+    }
+
   return (
 
     <div className="p-6 bg-gray-800 min-h-screen">
@@ -33,23 +45,34 @@ export const   Homepage=  () => {
 </div>
 
     </div>
-
-
  
   </span>
-  <div className="space-y-4">
-    {passes?.map((pass) => (
-      <div
-        key={pass._id}
-        className="bg-gray-700 p-4 rounded-lg shadow-md hover:scale-105 transition-transform duration-200"
-      >
+
+
+<div className="space-y-4 ">
+  {passes?.map((pass) => (
+    <div
+      key={pass._id}
+      className="bg-gray-800 p-4 rounded-lg shadow-lg hover:scale-[1.023] transition-transform duration-200 flex justify-between items-center"
+    >
+      <div>
         <p className="text-white font-semibold">Name: <span className="font-normal">{pass.name}</span></p>
         <p className="text-white font-semibold">Password: <span className="font-normal">{pass.password}</span></p>
       </div>
-    ))}
-  </div>
-  </div>
-
+      
+      <div className="flex gap-3" >
+        <button className="bg-violet-300 hover:bg-violet-600 text-black px-3 py-1 rounded shadow">
+          Delete
+        </button>
+        
+        <button className="bg-amber-500 hover:bg-amber-600 text-black px-3 py-1 rounded shadow" onClick={(e) => handleview(e, pass._id)}>
+          View
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
+ </div>
   )
 }
 

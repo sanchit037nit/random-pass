@@ -7,15 +7,16 @@ export const signup=async (req,res)=>{
     try{
 
         if(!name || !emailid || !password){
-            return res.status(400).json({message: "all fields required"})
+            return res.status(400).json(
+                {success:false,message: "all fields required"})
         }
         if(password.length < 6){
-            return res.status(400).json({message: "password must be atleast 6 characters"})
+            return res.status(400).json({success:false,message: "password must be atleast 6 characters"})
         }
         const user=await User.findOne({emailid})
 
         if(user){
-            return res.status(400).json({message: "user already exists"})
+            return res.status(400).json({success:false,message: "user already exists"})
         }
 
         const salt=await bcrypt.genSalt(10)
