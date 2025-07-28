@@ -51,7 +51,7 @@ export const login=async (req,res)=>{
     try{
         // console.log(typeof(emailid),typeof(password))
          const user=await User.findOne({emailid})
-          console.log(user)
+        //   console.log(user)
          if(!user){
             return res.status(400).json({message:"invalid credentials"})
          }

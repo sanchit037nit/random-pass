@@ -64,20 +64,19 @@ export const updatepass = async(req,res)=>{
 }
 
 export const deletepass = async(req,res)=>{
-      const {passid}=req.params
-
+      const {id}=req.params
       try {
-           if(!passid){
+           if(!id){
             return res.status(400).json({
                 message:"no todo selected"
             })
            }
 
-        const delpass=await Password.findByIdAndDelete(passid)
-        return res.status(200).json({message:"password updated"})
+        const delpass=await Password.findByIdAndDelete(id)
+        return res.status(200).json({message:"password deleted"})
 
       } catch (error) {
-        console.log("error in updating password",error)
+        console.log("error in deleting password",error)
       }
 
 }
@@ -106,12 +105,13 @@ export const getpass= async(req,res)=>{
 }
 
 export const viewpass= async(req,res)=>{
-    const {passid}=req.params
+    const {id}=req.params
+    // console.log(passid)
     try {
-        const password=await Password.findById(passid)
+        const password=await Password.findById(id)
 
         if(!password){
-              return res.status(200).json({message:"click valid password"})
+              return res.status(400).json({message:"click valid password"})
         }
 
         return res.status(200).json({password})

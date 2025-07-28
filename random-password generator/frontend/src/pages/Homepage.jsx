@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 
 export const   Homepage=  () => {
     const {authUser,logout} = useAuthStore()
-    const {getpass ,passes,viewpass} = usePasStore()
+    const {getpass ,passes,viewpass,deletepass} = usePasStore()
     console.log(passes)
     const id=authUser._id
  
@@ -19,9 +19,9 @@ export const   Homepage=  () => {
     }
 
  
-    const handledelete=(e)=>{
+    const handledelete=(e,id)=>{
       e.preventDefault()
-       logout()
+      deletepass(id)
     }
 
     const handleview=(e,id)=>{
@@ -61,7 +61,7 @@ export const   Homepage=  () => {
       </div>
       
       <div className="flex gap-3" >
-        <button className="bg-violet-300 hover:bg-violet-600 text-black px-3 py-1 rounded shadow">
+        <button className="bg-violet-300 hover:bg-violet-600 text-black px-3 py-1 rounded shadow" onClick={(e) => handledelete(e, pass._id)}>
           Delete
         </button>
         

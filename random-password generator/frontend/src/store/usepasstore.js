@@ -1,9 +1,12 @@
 import {create} from 'zustand';
 import { axiosinstance } from '../lib/axios.js';
 import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+  
 
 export const usePasStore = create((set,get) => ({
 
+    
    passes: [],
 //    selecteduser:null,
 
@@ -25,6 +28,7 @@ export const usePasStore = create((set,get) => ({
     updatepass: async(data) =>{
         try{
             await axiosinstance.patch(`/pass/update/${data.id}`,data)
+            
             toast.success("password updated successfully")
         }
         catch(error){
@@ -34,7 +38,10 @@ export const usePasStore = create((set,get) => ({
 
     deletepass: async(id) =>{
         try{
+            const {passes} = get();
             await axiosinstance.delete(`/pass/delete/${id}`)
+            const npas=passes.filter((pass) => pass._id !== id)
+            set({ passes: npas })
             toast.success("password deleted successfully")
         }
         catch(error){
@@ -44,7 +51,12 @@ export const usePasStore = create((set,get) => ({
 
     viewpass: async(id) =>{
         try{
+            const navigate = useNavigate();
             const res = await axiosinstance.get(`/pass/view/${id}`)
+            // if(res){
+            // navigate('/view');
+            // }
+            // console.log(res)
             toast.success("password retrieved successfully")
         }
         catch(error){
