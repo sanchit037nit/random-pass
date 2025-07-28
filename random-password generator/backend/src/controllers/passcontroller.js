@@ -40,19 +40,24 @@ export const createpass = async(req,res)=>{
 }
 
 export const updatepass = async(req,res)=>{
-      const {data}=req.body
-      const {passid}=req.params
-
+      const {name,password,description}=req.body
+      const {id}=req.params
+   
       try {
-           if(!passid){
+           if(!id){
             return res.status(400).json({
                 message:"no todo selected"
             })
            }
 
         const newpass=await Password.findByIdAndUpdate(
-            passid,
-            data,
+            id,
+            { $set:{
+                name:name,
+                password:password,
+                description:description 
+              }
+            },
             {new:true}
         )
 
@@ -106,7 +111,6 @@ export const getpass= async(req,res)=>{
 
 export const viewpass= async(req,res)=>{
     const {id}=req.params
-    // console.log(passid)
     try {
         const password=await Password.findById(id)
 

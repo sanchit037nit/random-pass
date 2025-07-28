@@ -5,12 +5,9 @@ import { useNavigate } from 'react-router-dom';
   
 
 export const usePasStore = create((set,get) => ({
-
     
    passes: [],
-//    selecteduser:null,
-
-    // setselecteduser:(selecteduser) =>set({selecteduser}),
+   selectedpass: null,
 
     createpass: async(data) =>{
         try{
@@ -25,9 +22,11 @@ export const usePasStore = create((set,get) => ({
         }
     },
 
-    updatepass: async(data) =>{
+    updatepass: async(data,id) =>{
+        // const {id}=req.params
+        // console.log(id)
         try{
-            await axiosinstance.patch(`/pass/update/${data.id}`,data)
+            await axiosinstance.patch(`/pass/update/${id}`,data)
             
             toast.success("password updated successfully")
         }
@@ -49,18 +48,17 @@ export const usePasStore = create((set,get) => ({
         }
     },
 
-    viewpass: async(id) =>{
+    viewpass: async(id,navigate) =>{
         try{
-            const navigate = useNavigate();
+          
             const res = await axiosinstance.get(`/pass/view/${id}`)
-            // if(res){
-            // navigate('/view');
-            // }
-            // console.log(res)
+            set({selectedpass:res.data})
+            navigate('/view');
             toast.success("password retrieved successfully")
         }
         catch(error){
-            toast.error(error.response.data.message)
+            console.log(error)
+            toast.error("error occurred")
         }
     },
 
@@ -76,3 +74,9 @@ export const usePasStore = create((set,get) => ({
         }
     }
 }))
+
+    // Uncomment if you want to manage selected user state
+    // selecteduser: null,
+//    selecteduser:null,
+
+    // setselecteduser:(selecteduser) =>set({selecteduser}),

@@ -9,6 +9,7 @@ import  {Homepage}  from './pages/Homepage'
 import Createpage from './pages/Createpage'
 import './App.css'
 import { useAuthStore } from './store/useauthstore.js'
+import ViewPage from './pages/Viewpage.jsx'
 
 
 const App=()=>{
@@ -28,7 +29,7 @@ const App=()=>{
       <Route path="/ranpass" element={authUser ? <Ranpass /> : <Navigate to="/" />} />
       <Route path="/home" element={authUser ? <Homepage /> : <Navigate to="/" />} />
       <Route path="/create" element={authUser ? <Createpage /> : <Navigate to="/" />} />
-      <Route path="/view" element={authUser ? <Createpage /> : <Navigate to="/" />} />
+      <Route path="/view" element={authUser ? <ViewPage /> : <Navigate to="/" />} />
    
     </Routes>
 

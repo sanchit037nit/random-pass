@@ -2,11 +2,14 @@ import React from 'react'
 import { useAuthStore } from '../store/useauthstore.js'
 import { usePasStore } from '../store/usepasstore.js'  
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 export const   Homepage=  () => {
     const {authUser,logout} = useAuthStore()
     const {getpass ,passes,viewpass,deletepass} = usePasStore()
-    console.log(passes)
+    const navigate = useNavigate();
+
+
     const id=authUser._id
  
     useEffect(() => {
@@ -26,7 +29,9 @@ export const   Homepage=  () => {
 
     const handleview=(e,id)=>{
       e.preventDefault()
-        viewpass(id)
+    
+    usePasStore.getState().viewpass(id, navigate);
+
     }
 
   return (
