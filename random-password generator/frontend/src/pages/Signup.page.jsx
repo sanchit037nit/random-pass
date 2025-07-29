@@ -86,12 +86,12 @@ export const Signuppage = () => {
   <h2 className="text-center text-2xl font-bold mb-4">Signup Form</h2>
 
   {/* Name Input */}
-  <div className="flex flex-col space-y-2">
+  <div className=" text-amber-50 flex flex-col space-y-2">
     <label htmlFor="name" className="text-lg">Enter Your Name</label>
     <input
       type="text"
       id="name"
-      className="border border-gray-400 rounded-md px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+      className="border border-gray-400 rounded-md px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
       placeholder="Enter your name"
       value={formdata.name}
       onChange={(e) => setformdata({ ...formdata, name: e.target.value })}
@@ -105,7 +105,7 @@ export const Signuppage = () => {
     <input
       type="email"
       id="email"
-      className="border border-gray-400 rounded-md px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+      className="border border-gray-400 rounded-md px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
       placeholder="Enter your email"
       value={formdata.emailid}
       onChange={(e) => setformdata({ ...formdata, emailid: e.target.value })}
@@ -119,7 +119,7 @@ export const Signuppage = () => {
     <input
       type="password"
       id="password"
-      className="border border-gray-400 rounded-md px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+      className="border border-gray-400 rounded-md px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
       placeholder="Enter your password"
       value={formdata.password}
       onChange={(e) => setformdata({ ...formdata, password: e.target.value })}
