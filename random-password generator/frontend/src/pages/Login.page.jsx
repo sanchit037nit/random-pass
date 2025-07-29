@@ -20,11 +20,11 @@ export const Loginpage = () =>{
     }
      return (
 
-   
+       <div className="flex justify-center items-center min-h-screen bg-gray-900 p-4">
         <form onSubmit={handleclick} className="space-y-7 text-white w-full max-w-md mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
   <h2 className="text-center text-2xl font-bold mb-4">Login Form</h2>
 
-  <div className="flex flex-col space-y-2">
+  <div className="flex flex-col space-y-2 ">
     <label htmlFor="email" className="text-lg">Enter your Email</label>
     <input 
       type="email"
@@ -57,7 +57,7 @@ export const Loginpage = () =>{
     Submit
   </button>
 </form>
-
+</div>
     );
 
 }

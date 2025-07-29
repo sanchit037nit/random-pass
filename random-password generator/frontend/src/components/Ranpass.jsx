@@ -1,7 +1,8 @@
 import React from 'react';
 import { useState, useCallback, useEffect, useRef } from 'react'
-// import { useAuthStore } from '../store/useauthstore.js'
+import { useAuthStore } from '../store/useauthstore.js'
 import { useNavigate } from 'react-router-dom';
+import { usePasStore } from '../store/usepasstore.js';
 
 export const Ranpass = () => {
  
@@ -10,6 +11,10 @@ export const Ranpass = () => {
   const [numberAllowed, setNumberAllowed] = useState(false);
   const [charAllowed, setCharAllowed] = useState(false)
   const [password, setPassword] = useState("")
+ const {logout} = useAuthStore()
+ const { setGeneratedPassword } = usePasStore();
+
+
 
   //useRef hook
   const passwordRef = useRef(null)
@@ -30,7 +35,7 @@ export const Ranpass = () => {
     }
 
     setPassword(pass)
-
+    setGeneratedPassword(pass);
 
   }, [length, numberAllowed, charAllowed, setPassword])
 
@@ -45,11 +50,24 @@ export const Ranpass = () => {
     passwordGenerator()
   }, [length, numberAllowed, charAllowed, passwordGenerator])
 
+      const handleclick=(e)=>{
+      e.preventDefault()
+       logout()
+    }
 
   return (
     
+    <div className='flex justify-center items-center min-h-screen bg-gray-800 p-4'>
     <div className=" flex flex-col justify-evenly items-center w-150 h-120 mx-auto shadow-md rounded-lg px-4 py-3 my-8 bg-blue-400 text-blue-800 font-bold ">
+      <div className='flex justify-around w-full'>
       <h1 className='text-black text-center my-3 text-3xl'>Password generator</h1>
+      <button
+    onClick={handleclick}
+    className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-2xl transition duration-300"
+  >
+    Logout
+  </button>
+    </div>
     <div className="  h-15 flex  items-center shadow rounded-lg overflow-hidden mb-4 bg-white justify-center w-110">
         <input
             type="text"
@@ -112,6 +130,6 @@ export const Ranpass = () => {
     </div>
   
  </div>
-    
+    </div>
   )
 }

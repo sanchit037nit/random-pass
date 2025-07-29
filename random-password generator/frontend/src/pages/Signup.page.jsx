@@ -78,7 +78,7 @@ export const Signuppage = () => {
  
 
         // </form>
-
+  <div className="flex justify-center items-center min-h-screen bg-gray-900 p-4">
         <form 
   onSubmit={handleclick} 
   className="w-full max-w-md mx-auto bg-gray-800 p-8 rounded-lg shadow-lg text-white space-y-6"
@@ -135,6 +135,6 @@ export const Signuppage = () => {
     Submit
   </button>
  </form>
-
+</div>
     );
 }

@@ -6,8 +6,9 @@ import { useNavigate } from 'react-router-dom';
 
 export const   Homepage=  () => {
     const {authUser,logout} = useAuthStore()
-    const {getpass ,passes,viewpass,deletepass} = usePasStore()
+    const {getpass ,passes,viewpass} = usePasStore()
     const navigate = useNavigate();
+    const {deleteaccount} = useAuthStore()
 
 
     const id=authUser._id
@@ -20,11 +21,10 @@ export const   Homepage=  () => {
       e.preventDefault()
        logout()
     }
-
  
-    const handledelete=(e,id)=>{
+    const handledelete=(e)=>{
       e.preventDefault()
-      deletepass(id)
+      deleteaccount()
     }
 
     const handleview=(e,id)=>{
@@ -46,6 +46,13 @@ export const   Homepage=  () => {
     className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded transition duration-300"
   >
     Logout
+  </button>
+
+  <button
+    onClick={handledelete}
+    className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded transition duration-300"
+  >
+    Delete Account
   </button>
 </div>
 

@@ -7,12 +7,12 @@ import { useNavigate } from 'react-router-dom';
 
 const Createpage = () => {
   const navigate = useNavigate();
-  const { createpass, updatepass } = usePasStore();
+  const { createpass, updatepass,generatedPassword } = usePasStore();
   const { authUser } = useAuthStore();
 
   const [formdata, setformdata] = useState({
     name: '',
-    password: '',
+    password: generatedPassword || '',
     description: '',
     createdby: authUser?._id,
   });
@@ -27,12 +27,7 @@ const Createpage = () => {
     setformdata({ name: '', password: '', description: '' });
   };
 
-  const handleupdate = (e) => {
-    e.preventDefault();
-    updatepass(formdata);
-    navigate('/home');
-    setformdata({ name: '', password: '', description: '' });
-  };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
@@ -79,12 +74,7 @@ const Createpage = () => {
             >
               Create
             </button>
-            <button
-              onClick={handleupdate}
-              className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition"
-            >
-              Update
-            </button>
+           
           </div>
         </form>
       </div>

@@ -8,11 +8,15 @@ export const usePasStore = create((set,get) => ({
     
    passes: [],
    selectedpass: null,
+   createdpass:null,
+   generatedPassword: '',
+   setGeneratedPassword: (pwd) => set({ generatedPassword: pwd }),
+
 
     createpass: async(data) =>{
         try{
             const {passes} = get();
-            console.log(passes)
+            // console.log(passes)
             const newpass=await axiosinstance.post("/pass/create",data)
             set({passes:[...passes,newpass.data]})
             toast.success("password created successfully")
@@ -23,8 +27,7 @@ export const usePasStore = create((set,get) => ({
     },
 
     updatepass: async(data,id) =>{
-        // const {id}=req.params
-        // console.log(id)
+       
         try{
             await axiosinstance.patch(`/pass/update/${id}`,data)
             
@@ -54,7 +57,7 @@ export const usePasStore = create((set,get) => ({
             const res = await axiosinstance.get(`/pass/view/${id}`)
             set({selectedpass:res.data})
             navigate('/view');
-            toast.success("password retrieved successfully")
+            // toast.success("password retrieved successfully")
         }
         catch(error){
             console.log(error)
@@ -67,7 +70,7 @@ export const usePasStore = create((set,get) => ({
             const res = await axiosinstance.get(`/pass/get/${id}`)
             // console.log(res.data.passwords)
             set({ passes: res.data.passwords })
-            toast.success("password retrieved successfully")
+            // toast.success("password retrieved successfully")
         }
         catch(error){
             toast.error(error.response.data.message)

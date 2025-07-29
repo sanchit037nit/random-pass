@@ -1,5 +1,6 @@
 import {generateToken} from "../lib/uteis.js"
 import User from "../models/user.model.js"
+import Password from "../models/pass.model.js"
 import bcrypt from "bcryptjs"
 
 export const signup=async (req,res)=>{
@@ -94,4 +95,21 @@ catch (error){
     console.log("error in checkauth controller",error.message)
     res.status(500).json({message: "internal server error"})
 }
+}
+
+export const deleteaccount=async (req,res)=>{
+    const {userid}=req.params
+   
+   try {
+  
+    if(!userid){
+        return res.status(400).json({message: "user id is required"})
+    }
+    await User.findByIdAndDelete(userid)
+    await Password.deleteMany({createdby:userid})
+    res.status(200).json({message: "account deleted successfully"})
+   } catch (error) {
+    console.log("error in deleteaccount controller",error.message)
+    res.status(400).json({message: "internal server error"})
+   }
 }
