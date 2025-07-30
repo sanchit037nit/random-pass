@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useAuthStore } from '../store/useauthstore.js';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar.jsx';
 
 const Viewpage = () => {
   const navigate = useNavigate();
@@ -27,10 +28,30 @@ const Viewpage = () => {
     setformdata({ name: '', password: '', description: '' });
   };
 
+  const handlecross = (e) => {
+    e.preventDefault();
+    navigate('/home');
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
+    <div className=" flex flex-col items-center justify-center gap-15">
+       <div className='w-full' >
+      <Navbar/>
+     </div>
+
       <div className="bg-gray-800 rounded-2xl shadow-lg p-8 w-full max-w-md">
+        <div className='flex justify-between items-center mb-6'>
         <h2 className="text-2xl font-semibold text-white mb-6 text-center">View/Update Password</h2>
+          
+<div className="flex items-center justify-center w-7 h-7 bg-gray-100 rounded-full hover:bg-red-50 transition-colors duration-200">
+  <button 
+    onClick={handlecross}
+    className="text-sm leading-none text-gray-600 hover:text-red-600 focus:outline-none"
+  >
+    ❌
+  </button>
+</div>
+        </div>
 
         <form className="space-y-4">
           <div>

@@ -27,12 +27,27 @@ const Createpage = () => {
     setformdata({ name: '', password: '', description: '' });
   };
 
+    const handlecross = (e) => {
+    e.preventDefault();
+    navigate('/ranpass');
+  }
 
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
-      <div className="bg-gray-800 rounded-2xl shadow-lg p-8 w-full max-w-md">
+      <div className="bg-gray-800 rounded-2xl shadow-lg p-8 w-full max-w-md ">
+        <div className='flex justify-between items-center mb-6'>
         <h2 className="text-2xl font-semibold text-white mb-6 text-center">Manage Password</h2>
+          
+          <div className="flex items-center justify-center w-7 h-7 bg-gray-100 rounded-full transition-colors duration-200">
+  <button 
+    onClick={handlecross}
+    className="text-sm leading-none text-gray-600 hover:text-red-600 focus:outline-none"
+  >
+    ❌
+  </button>
+  </div>
+</div>
 
         <form className="space-y-4">
           <div>

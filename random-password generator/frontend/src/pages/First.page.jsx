@@ -1,35 +1,41 @@
+import React from 'react';
+import Navbar from '../components/Navbar.jsx';
+import Footer from '../components/Footer.jsx';
+import { motion } from 'framer-motion';
+
 export const Firstpage = () => {
+
   return (
-    <div className="min-h-screen font-sans bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white tracking-wide">
-      {/* Header */}
-      <div className="flex justify-center items-center bg-gray-800 py-8 px-6">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-amber-400 drop-shadow-lg">
-          Welcome to Random Password Generator
-        </h1>
-      </div>
+    <div className='flex flex-col justify-between min-h-screen'>
+      <Navbar />
 
-      {/* Signup/Login Section */}
-      <div className="flex flex-col justify-center items-center py-20 space-y-6">
-        <div className="text-center space-y-3">
-          <p className="text-lg md:text-xl text-gray-300 font-medium">Don't have an account?</p>
-          <button
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded-md shadow-md transition-transform duration-300 hover:scale-105 border border-blue-300"
-            onClick={() => window.location.href = "/signup"}
-          >
-            Sign Up
-          </button>
-        </div>
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className='flex-grow flex-col justify-center min-h-screen items-center py-16 px-6 text-gray-800 bg-gradient-to-br from-amber-100 to-amber-300'
+      >
+        <motion.h1 
+          className='text-5xl font-extrabold tracking-wider mb-4 flex items-center gap-2'
+          initial={{ scale: 0.8 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 0.3 }}
+        >
+          🔐 WELCOME
+        </motion.h1>
 
-        <div className="text-center space-y-3">
-          <p className="text-lg md:text-xl text-gray-300 font-medium">Already have an account?</p>
-          <button
-            className="bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-3 rounded-md shadow-md transition-transform duration-300 hover:scale-105 border border-green-300"
-            onClick={() => window.location.href = "/login"}
-          >
-            Log In
-          </button>
-        </div>
-      </div>
+        <motion.p 
+          className='text-xl text-center max-w-xl'
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+        >
+          This is a password generator app — a complete solution for password management.
+        </motion.p>
+      </motion.div>
+
+      <Footer />
     </div>
   );
+
 };
