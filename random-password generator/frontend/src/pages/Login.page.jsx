@@ -56,7 +56,7 @@ export const Loginpage = () => {
           <input
             type="email"
             id="email"
-            className="border border-gray-400 rounded-md px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-400 rounded-md px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-white"
             placeholder="Enter your email"
             value={formdata.emailid}
             onChange={(e) =>
@@ -73,7 +73,7 @@ export const Loginpage = () => {
           <input
             type="password"
             id="password"
-            className="border border-gray-400 rounded-md px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border  rounded-md px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-white"
             placeholder="Enter your password"
             value={formdata.password}
             onChange={(e) =>

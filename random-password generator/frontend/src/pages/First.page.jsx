@@ -34,7 +34,7 @@ export const Firstpage = () => {
           className="text-xl text-center max-w-xl"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
+          transition={{ delay: 0.5 }}
         >
           This is a password generator app — a complete solution for password
           management.

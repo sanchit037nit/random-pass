@@ -19,14 +19,12 @@ export const Ranpass = () => {
 
   const passwordGenerator = useCallback(() => {
     let pass = "";
-    let str = "";
+    let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*-_+=[]{}~`";
 
-    if (numberAllowed) str += "0123456789";
-    if (charAllowed)
-      str +=
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*-_+=[]{}~`";
+    if (numberAllowed){ str = "0123456789";}
+    
     if (charAllowed && numberAllowed)
-      str +=
+      str =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*-_+=[]{}~`";
 
     for (let i = 1; i <= length; i++) {
@@ -135,7 +133,7 @@ export const Ranpass = () => {
           </div>
         </div>
 
-        <div className="text-xl flex justify-evenly  items-center m-5 bg-black rounded-lg p-2 w-130 h-10 hover:bg-green-500">
+        <div className="text-xl flex justify-evenly  items-center m-5 bg-black rounded-lg p-2 w-130 h-10 hover:scale-[1.023] hover:shadow-[0_0_10px_rgba(124,58,237,0.6)]">
           <button onClick={() => Navigate("/home")}>Your Passwords</button>
         </div>
       </div>
