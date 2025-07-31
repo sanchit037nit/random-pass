@@ -1,7 +1,7 @@
 import { useState } from "react";
 import {useAuthStore} from "../store/useauthstore.js";
 import { toast } from "react-hot-toast";
-
+import { useNavigate } from "react-router-dom";
 
 export const Signuppage = () => {
 
@@ -24,66 +24,44 @@ export const Signuppage = () => {
         }
     }
 
+         const navigate = useNavigate();
+    const handlecross = (e) => {
+    e.preventDefault();
+    navigate('/');
+   }
+
     const handleclick = async(e)=>{
         e.preventDefault()
 
-        // const success=validateformdata()
-
-        // if(success) {await }
+   
          await signup(formdata)
-            // return toast.success("signed up successfully")
+            
     }
 
     return (
-        // <form onSubmit={handleclick} className="space-y-7 text-white">
-        //     <div className=" m-3 flex flex-col justify-evenly items-center h-100" >
-        //     <div className="flex  space-y-2 w-fit m-5 justify-center items-center">
-        //         <span>enter yor name
-        //         <input 
-        //         type="text"
-        //         className={`input input-bordered w-full pl-10`}
-        //         placeholder="enter your name"
-        //         value={formdata.name}
-        //         onChange={(e)=>setformdata({...formdata,name:e.target.value})}
-        //          />
-        //         </span>
-           
-        //     </div>
-        //     <div className="flex  space-y-2 w-fit m-5 justify-center items-center">
-        //         <span>enter yor email
-        //         <input 
-        //         type="email"
-        //         className={`input input-bordered w-full pl-10`}
-        //         placeholder="enter your email"
-        //         value={formdata.email}
-        //         onChange={(e)=>setformdata({...formdata,email:e.target.value})}
-        //          />
-        //         </span>
-           
-        //     </div>
-        //     <div className="flex  space-y-2 w-fit m-5 justify-center items-center">
-        //         <span>enter yor password
-        //         <input 
-        //         type="password"
-        //         className={`input input-bordered w-full pl-10`}
-        //         placeholder="enter your password"
-        //         value={formdata.pass}
-        //         onChange={(e)=>setformdata({...formdata,pass:e.target.value})}
-        //          />
-        //         </span>
-           
-        //     </div>
-        //                <button type="submit" className="btn btn-primary text-white">Submit</button>
-        //     </div>
- 
 
-        // </form>
-  <div className="flex justify-center items-center min-h-screen bg-gray-900 p-4">
+  <div className="flex justify-center items-center min-h-screen p-4">
+        <spline-viewer
+        url="https://prod.spline.design/cwq814qIdbhTkjqB/scene.splinecode"
+        background="transparent"
+        class="absolute top-0 left-0 w-full h-full z-[-1]"
+      ></spline-viewer>
+
         <form 
   onSubmit={handleclick} 
-  className="w-full max-w-md mx-auto bg-gray-800 p-8 rounded-lg shadow-lg text-white space-y-6"
+  className="w-full max-w-md mx-auto  p-8 rounded-lg shadow-lg text-white space-y-6"
 >
-  <h2 className="text-center text-2xl font-bold mb-4">Signup Form</h2>
+   <div className="flex justify-between items-center mb-6">
+       <h2 className="text-center text-2xl font-bold mb-4">Signup Form</h2>
+       <div className="flex items-center justify-center w-7 h-7 bg-gray-100 rounded-full hover:bg-red-50 transition-colors duration-200">
+  <button 
+    onClick={handlecross}
+    className="text-sm leading-none text-gray-600 hover:text-red-600 focus:outline-none"
+  >
+    ❌
+  </button>
+</div>
+</div>
 
   {/* Name Input */}
   <div className=" text-amber-50 flex flex-col space-y-2">

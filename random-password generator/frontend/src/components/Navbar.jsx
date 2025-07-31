@@ -43,14 +43,14 @@ const Navbar = () => {
         user:true
     },
     {
-        title: "deleteaccount",
+        title: "Delete Account",
         action: handleAccountDelete,
         user:true
     }
    ]
   return (
   
-    <div className='flex flex-wrap justify-between items-center bg-gray-900 px-8 py-5 text-white shadow-md'>
+    <div className='flex flex-wrap justify-between items-center  px-8 py-5 text-white shadow-md'>
   {/* Logo & Title */}
   <div className='flex items-center gap-2'>
     <span className='text-2xl font-extrabold tracking-wide text-amber-400'>🔐</span>

@@ -58,16 +58,22 @@ export const Ranpass = () => {
 
   return (
     
-    <div className='flex flex-col justify-center bg-gray-800  text-white font-sans tracking-wide'>
+    <div className='flex flex-col justify-center   text-white font-sans tracking-wide'>
       <div>
       <Navbar/>
      </div>
-    <div className=" flex flex-col justify-evenly items-center w-150 h-148 mx-auto shadow-md rounded-lg px-4 py-3 my-8 bg-blue-400 text-blue-800 font-bold ">
+         <spline-viewer
+        url="https://prod.spline.design/cwq814qIdbhTkjqB/scene.splinecode"
+        background="transparent"
+        class="absolute top-0 left-0 w-full h-full z-[-1]"
+      ></spline-viewer>
+
+    <div className=" flex flex-col justify-evenly bg-black-300 items-center w-150 h-148 mx-auto shadow-md rounded-lg px-4 py-3 my-8  text-white font-bold ">
       <div className='flex justify-around w-full'>
-      <h1 className='text-black text-center my-3 text-3xl'>Password generator</h1>
+      <h1 className='text-amber-100 text-center my-3 text-3xl'>Password generator</h1>
  
     </div>
-    <div className="  h-15 flex  items-center shadow rounded-lg overflow-hidden mb-4 bg-white justify-center w-110">
+    <div className="  h-15 flex  items-center shadow rounded-lg bg-black overflow-hidden mb-4  justify-center w-110">
         <input
             type="text"
             value={password}
@@ -124,7 +130,7 @@ export const Ranpass = () => {
       </div>
     </div>
     
-    <div className='text-xl flex justify-evenly  items-center m-5 bg-gray-200 rounded-lg p-2 w-130 h-10 hover:bg-green-500'>
+    <div className='text-xl flex justify-evenly  items-center m-5 bg-black rounded-lg p-2 w-130 h-10 hover:bg-green-500'>
         <button onClick={()=>Navigate("/home")}>Your Passwords</button>
     </div>
   

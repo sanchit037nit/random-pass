@@ -34,8 +34,14 @@ const Createpage = () => {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
-      <div className="bg-gray-800 rounded-2xl shadow-lg p-8 w-full max-w-md ">
+    <div className="min-h-screen flex items-center justify-center  px-4">
+          <spline-viewer
+        url="https://prod.spline.design/cwq814qIdbhTkjqB/scene.splinecode"
+        background="transparent"
+        class="absolute top-0 left-0 w-full h-full z-[-1]"
+      ></spline-viewer>
+
+      <div className=" rounded-2xl shadow-lg p-8 w-full max-w-md ">
         <div className='flex justify-between items-center mb-6'>
         <h2 className="text-2xl font-semibold text-white mb-6 text-center">Manage Password</h2>
           

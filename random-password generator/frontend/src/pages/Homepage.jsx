@@ -7,6 +7,9 @@ import Navbar from '../components/Navbar.jsx';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 
+
+
+
 export const Homepage = () => {
   const { authUser, logout, deleteaccount } = useAuthStore();
   const { getpass, passes ,deletepass} = usePasStore();
@@ -60,11 +63,18 @@ export const Homepage = () => {
 
 
   return (
-    <div className="flex flex-col  gap-5 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 min-h-screen text-white font-sans tracking-wide">
+    <div className="flex flex-col  gap-5   text-white font-sans tracking-wide">
       <div className='w-full m-0 mb-2'>
       <Navbar/>
      </div>
 
+    <spline-viewer
+        url="https://prod.spline.design/cwq814qIdbhTkjqB/scene.splinecode"
+        background="transparent"
+        class="absolute top-0 left-0 w-full h-full z-[-1]"
+      ></spline-viewer>
+
+      
       <div className="flex justify-center items-center text-3xl font-extrabold underline tracking-tight">
         MY PASSWORDS
       </div>

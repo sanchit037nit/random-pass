@@ -38,8 +38,14 @@ const Viewpage = () => {
        <div className='w-full' >
       <Navbar/>
      </div>
+         <spline-viewer
+        url="https://prod.spline.design/cwq814qIdbhTkjqB/scene.splinecode"
+        background="transparent"
+        class="absolute top-0 left-0 w-full h-full z-[-1]"
+      ></spline-viewer>
 
-      <div className="bg-gray-800 rounded-2xl shadow-lg p-8 w-full max-w-md">
+
+      <div className=" rounded-2xl shadow-lg p-8 w-full max-w-md">
         <div className='flex justify-between items-center mb-6'>
         <h2 className="text-2xl font-semibold text-white mb-6 text-center">View/Update Password</h2>
           
