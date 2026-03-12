@@ -1,25 +1,24 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuthStore } from "../store/useauthstore.js";
 import { usePasStore } from "../store/usepasstore.js";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import "@splinetool/viewer";
 
 export const Homepage = () => {
-  const { authUser, logout, deleteaccount } = useAuthStore();
+  const { authUser } = useAuthStore();
   const { getpass, passes, deletepass } = usePasStore();
   const navigate = useNavigate();
+
   const [visibleIds, setVisibleIds] = useState([]);
   const [spass, setspass] = useState("");
   const [sort, setsort] = useState(false);
+
   const orderedpasses = [...passes];
 
   if (sort) {
-    // orderedpasses.push(passes)
-    console.log(orderedpasses);
     orderedpasses.sort((a, b) => a.name.localeCompare(b.name));
-    console.log(orderedpasses);
   }
 
   const toggleView = (id) => {
@@ -27,10 +26,11 @@ export const Homepage = () => {
       prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]
     );
   };
-  const id = authUser._id;
+
+  const id = authUser?._id;
 
   useEffect(() => {
-    getpass(id);
+    if (id) getpass(id);
   }, [id]);
 
   const handleView = (e, passId) => {
@@ -45,49 +45,51 @@ export const Homepage = () => {
 
   const handleCopy = (e, id) => {
     e.preventDefault();
-    const pass = passes.find((p) => p._id == id);
+    const pass = passes.find((p) => p._id === id);
     navigator.clipboard.writeText(pass.password);
   };
 
-  const handleSort = () => {
-    setsort(!sort);
-  };
-
   return (
-    <div className="flex flex-col  gap-5   text-white font-sans tracking-wide">
-      <div className="w-full m-0 mb-2">
-        <Navbar />
-      </div>
+    <div className="flex flex-col min-h-screen text-slate-200 font-sans">
 
-      <spline-viewer
+      <Navbar />
+
+      {/* 3D Background */}
+      {/* <spline-viewer
         url="https://prod.spline.design/cwq814qIdbhTkjqB/scene.splinecode"
         background="transparent"
         class="absolute top-0 left-0 w-full h-full z-[-1]"
-      ></spline-viewer>
+      ></spline-viewer> */}
 
-      <div className="flex justify-center items-center text-3xl font-extrabold underline tracking-tight">
-        MY PASSWORDS
+      {/* Title */}
+      <div className="flex justify-center mt-6">
+        <h1 className="text-4xl font-bold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500">
+          My Password Vault
+        </h1>
       </div>
 
-      <div className="flex justify-between items-center mb-4  m-10">
+      {/* Search + Sort */}
+      <div className="flex justify-between items-center mx-10 mt-8">
+
         <input
           type="text"
           value={spass}
           onChange={(e) => setspass(e.target.value)}
           placeholder="Search passwords..."
-          className="p-2 rounded-md bg-gray-800 border border-gray-700"
+          className="px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-72"
         />
-        <div className="flex gap-2">
-          <button
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-            onClick={handleSort}
-          >
-            {sort ? "Unsort" : "Sort"}
-          </button>
-        </div>
+
+        <button
+          className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 transition shadow-lg"
+          onClick={() => setsort(!sort)}
+        >
+          {sort ? "Reset Order" : "Sort A-Z"}
+        </button>
       </div>
 
-      <div className="space-y-5 p-6">
+      {/* Password Cards */}
+      <div className="space-y-5 p-8">
+
         {orderedpasses
           ?.filter((pass) =>
             pass.name.toLowerCase().includes(spass.toLowerCase())
@@ -97,50 +99,64 @@ export const Homepage = () => {
               key={pass._id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="bg-gray-900/60 backdrop-blur-md p-4 rounded-xl shadow-lg hover:scale-[1.023] hover:shadow-[0_0_10px_rgba(124,58,237,0.6)] transition-all duration-200 flex justify-between items-start border border-gray-700"
+              className="bg-slate-900/60 backdrop-blur-md p-5 rounded-xl border border-slate-700 shadow-lg hover:shadow-indigo-500/20 hover:scale-[1.02] transition-all flex justify-between items-center"
             >
-              <div className="space-y-1 text-left">
-                <p className="text-white text-lg font-medium">
-                  Name:{" "}
-                  <span className="text-gray-300 font-normal">{pass.name}</span>
+              {/* Password info */}
+              <div className="space-y-2">
+
+                <p className="text-lg">
+                  <span className="text-slate-400">Name:</span>{" "}
+                  <span className="text-white">{pass.name}</span>
                 </p>
-                <p className="text-white text-lg font-medium flex items-center gap-2">
-                  Password:{" "}
-                  <span className="text-gray-300 font-normal">
-                    {visibleIds.includes(pass._id) ? pass.password : "••••••••"}
+
+                <p className="text-lg flex items-center gap-2">
+                  <span className="text-slate-400">Password:</span>
+
+                  <span className="text-white">
+                    {visibleIds.includes(pass._id)
+                      ? pass.password
+                      : "••••••••"}
                   </span>
+
                   <button
                     onClick={() => toggleView(pass._id)}
-                    className="text-xl hover:scale-110 transition-transform"
+                    className="text-indigo-400 hover:text-indigo-300"
                   >
                     {visibleIds.includes(pass._id) ? "🙈" : "👁️"}
                   </button>
                 </p>
+
               </div>
 
-              <div className="flex gap-2">
+              {/* Buttons */}
+              <div className="flex gap-3">
+
                 <button
-                  className="bg-violet-500 hover:bg-violet-700 text-white px-4 py-2 rounded-md transition duration-150 shadow"
-                  onClick={(e) => handleDelete(e, pass._id)}
-                >
-                  Delete
-                </button>
-                <button
-                  className="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-md transition duration-150 shadow"
                   onClick={(e) => handleView(e, pass._id)}
+                  className="px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-700 transition"
                 >
-                  View/Update
+                  View
                 </button>
+
                 <button
-                  className="bg-orange-500 hover:bg-orange-600 text-black px-4 py-2 rounded-md transition duration-150 shadow"
                   onClick={(e) => handleCopy(e, pass._id)}
+                  className="px-4 py-2 rounded-md bg-slate-700 hover:bg-slate-600 transition"
                 >
                   Copy
                 </button>
+
+                <button
+                  onClick={(e) => handleDelete(e, pass._id)}
+                  className="px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 transition"
+                >
+                  Delete
+                </button>
+
               </div>
+
             </motion.div>
           ))}
+
       </div>
     </div>
   );

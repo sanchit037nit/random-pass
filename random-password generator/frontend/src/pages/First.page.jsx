@@ -6,20 +6,22 @@ import "@splinetool/viewer";
 
 export const Firstpage = () => {
   return (
-    <div className="flex flex-col justify-between min-h-screen">
+    <div className="flex flex-col min-h-screen relative overflow-hidden">
       <Navbar />
 
-      <spline-viewer
+      {/* Background 3D scene */}
+      {/* <spline-viewer
         url="https://prod.spline.design/cwq814qIdbhTkjqB/scene.splinecode"
         background="transparent"
-        className="absolute top-0 left-0 w-full h-full z-[-1]"
-      ></spline-viewer>
+        class="absolute top-0 left-0 w-full h-full z-[-1]"
+      ></spline-viewer> */}
 
+      {/* Main Content */}
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative z-[1] flex-grow flex-col justify-center min-h-screen items-center py-16 px-6 text-white "
+        className="relative z-[1] flex flex-col flex-grow justify-center items-center text-center py-16 px-6 text-white"
       >
         <motion.h1
           className="text-5xl font-extrabold tracking-wider mb-4 flex items-center gap-2"
@@ -31,7 +33,7 @@ export const Firstpage = () => {
         </motion.h1>
 
         <motion.p
-          className="text-xl text-center max-w-xl"
+          className="text-xl max-w-xl"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
