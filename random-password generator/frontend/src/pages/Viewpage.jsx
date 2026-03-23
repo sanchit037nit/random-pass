@@ -16,6 +16,7 @@ const Viewpage = () => {
     name: selectedpass.password.name,
     password: selectedpass.password.password,
     description: selectedpass.password.description,
+    group: selectedpass.password.group || "General", // ✅ Added group
     createdby: authUser?._id,
   });
 
@@ -27,7 +28,6 @@ const Viewpage = () => {
 
   return (
     <div className="relative min-h-screen flex flex-col items-center text-white">
-
       <Navbar />
 
       {/* Background */}
@@ -95,6 +95,24 @@ const Viewpage = () => {
             />
           </div>
 
+          {/* Group */}
+          <div>
+            <label className="text-gray-300 text-sm">Group</label>
+            <select
+              value={formdata.group}
+              onChange={(e) =>
+                setformdata({ ...formdata, group: e.target.value })
+              }
+              className="w-full mt-1 px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-violet-500 transition"
+            >
+              <option value="General">General</option>
+              <option value="Work">Work</option>
+              <option value="Social">Social</option>
+              <option value="Banking">Banking</option>
+              <option value="Shopping">Shopping</option>
+            </select>
+          </div>
+
           {/* Update Button */}
           <button
             onClick={handleupdate}
@@ -102,7 +120,6 @@ const Viewpage = () => {
           >
             Update Password
           </button>
-
         </form>
       </div>
     </div>

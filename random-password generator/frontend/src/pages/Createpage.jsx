@@ -17,6 +17,7 @@ const Createpage = () => {
     name: "",
     password: generatedPassword || "",
     description: "",
+    group: "General",
     createdby: authUser?._id,
   });
 
@@ -35,7 +36,9 @@ const Createpage = () => {
     setformdata({
       name: "",
       password: "",
+      group: "General",
       description: "",
+
     });
   };
 
@@ -46,13 +49,6 @@ const Createpage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 relative text-white">
-
-      {/* 3D Background */}
-      {/* <spline-viewer
-        url="https://prod.spline.design/cwq814qIdbhTkjqB/scene.splinecode"
-        background="transparent"
-        class="absolute top-0 left-0 w-full h-full z-[-1]"
-      ></spline-viewer> */}
 
       {/* Card */}
       <motion.div
@@ -136,7 +132,28 @@ const Createpage = () => {
               className="w-full px-4 py-2 rounded-lg bg-black/40 border border-gray-600 resize-none h-24 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
+          
+          {/* Group section */}
+          <div>
+  <label className="text-gray-300 block mb-1">
+    Group
+  </label>
 
+  <select
+    value={formdata.group}
+    onChange={(e) =>
+      setformdata({ ...formdata, group: e.target.value })
+    }
+    className="w-full px-4 py-2 rounded-lg bg-black/40 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+  >
+    <option value="General">General</option>
+    <option value="Work">Work</option>
+    <option value="Social">Social</option>
+    <option value="Banking">Banking</option>
+    <option value="Shopping">Shopping</option>
+  </select>
+          </div>
+          
           {/* Button */}
           <motion.button
             whileTap={{ scale: 0.95 }}

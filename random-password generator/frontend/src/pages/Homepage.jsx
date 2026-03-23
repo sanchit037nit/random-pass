@@ -21,6 +21,14 @@ export const Homepage = () => {
     orderedpasses.sort((a, b) => a.name.localeCompare(b.name));
   }
 
+  // Group passwords by "group" field
+  const groupedPasswords = orderedpasses.reduce((acc, pass) => {
+    const group = pass.group || "General";
+    if (!acc[group]) acc[group] = [];
+    acc[group].push(pass);
+    return acc;
+  }, {});
+
   const toggleView = (id) => {
     setVisibleIds((prev) =>
       prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]
@@ -43,23 +51,9 @@ export const Homepage = () => {
     deletepass(passId);
   };
 
-  const handleCopy = (e, id) => {
-    e.preventDefault();
-    const pass = passes.find((p) => p._id === id);
-    navigator.clipboard.writeText(pass.password);
-  };
-
   return (
     <div className="flex flex-col min-h-screen text-slate-200 font-sans">
-
       <Navbar />
-
-      {/* 3D Background */}
-      {/* <spline-viewer
-        url="https://prod.spline.design/cwq814qIdbhTkjqB/scene.splinecode"
-        background="transparent"
-        class="absolute top-0 left-0 w-full h-full z-[-1]"
-      ></spline-viewer> */}
 
       {/* Title */}
       <div className="flex justify-center mt-6">
@@ -70,7 +64,6 @@ export const Homepage = () => {
 
       {/* Search + Sort */}
       <div className="flex justify-between items-center mx-10 mt-8">
-
         <input
           type="text"
           value={spass}
@@ -79,84 +72,98 @@ export const Homepage = () => {
           className="px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-72"
         />
 
-        <button
-          className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 transition shadow-lg"
-          onClick={() => setsort(!sort)}
-        >
-          {sort ? "Reset Order" : "Sort A-Z"}
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <button
+            className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 transition shadow-lg"
+            onClick={() => setsort(!sort)}
+          >
+            {sort ? "Reset Order" : "Sort A-Z"}
+          </button>
+        </div>
       </div>
 
-      {/* Password Cards */}
-      <div className="space-y-5 p-8">
+      {/* Password Cards Grouped */}
+      <div className="space-y-10 p-8">
+        {Object.entries(groupedPasswords).map(([groupName, groupPasses]) => (
+          <div key={groupName}>
+            {/* Group Title */}
+            <h2 className="text-2xl font-semibold text-indigo-400 mb-4">
+              {groupName} ({groupPasses.length})
+            </h2>
 
-        {orderedpasses
-          ?.filter((pass) =>
-            pass.name.toLowerCase().includes(spass.toLowerCase())
-          )
-          .map((pass) => (
-            <motion.div
-              key={pass._id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-slate-900/60 backdrop-blur-md p-5 rounded-xl border border-slate-700 shadow-lg hover:shadow-indigo-500/20 hover:scale-[1.02] transition-all flex justify-between items-center"
-            >
-              {/* Password info */}
-              <div className="space-y-2">
-
-                <p className="text-lg">
-                  <span className="text-slate-400">Name:</span>{" "}
-                  <span className="text-white">{pass.name}</span>
-                </p>
-
-                <p className="text-lg flex items-center gap-2">
-                  <span className="text-slate-400">Password:</span>
-
-                  <span className="text-white">
-                    {visibleIds.includes(pass._id)
-                      ? pass.password
-                      : "••••••••"}
-                  </span>
-
-                  <button
-                    onClick={() => toggleView(pass._id)}
-                    className="text-indigo-400 hover:text-indigo-300"
+            <div className="space-y-5">
+              {groupPasses
+                .filter((pass) =>
+                  pass.name.toLowerCase().includes(spass.toLowerCase())
+                )
+                .map((pass) => (
+                  <motion.div
+                    key={pass._id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-slate-900/60 backdrop-blur-md p-5 rounded-xl border border-slate-700 shadow-lg hover:shadow-indigo-500/20 hover:scale-[1.02] transition-all flex justify-between items-center"
                   >
-                    {visibleIds.includes(pass._id) ? "🙈" : "👁️"}
-                  </button>
-                </p>
+                    {/* Password Info */}
+                    <div className="space-y-2">
+                      <p className="text-lg">
+                        <span className="text-slate-400">Name:</span>{" "}
+                        <span className="text-white">{pass.name}</span>
+                      </p>
 
-              </div>
+                      <p className="text-lg flex items-center gap-2">
+                        <span className="text-slate-400">Password:</span>
+                        <span className="text-white">
+                          {visibleIds.includes(pass._id)
+                            ? pass.password
+                            : "••••••••"}
+                        </span>
 
-              {/* Buttons */}
-              <div className="flex gap-3">
+                        <button
+                          onClick={() => toggleView(pass._id)}
+                          className="text-indigo-400"
+                        >
+                          {visibleIds.includes(pass._id) ? "🙈" : "👁️"}
+                        </button>
+                      </p>
 
-                <button
-                  onClick={(e) => handleView(e, pass._id)}
-                  className="px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-700 transition"
-                >
-                  View
-                </button>
+                      <p className="text-lg">
+                        <span className="text-slate-400">Created @:</span>{" "}
+                        {new Date(pass.createdAt).toLocaleString()}
+                      </p>
+                    </div>
 
-                <button
-                  onClick={(e) => handleCopy(e, pass._id)}
-                  className="px-4 py-2 rounded-md bg-slate-700 hover:bg-slate-600 transition"
-                >
-                  Copy
-                </button>
+                    {/* Buttons */}
+                    <div className="flex gap-3">
+                      <button
+                        onClick={(e) => handleView(e, pass._id)}
+                        className="px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-700"
+                      >
+                        View
+                      </button>
 
-                <button
-                  onClick={(e) => handleDelete(e, pass._id)}
-                  className="px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 transition"
-                >
-                  Delete
-                </button>
+                      <button
+                        onClick={(e) => handleDelete(e, pass._id)}
+                        className="px-4 py-2 rounded-md bg-red-600 hover:bg-red-700"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </motion.div>
+                ))}
+            </div>
+          </div>
+        ))}
+      </div>
 
-              </div>
+      {/* Floating Add Group Button */}
+      <div className="fixed bottom-4 right-4 group">
+        <button className="w-14 h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full flex items-center justify-center shadow-xl transition-transform hover:scale-110">
+          +
+        </button>
 
-            </motion.div>
-          ))}
-
+        <span className="absolute bottom-20 right-0 bg-gray-800 text-white text-xs px-2 py-1 rounded shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+          Add New Group
+        </span>
       </div>
     </div>
   );

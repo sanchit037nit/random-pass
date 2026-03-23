@@ -6,6 +6,8 @@ import { Toaster } from 'react-hot-toast'
 import { Loginpage } from './pages/Login.page'
 import { Firstpage } from './pages/First.page'
 import  {Homepage}  from './pages/Homepage'
+import { Dashpage } from './pages/Dashpage'
+import RecycleBinPage from './pages/RecycleBinPage.jsx'
 import Createpage from './pages/Createpage'
 import './App.css'
 import { useAuthStore } from './store/useauthstore.js'
@@ -30,6 +32,8 @@ const App=()=>{
       <Route path="/home" element={authUser ? <Homepage /> : <Navigate to="/" />} />
       <Route path="/create" element={authUser ? <Createpage /> : <Navigate to="/" />} />
       <Route path="/view" element={authUser ? <ViewPage /> : <Navigate to="/" />} />
+      <Route path="/dashboard" element={authUser ? <Dashpage /> : <Navigate to="/" />} />
+      <Route path="/recycle-bin" element={authUser ? <RecycleBinPage /> : <Navigate to="/" />} />
    
     </Routes>
 

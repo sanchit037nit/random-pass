@@ -4,22 +4,18 @@ import User from "../models/user.model.js"
 
 
 export const createpass = async(req,res)=>{
-      const {name,password,description,createdby}=req.body
-    //   const {userid}=req.params
+      const {name,password,description,createdby,group}=req.body
 
       try {
         if(!name || !password || !description){
             return res.status(400).json({message:"all fields required"})
         }
-        // const user=await User.findById(userid)
-        // if(!user){
-        //     return res.status(400).json({message:"invalid user"})
-        // }
 
         const newpass=new Password({
             name,
             password,
             description,
+            group,
             createdby
         })
 
@@ -40,7 +36,7 @@ export const createpass = async(req,res)=>{
 }
 
 export const updatepass = async(req,res)=>{
-      const {name,password,description}=req.body
+      const {name,password,description,group}=req.body
       const {id}=req.params
    
       try {
@@ -55,7 +51,8 @@ export const updatepass = async(req,res)=>{
             { $set:{
                 name:name,
                 password:password,
-                description:description 
+                description: description,
+                group:group
               }
             },
             {new:true}
@@ -68,27 +65,24 @@ export const updatepass = async(req,res)=>{
 
 }
 
-export const deletepass = async(req,res)=>{
-      const {id}=req.params
-      try {
-           if(!id){
-            return res.status(400).json({
-                message:"no todo selected"
-            })
-           }
+export const deletepass = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const pass = await Password.findById(id);
+    if (!pass) return res.status(400).json({ message: "Password not found" });
 
-        const delpass=await Password.findByIdAndDelete(id)
-        return res.status(200).json({message:"password deleted"})
+    pass.deleted = true; 
+    await pass.save();
 
-      } catch (error) {
-        console.log("error in deleting password",error)
-      }
-
-}
+    return res.status(200).json({ message: "Password moved to Recycle Bin" });
+  } catch (error) {
+    console.log("Error deleting password", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 export const getpass= async(req,res)=>{
     const {userId}=req.params
-    // console.log(userid)
    
     try {
         const user=await User.findById(userId)
@@ -124,3 +118,64 @@ export const viewpass= async(req,res)=>{
         console.log("error in viewing password",error)
     }
 }
+
+export const Dashpage = async (req, res) => {
+  const { userId } = req.params;
+  // console.log(userId)
+  try {
+    if (!userId) return res.status(400).json({ message: "user id required" });
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(400).json({ message: "invalid user" });
+
+    const passwords = await Password.find({ createdby: userId });
+
+    // Count passwords per group
+    const groupCounts = passwords.reduce((acc, pass) => {
+      const group = pass.group || "General";
+      acc[group] = (acc[group] || 0) + 1;
+      return acc;
+    }, {});
+
+    // Recent passwords (last 5)
+    const recentPasswords = passwords
+      .sort((a, b) => b.createdAt - a.createdAt)
+      .slice(0, 5);
+
+    return res.status(200).json({
+      totalPasswords: passwords.length,
+      groupCounts,
+      recentPasswords,
+    });
+  } catch (error) {
+    console.log("Dashboard error:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const getRecycleBin = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const passwords = await Password.find({ createdby: userId, deleted: true });
+    res.status(200).json({ passwords });
+  } catch (error) {
+    console.log("Error fetching recycle bin", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const restorePass = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const pass = await Password.findById(id);
+    if (!pass) return res.status(400).json({ message: "Password not found" });
+
+    pass.deleted = false;
+    await pass.save();
+
+    res.status(200).json({ message: "Password restored" });
+  } catch (error) {
+    console.log("Error restoring password", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
