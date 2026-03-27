@@ -72,9 +72,25 @@ export const deletepass = async (req, res) => {
     if (!pass) return res.status(400).json({ message: "Password not found" });
 
     pass.deleted = true; 
+    pass.deletedAt= new Date()
     await pass.save();
 
     return res.status(200).json({ message: "Password moved to Recycle Bin" });
+  } catch (error) {
+    console.log("Error deleting password", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const deleteforever = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const pass = await Password.findById(id);
+    if (!pass) return res.status(400).json({ message: "Password not found" });
+
+    const del = await Password.findByIdAndDelete(id);
+    
+    return res.status(200).json({ message: "Password deleted successfully" });
   } catch (error) {
     console.log("Error deleting password", error);
     res.status(500).json({ message: "Server error" });
@@ -90,7 +106,7 @@ export const getpass= async(req,res)=>{
          return res.status(400).json({message:"invalid user"})
         }
 
-        const passwords=await Password.find({createdby:userId})
+        const passwords=await Password.find({createdby:userId,deleted:false,})
 
         if(!passwords){
               return res.status(200).json({message:"no passwords available"})
@@ -166,11 +182,13 @@ export const getRecycleBin = async (req, res) => {
 
 export const restorePass = async (req, res) => {
   const { id } = req.params;
+  console.log(id)
   try {
     const pass = await Password.findById(id);
     if (!pass) return res.status(400).json({ message: "Password not found" });
 
     pass.deleted = false;
+    pass.deletedAt = null;
     await pass.save();
 
     res.status(200).json({ message: "Password restored" });

@@ -28,6 +28,10 @@ const passchema=new mongoose.Schema({
         required: true,
     },
     deleted: { type: Boolean, default: false },
+    deletedAt: {
+        type: Date,
+        default: null,
+    },
 },
 {timestamps:true})
 

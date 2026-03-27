@@ -44,7 +44,7 @@ export const usePasStore = create((set,get) => ({
             await axiosinstance.delete(`/pass/delete/${id}`)
             const npas=passes.filter((pass) => pass._id !== id)
             set({ passes: npas })
-            toast.success("password deleted successfully")
+            toast.success("password moved to recycle bin!")
         }
         catch(error){
             toast.error(error.response.data.message)

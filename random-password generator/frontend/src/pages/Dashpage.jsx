@@ -15,6 +15,7 @@ export const Dashpage = () => {
     recentPasswords: [],
   });
 
+  const id=authUser?._id
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,7 +26,8 @@ export const Dashpage = () => {
 
     const fetchDashboard = async () => {
       try {
-        const res = await axios.get(`http://localhost:5003/api/pass/dashboard/${authUser._id}`);
+        // const res = await axios.get(`http://localhost:5003/api/pass/dashboard/${authUser._id}`);
+        const res=await axiosinstance.get(`/pass/dashboard/${id}`)
         console.log(res.data)
 
         setStats({

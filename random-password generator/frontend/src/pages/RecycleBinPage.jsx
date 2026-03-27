@@ -1,12 +1,16 @@
 import { useEffect } from "react";
 import { useTrashStore } from "../store/usetrashstore.js";
 import { Trash2, RotateCcw } from "lucide-react";
+import { useAuthStore } from "../store/useauthstore.js";
 
 const RecycleBinPage = () => {
   const { trashItems, getTrash, restoreItem, deleteForever, isLoading } = useTrashStore();
+  const { authUser} =useAuthStore()
+  const id = authUser?._id;
+
 
   useEffect(() => {
-    getTrash();
+    getTrash(id);
   }, []);
 
   return (
@@ -25,12 +29,15 @@ const RecycleBinPage = () => {
               className="flex justify-between items-center bg-white/10 p-4 rounded-xl border border-gray-700"
             >
               {/* Item Info */}
-              <div>
-                <p className="font-medium">{item.title}</p>
-                <p className="text-sm text-gray-400">
-                  Deleted on: {item.deletedAt?.split("T")[0]}
-                </p>
-              </div>
+            <div>
+              <p className="font-medium">
+                {item.name || item.title}
+              </p>
+
+              <p className="text-sm text-gray-400">
+                Deleted on: {item.deletedAt?.split("T")[0]}
+              </p>
+            </div>
 
               {/* Actions */}
               <div className="flex gap-3">

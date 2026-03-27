@@ -157,12 +157,14 @@ export const Homepage = () => {
 
       {/* Floating Add Group Button */}
       <div className="fixed bottom-4 right-4 group">
-        <button className="w-14 h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full flex items-center justify-center shadow-xl transition-transform hover:scale-110">
+        <button
+          onClick={() => navigate("/ranpass")}
+          className="w-14 h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full flex items-center justify-center shadow-xl transition-transform hover:scale-110">
           +
         </button>
 
         <span className="absolute bottom-20 right-0 bg-gray-800 text-white text-xs px-2 py-1 rounded shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
-          Add New Group
+          Add New Password
         </span>
       </div>
     </div>
