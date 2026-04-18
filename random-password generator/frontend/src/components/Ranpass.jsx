@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import { useAuthStore } from "../store/useauthstore.js";
 import { useNavigate } from "react-router-dom";
 import { usePasStore } from "../store/usepasstore.js";
 import Navbar from "../components/Navbar.jsx";
+import { RefreshCcw, Copy, Save } from "lucide-react";
 import "@splinetool/viewer";
 
 export const Ranpass = () => {
@@ -17,6 +17,7 @@ export const Ranpass = () => {
 
   const passwordRef = useRef(null);
 
+  // 🔐 Password Generator
   const passwordGenerator = useCallback(() => {
     let pass = "";
     let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -31,32 +32,24 @@ export const Ranpass = () => {
 
     setPassword(pass);
     setGeneratedPassword(pass);
-  }, [length, numberAllowed, charAllowed]);
+  }, [length, numberAllowed, charAllowed, setGeneratedPassword]);
 
+  // 📋 Copy Password
   const copyPasswordToClipboard = useCallback(() => {
     passwordRef.current?.select();
     window.navigator.clipboard.writeText(password);
   }, [password]);
 
+  // ⚡ Auto-generate on changes
   useEffect(() => {
     passwordGenerator();
   }, [length, numberAllowed, charAllowed, passwordGenerator]);
 
   return (
     <div className="min-h-screen text-slate-200 font-sans">
-
       <Navbar />
 
-      {/* Background */}
-      {/* <spline-viewer
-        url="https://prod.spline.design/cwq814qIdbhTkjqB/scene.splinecode"
-        background="transparent"
-        class="absolute top-0 left-0 w-full h-full z-[-1]"
-      ></spline-viewer> */}
-
-      <div className="flex justify-center items-center mt-16 px-4">
-
-        {/* Card */}
+      <div className="flex justify-center items-center min-h-screen px-4">
         <div className="w-full max-w-xl backdrop-blur-xl bg-slate-900/60 border border-slate-700 rounded-2xl shadow-xl p-8">
 
           <h1 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent">
@@ -74,25 +67,48 @@ export const Ranpass = () => {
               className="flex-1 px-4 py-2 rounded-lg bg-slate-800 border border-slate-600 focus:outline-none"
             />
 
+             {/* Refresh Icon */}
             <button
-              onClick={copyPasswordToClipboard}
-              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-lg transition"
+              onClick={passwordGenerator}
+              className="p-2"
+              title="Generate new password"
             >
-              Copy
+              <RefreshCcw
+                size={22}
+                className="text-green-400 hover:text-green-300 hover:rotate-180 transition-transform duration-300"
+              />
             </button>
 
+            
+            {/* Copy Icon */}
+            <button
+              onClick={copyPasswordToClipboard}
+              className="p-2"
+              title="Copy password"
+            >
+              <Copy
+                size={22}
+                className="text-indigo-400 hover:text-indigo-300 transition"
+              />
+            </button>
+
+
+            {/* Save Icon */}
             <button
               onClick={() => navigate("/create")}
-              className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg transition"
+              className="p-2"
+              title="Save password"
             >
-              Save
+              <Save
+                size={22}
+                className="text-purple-400 hover:text-purple-300 transition"
+              />
             </button>
 
           </div>
 
-          {/* Slider */}
+          {/* Length Slider */}
           <div className="mb-6">
-
             <label className="block mb-2 text-slate-400">
               Length: {length}
             </label>
@@ -102,10 +118,9 @@ export const Ranpass = () => {
               min={6}
               max={20}
               value={length}
-              onChange={(e) => setLength(e.target.value)}
+              onChange={(e) => setLength(Number(e.target.value))}
               className="w-full accent-indigo-500 cursor-pointer"
             />
-
           </div>
 
           {/* Options */}
@@ -135,20 +150,16 @@ export const Ranpass = () => {
 
           {/* Navigation */}
           <div className="flex justify-center">
-
             <button
               onClick={() => navigate("/home")}
               className="px-6 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition"
             >
               Your Password Vault
             </button>
-
           </div>
 
         </div>
-
       </div>
-
     </div>
   );
 };

@@ -62,7 +62,8 @@ export const Dashpage = () => {
     <div className="min-h-screen bg-gray-900 text-white">
       <Navbar />
 
-      <div className="p-8 space-y-8">
+<div className="flex justify-center items-start min-h-screen pt-20 px-4">
+  <div className="w-full max-w-6xl space-y-8">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
@@ -128,7 +129,8 @@ export const Dashpage = () => {
             <p className="text-gray-400">No passwords added yet.</p>
           )}
         </div>
-      </div>
+        </div>
+        </div>
     </div>
   );
 };
