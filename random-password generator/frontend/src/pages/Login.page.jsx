@@ -29,40 +29,56 @@ export const Loginpage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen relative">
+    <div className="min-h-screen relative flex justify-center items-center overflow-hidden text-white">
 
-      {/* Background */}
-      {/* <spline-viewer
+      {/* 🌈 Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-slate-900 to-black"></div>
+
+      {/* 💡 Glow Effects */}
+      <div className="absolute top-[-120px] left-[-120px] w-[300px] h-[300px] bg-purple-600 opacity-20 blur-3xl rounded-full"></div>
+      <div className="absolute bottom-[-120px] right-[-120px] w-[300px] h-[300px] bg-indigo-600 opacity-20 blur-3xl rounded-full"></div>
+
+      {/* Optional Spline (uncomment if needed) */}
+      {/*
+      <spline-viewer
         url="https://prod.spline.design/cwq814qIdbhTkjqB/scene.splinecode"
         background="transparent"
-        class="absolute top-0 left-0 w-full h-full z-[-1]"
-      ></spline-viewer> */}
+        class="absolute top-0 left-0 w-full h-full z-0"
+      ></spline-viewer>
+      */}
 
-      {/* Login Form */}
+      {/* Form */}
       <form
         onSubmit={handleclick}
-        className="space-y-7 text-white w-full max-w-md p-8 rounded-lg backdrop-blur-md shadow-xl"
+        className="relative z-10 space-y-7 w-full max-w-md p-8 rounded-2xl 
+                   bg-slate-900/60 backdrop-blur-xl border border-slate-700 
+                   shadow-2xl hover:shadow-indigo-500/20 transition"
       >
+
+        {/* Header */}
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold">Login Form</h2>
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent">
+            Login
+          </h2>
 
           <button
             onClick={handlecross}
-            className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200 hover:bg-red-100"
+            className="p-2 rounded-full hover:bg-red-500/20 text-gray-400 hover:text-red-400 transition"
           >
-            ❌
+            ✕
           </button>
         </div>
 
+        {/* Email */}
         <div className="flex flex-col space-y-2">
-          <label htmlFor="email" className="text-lg">
-            Enter your Email
+          <label className="text-sm text-gray-300">
+            Email
           </label>
 
           <input
             type="email"
-            id="email"
-            className="border border-gray-400 rounded-md px-4 py-2 bg-transparent focus:outline-none focus:ring-2 focus:ring-white"
+            className="border border-slate-700 rounded-lg px-4 py-2 bg-slate-800/70 
+                       focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
             placeholder="Enter your email"
             value={formdata.emailid}
             onChange={(e) =>
@@ -71,15 +87,16 @@ export const Loginpage = () => {
           />
         </div>
 
+        {/* Password */}
         <div className="flex flex-col space-y-2">
-          <label htmlFor="password" className="text-lg">
-            Enter your Password
+          <label className="text-sm text-gray-300">
+            Password
           </label>
 
           <input
             type="password"
-            id="password"
-            className="border border-gray-400 rounded-md px-4 py-2 bg-transparent focus:outline-none focus:ring-2 focus:ring-white"
+            className="border border-slate-700 rounded-lg px-4 py-2 bg-slate-800/70 
+                       focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
             placeholder="Enter your password"
             value={formdata.password}
             onChange={(e) =>
@@ -88,12 +105,27 @@ export const Loginpage = () => {
           />
         </div>
 
+        {/* Button */}
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 font-semibold py-2 rounded-md transition"
+          className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 
+                     hover:scale-[1.02] hover:shadow-lg hover:shadow-indigo-500/30 
+                     py-2 rounded-lg font-semibold transition"
         >
-          Submit
+          Login
         </button>
+
+        {/* Extra */}
+        <p className="text-sm text-center text-gray-400">
+          Don’t have an account?{" "}
+          <span
+            onClick={() => navigate("/signup")}
+            className="text-indigo-400 hover:underline cursor-pointer"
+          >
+            Sign up
+          </span>
+        </p>
+
       </form>
     </div>
   );

@@ -46,118 +46,120 @@ export const Ranpass = () => {
   }, [length, numberAllowed, charAllowed, passwordGenerator]);
 
   return (
-    <div className="min-h-screen text-slate-200 font-sans">
-      <Navbar />
+    <div className="min-h-screen relative text-slate-200 font-sans overflow-hidden">
 
-      <div className="flex justify-center items-center min-h-screen px-4">
-        <div className="w-full max-w-xl backdrop-blur-xl bg-slate-900/60 border border-slate-700 rounded-2xl shadow-xl p-8">
+      {/* 🌈 Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-slate-900 to-black"></div>
 
-          <h1 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent">
-            Password Generator
-          </h1>
+      {/* 💡 Glow Effects */}
+      <div className="absolute top-[-120px] left-[-120px] w-[300px] h-[300px] bg-purple-600 opacity-20 blur-3xl rounded-full"></div>
+      <div className="absolute bottom-[-120px] right-[-120px] w-[300px] h-[300px] bg-indigo-600 opacity-20 blur-3xl rounded-full"></div>
 
-          {/* Password field */}
-          <div className="flex gap-2 mb-6">
+      {/* Content */}
+      <div className="relative z-10">
+        <Navbar />
 
-            <input
-              type="text"
-              value={password}
-              readOnly
-              ref={passwordRef}
-              className="flex-1 px-4 py-2 rounded-lg bg-slate-800 border border-slate-600 focus:outline-none"
-            />
+        <div className="flex justify-center items-center min-h-screen px-4">
+          <div className="w-full max-w-xl backdrop-blur-xl bg-slate-900/60 border border-slate-700 rounded-2xl shadow-xl p-8">
 
-             {/* Refresh Icon */}
-            <button
-              onClick={passwordGenerator}
-              className="p-2"
-              title="Generate new password"
-            >
-              <RefreshCcw
-                size={22}
-                className="text-green-400 hover:text-green-300 hover:rotate-180 transition-transform duration-300"
-              />
-            </button>
+            <h1 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent">
+              Password Generator
+            </h1>
 
-            
-            {/* Copy Icon */}
-            <button
-              onClick={copyPasswordToClipboard}
-              className="p-2"
-              title="Copy password"
-            >
-              <Copy
-                size={22}
-                className="text-indigo-400 hover:text-indigo-300 transition"
-              />
-            </button>
+            {/* Password field */}
+            <div className="flex gap-2 mb-6">
 
-
-            {/* Save Icon */}
-            <button
-              onClick={() => navigate("/create")}
-              className="p-2"
-              title="Save password"
-            >
-              <Save
-                size={22}
-                className="text-purple-400 hover:text-purple-300 transition"
-              />
-            </button>
-
-          </div>
-
-          {/* Length Slider */}
-          <div className="mb-6">
-            <label className="block mb-2 text-slate-400">
-              Length: {length}
-            </label>
-
-            <input
-              type="range"
-              min={6}
-              max={20}
-              value={length}
-              onChange={(e) => setLength(Number(e.target.value))}
-              className="w-full accent-indigo-500 cursor-pointer"
-            />
-          </div>
-
-          {/* Options */}
-          <div className="flex gap-8 mb-8">
-
-            <label className="flex items-center gap-2">
               <input
-                type="checkbox"
-                checked={numberAllowed}
-                onChange={() => setNumberAllowed((prev) => !prev)}
-                className="accent-indigo-500"
+                type="text"
+                value={password}
+                readOnly
+                ref={passwordRef}
+                className="flex-1 px-4 py-2 rounded-lg bg-slate-800 border border-slate-600 focus:outline-none"
               />
-              Numbers
+
+              {/* Refresh */}
+              <button onClick={passwordGenerator} className="p-2">
+                <RefreshCcw
+                  size={22}
+                  className="text-green-400 hover:text-green-300 hover:rotate-180 transition-transform duration-300"
+                />
+              </button>
+
+              {/* Copy */}
+              <button onClick={copyPasswordToClipboard} className="p-2">
+                <Copy
+                  size={22}
+                  className="text-indigo-400 hover:text-indigo-300 transition"
+                />
+              </button>
+
+              {/* Save */}
+              <button onClick={() => navigate("/create")} className="p-2">
+                <Save
+                  size={22}
+                  className="text-purple-400 hover:text-purple-300 transition"
+                />
+              </button>
+
+            </div>
+
+            {/* Helper text */}
+            <label className="block mb-2 text-slate-500 text-sm italic">
+              *Include numbers and special characters for better security
             </label>
 
-            <label className="flex items-center gap-2">
+            {/* Length Slider */}
+            <div className="mb-6">
+              <label className="block mb-2 text-slate-400">
+                Length: {length}
+              </label>
+
               <input
-                type="checkbox"
-                checked={charAllowed}
-                onChange={() => setCharAllowed((prev) => !prev)}
-                className="accent-indigo-500"
+                type="range"
+                min={6}
+                max={20}
+                value={length}
+                onChange={(e) => setLength(Number(e.target.value))}
+                className="w-full accent-indigo-500 cursor-pointer"
               />
-              Symbols
-            </label>
+            </div>
+
+            {/* Options */}
+            <div className="flex gap-8 mb-8">
+
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={numberAllowed}
+                  onChange={() => setNumberAllowed((prev) => !prev)}
+                  className="accent-indigo-500"
+                />
+                Numbers
+              </label>
+
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={charAllowed}
+                  onChange={() => setCharAllowed((prev) => !prev)}
+                  className="accent-indigo-500"
+                />
+                Symbols
+              </label>
+
+            </div>
+
+            {/* Navigation */}
+            <div className="flex justify-center">
+              <button
+                onClick={() => navigate("/home")}
+                className="px-6 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition"
+              >
+                Your Password Vault
+              </button>
+            </div>
 
           </div>
-
-          {/* Navigation */}
-          <div className="flex justify-center">
-            <button
-              onClick={() => navigate("/home")}
-              className="px-6 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition"
-            >
-              Your Password Vault
-            </button>
-          </div>
-
         </div>
       </div>
     </div>

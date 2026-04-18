@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuthStore } from "../store/useauthstore.js";
-import ThemeToggle from "../components/ThemeToggle";
 import { Trash2, User, ChevronDown } from "lucide-react";
 
 const Navbar = () => {
@@ -29,8 +28,7 @@ const Navbar = () => {
         {/* Navigation */}
         <div className="flex items-center gap-4">
 
-          {/* Theme Toggle */}
-          <ThemeToggle />
+
 
           {/* Auth Buttons */}
           {authUser && (

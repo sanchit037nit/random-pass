@@ -12,16 +12,15 @@ import Createpage from './pages/Createpage'
 import './App.css'
 import { useAuthStore } from './store/useauthstore.js'
 import ViewPage from './pages/Viewpage.jsx'
-import { useThemeStore } from "./store/usethemestore.js";
+
 
 
 const App=()=>{
   const { authUser ,checkauth} = useAuthStore()
-  const { initTheme } = useThemeStore();
+
 
   useEffect(()=>{
     checkauth()
-     initTheme();
   },[]);
 
     // console.log( authUser)
