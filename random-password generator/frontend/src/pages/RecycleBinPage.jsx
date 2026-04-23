@@ -19,7 +19,7 @@ const RecycleBinPage = () => {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-4xl font-bold tracking-tight flex items-center gap-2">
-          🗑️ Recycle Bin
+           Recycle Bin
         </h1>
         <p className="text-gray-400 mt-2">
           Items here will be permanently deleted after some time.
