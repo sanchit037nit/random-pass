@@ -4,6 +4,8 @@ import { usePasStore } from "../store/usepasstore.js";
 import Navbar from "../components/Navbar.jsx";
 import { RefreshCcw, Copy, Save } from "lucide-react";
 import "@splinetool/viewer";
+import zxcvbn from "zxcvbn";
+
 
 export const Ranpass = () => {
   const navigate = useNavigate();
@@ -12,6 +14,7 @@ export const Ranpass = () => {
   const [numberAllowed, setNumberAllowed] = useState(false);
   const [charAllowed, setCharAllowed] = useState(false);
   const [password, setPassword] = useState("");
+  const [Strength, setStrength] = useState("");
 
   const { setGeneratedPassword } = usePasStore();
 
@@ -29,9 +32,10 @@ export const Ranpass = () => {
       let char = Math.floor(Math.random() * str.length);
       pass += str.charAt(char);
     }
-
+    const strength = zxcvbn(password);
     setPassword(pass);
     setGeneratedPassword(pass);
+    setStrength(strength)
   }, [length, numberAllowed, charAllowed, setGeneratedPassword]);
 
   // 📋 Copy Password
@@ -104,6 +108,37 @@ export const Ranpass = () => {
             </div>
 
             {/* Helper text */}
+<div>
+  <div
+    style={{
+      width: "100%",
+      height: "10px",
+      backgroundColor: "#ddd",
+      borderRadius: "5px",
+    }}
+  >
+    <div
+      style={{
+        width: `${(Strength.score + 1) * 20}%`,
+        height: "100%",
+        backgroundColor:
+          Strength.score < 2
+            ? "red"
+            : Strength.score < 4
+            ? "orange"
+            : "green",
+        borderRadius: "5px",
+      }}
+    />
+  </div>
+
+  <p style={{ marginTop: "8px" }}>
+    {
+      ["Very Weak", "Weak", "Fair", "Strong", "Very Strong"][Strength.score]
+    }
+  </p>
+</div>
+
             <label className="block mb-2 text-slate-500 text-sm italic">
               *Include numbers and special characters for better security
             </label>
