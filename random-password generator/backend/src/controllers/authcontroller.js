@@ -88,7 +88,7 @@ export const logout= (req,res)=>{
 }
 
 export const checkauth =(req,res)=>{
-try{
+    try {
 res.status(200).json(req.user)
 }
 catch (error){

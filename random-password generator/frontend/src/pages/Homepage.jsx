@@ -8,7 +8,7 @@ import "@splinetool/viewer";
 
 export const Homepage = () => {
   const { authUser } = useAuthStore();
-  const { getpass, passes, deletepass } = usePasStore();
+  const { getpass, passes, deletepass , viewpass} = usePasStore();
   const navigate = useNavigate();
 
   const [visibleIds, setVisibleIds] = useState([]);
@@ -42,7 +42,7 @@ export const Homepage = () => {
 
   // ✅ FIXED
   const handleView = (passId) => {
-    navigate(`/view`);
+     viewpass(passId, navigate);
   };
 
   const handleDelete = (e, passId) => {

@@ -55,6 +55,7 @@ export const usePasStore = create((set,get) => ({
         try{
           
             const res = await axiosinstance.get(`/pass/view/${id}`)
+            console.log(res)
             set({selectedpass:res.data})
             navigate('/view');
             // toast.success("password retrieved successfully")
