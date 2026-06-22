@@ -69,18 +69,39 @@ export const usePasStore = create((set,get) => ({
     getpass: async(id) =>{
         try{
             const res = await axiosinstance.get(`/pass/get/${id}`)
-            // console.log(res.data.passwords)
             set({ passes: res.data.passwords })
-            // toast.success("password retrieved successfully")
         }
         catch(error){
             toast.error(error.response.data.message)
         }
-    }
+    },
+
+    downloadpass: async (id) => {
+        try {
+    const response = await axiosinstance.get(
+      `/pass/download/${id}`,
+      {
+        responseType: "blob",
+      }
+    );
+
+    const blob = new Blob([response.data], {
+      type: "application/pdf",
+    });
+
+    const url = window.URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "passwords.pdf";
+
+    document.body.appendChild(link);
+    link.click();
+
+    link.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error(error);
+  }
+    },
 }))
-
-    // Uncomment if you want to manage selected user state
-    // selecteduser: null,
-//    selecteduser:null,
-
-    // setselecteduser:(selecteduser) =>set({selecteduser}),

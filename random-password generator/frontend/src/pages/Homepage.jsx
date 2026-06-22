@@ -8,7 +8,7 @@ import "@splinetool/viewer";
 
 export const Homepage = () => {
   const { authUser } = useAuthStore();
-  const { getpass, passes, deletepass , viewpass} = usePasStore();
+  const { getpass, passes, deletepass , viewpass,downloadpass} = usePasStore();
   const navigate = useNavigate();
 
   const [visibleIds, setVisibleIds] = useState([]);
@@ -46,8 +46,13 @@ export const Homepage = () => {
   };
 
   const handleDelete = (e, passId) => {
-    e.stopPropagation(); // prevent card click
+    e.stopPropagation; // prevent card click
     deletepass(passId);
+  };
+
+  const handleDownload = (e) => {
+    e.stopPropagation; 
+    downloadpass(id);
   };
 
   return (
@@ -80,6 +85,13 @@ export const Homepage = () => {
             className="px-4 py-2 rounded-lg bg-slate-900/70 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-72 backdrop-blur"
           />
 
+          <button
+            className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 transition shadow-lg"
+            onClick={() => handleDownload(!sort)}
+          >
+            Download
+          </button>
+          
           <button
             className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 transition shadow-lg"
             onClick={() => setsort(!sort)}

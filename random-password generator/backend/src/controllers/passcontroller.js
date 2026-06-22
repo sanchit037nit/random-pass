@@ -1,7 +1,14 @@
 import {generateToken} from "../lib/uteis.js"
 import Password from "../models/pass.model.js"
 import User from "../models/user.model.js"
+import PDFDocument from "pdfkit";
 
+const fetchPasswords = async (userId) => {
+  return await Password.find({
+    createdby: userId,
+    deleted: false,
+  });
+};
 
 export const createpass = async(req,res)=>{
       const {name,password,description,createdby,group}=req.body
@@ -97,27 +104,7 @@ export const deleteforever = async (req, res) => {
   }
 };
 
-export const getpass= async(req,res)=>{
-    const {userId}=req.params
-   
-    try {
-        const user=await User.findById(userId)
-        if(!user){
-         return res.status(400).json({message:"invalid user"})
-        }
 
-        const passwords=await Password.find({createdby:userId,deleted:false,})
-
-        if(!passwords){
-              return res.status(200).json({message:"no passwords available"})
-        }
-        
-        return res.status(200).json({passwords})
-
-    } catch (error) {
-        console.log("error in getting passwords",error)
-    }
-}
 
 export const viewpass= async(req,res)=>{
     const {id}=req.params
@@ -194,6 +181,65 @@ export const restorePass = async (req, res) => {
     res.status(200).json({ message: "Password restored" });
   } catch (error) {
     console.log("Error restoring password", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const getpass = async (req, res) => {
+  const { userId } = req.params
+   
+  try {
+    const user = await User.findById(userId)
+    if (!user) {
+      return res.status(400).json({ message: "invalid user" })
+    }
+
+    const passwords = await Password.find({ createdby: userId, deleted: false, })
+
+    if (!passwords) {
+      return res.status(200).json({ message: "no passwords available" })
+    }
+        
+    return res.status(200).json({ passwords })
+
+  } catch (error) {
+    console.log("error in getting passwords", error)
+  }
+};
+
+export const downloadpass = async (req, res) => {
+
+  try {
+     const { userId } = req.params
+     const passwords = await fetchPasswords(userId);
+     console.log(passwords)
+    const doc = new PDFDocument();
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      'attachment; filename="passwords.pdf"'
+    );
+
+    doc.pipe(res);
+
+    doc.fontSize(20).text("Saved Passwords", {
+      align: "center",
+    });
+
+    doc.moveDown();
+
+    passwords.forEach((pass, index) => {
+      doc.text(`${index + 1}. Name: ${pass.name}`);
+      doc.text(`Password: ${pass.password}`);
+      doc.text(`Description: ${pass.description}`);
+      doc.moveDown();
+    });
+
+    doc.end();
+    
+  }catch (error) {
+    console.log("Error downloading password", error);
     res.status(500).json({ message: "Server error" });
   }
 };

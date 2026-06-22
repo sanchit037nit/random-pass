@@ -1,5 +1,5 @@
 import express from "express"
-import { createpass,updatepass,deletepass, viewpass, getpass,Dashpage,getRecycleBin,restorePass,deleteforever } from "../controllers/passcontroller.js"
+import { createpass,updatepass,deletepass, viewpass, getpass,Dashpage,getRecycleBin,restorePass,deleteforever,downloadpass } from "../controllers/passcontroller.js"
 import { protectroute } from "../middleware/authmiddleware.js"
 
 const router = express.Router();
@@ -21,6 +21,8 @@ router.get("/dashboard/:userId", protectroute, Dashpage);
 router.get("/recycle/:userId", protectroute, getRecycleBin);
 
 router.patch("/restore/:id", protectroute, restorePass);
+
+router.get("/download/:userId", protectroute, downloadpass);
 
 
 export default  router;
