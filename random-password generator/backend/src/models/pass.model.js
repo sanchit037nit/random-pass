@@ -35,5 +35,17 @@ const passchema=new mongoose.Schema({
 },
 {timestamps:true})
 
+passchema.index({ createdby: 1 });
+
+passchema.index({
+  createdby: 1,
+  deleted: 1,
+});
+
+passchema.index({
+  createdby: 1,
+  createdAt: -1,
+});
+
 const pass=mongoose.model("Password",passchema)
 export default pass

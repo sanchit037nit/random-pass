@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import { motion } from "framer-motion";
 import "@splinetool/viewer";
+import { debounce } from "lodash";
 
 export const Homepage = () => {
   const { authUser } = useAuthStore();
@@ -35,6 +36,11 @@ export const Homepage = () => {
   };
 
   const id = authUser?._id;
+
+  const debouncedSearch = debounce((value) => {
+  setspass(value);
+  }, 500);
+  
 
   useEffect(() => {
     if (id) getpass(id);
@@ -80,7 +86,7 @@ export const Homepage = () => {
           <input
             type="text"
             value={spass}
-            onChange={(e) => setspass(e.target.value)}
+            onChange={(e) => debouncedSearch(e.target.value)}
             placeholder="Search passwords..."
             className="px-4 py-2 rounded-lg bg-slate-900/70 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-72 backdrop-blur"
           />
