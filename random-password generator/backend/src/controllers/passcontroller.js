@@ -186,24 +186,31 @@ export const restorePass = async (req, res) => {
 };
 
 export const getpass = async (req, res) => {
-  const { userId } = req.params
-   
+  const { userId } = req.params;
+
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+
   try {
-    const user = await User.findById(userId)
-    if (!user) {
-      return res.status(400).json({ message: "invalid user" })
-    }
+    const passwords = await Password.find({
+      createdby: userId,
+      deleted: false,
+    })
+      .skip((page - 1) * limit)
+      .limit(limit);
 
-    const passwords = await Password.find({ createdby: userId, deleted: false, })
+    const total = await Password.countDocuments({
+      createdby: userId,
+      deleted: false,
+    });
 
-    if (!passwords) {
-      return res.status(200).json({ message: "no passwords available" })
-    }
-        
-    return res.status(200).json({ passwords })
-
+    res.status(200).json({
+      passwords,
+      totalPages: Math.ceil(total / limit),
+      currentPage: page,
+    });
   } catch (error) {
-    console.log("error in getting passwords", error)
+    console.log(error);
   }
 };
 

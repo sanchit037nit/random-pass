@@ -9,7 +9,7 @@ import { debounce } from "lodash";
 
 export const Homepage = () => {
   const { authUser } = useAuthStore();
-  const { getpass, passes, deletepass , viewpass,downloadpass} = usePasStore();
+  const { getpass, passes, deletepass , viewpass,downloadpass , totalPages} = usePasStore();
   const navigate = useNavigate();
 
   const [visibleIds, setVisibleIds] = useState([]);
@@ -48,6 +48,7 @@ export const Homepage = () => {
 
   // ✅ FIXED
   const handleView = (passId) => {
+    e.stopPropagation;
      viewpass(passId, navigate);
   };
 
@@ -60,6 +61,19 @@ export const Homepage = () => {
     e.stopPropagation; 
     downloadpass(id);
   };
+const [page, setPage] = useState(1);
+
+useEffect(() => {
+  if (id) {
+    getpass(id, page);
+  }
+}, [id, page]);
+
+useEffect(() => {
+  if (page > totalPages && totalPages > 0) {
+    setPage(totalPages);
+  }
+}, [page, totalPages]);
 
   return (
     <div className="min-h-screen relative text-slate-200 font-sans overflow-hidden">
@@ -174,6 +188,40 @@ export const Homepage = () => {
           ))}
         </div>
 
+        {/* Pagination */}
+<div className="flex justify-center items-center gap-4 py-8">
+
+  <button
+    disabled={page === 1}
+    onClick={() => setPage((prev) => prev - 1)}
+    className={`px-5 py-2 rounded-lg font-medium transition
+      ${
+        page === 1
+          ? "bg-slate-700 cursor-not-allowed opacity-50"
+          : "bg-indigo-600 hover:bg-indigo-700"
+      }`}
+  >
+    ← Previous
+  </button>
+
+  <span className="text-lg font-semibold text-indigo-300">
+    Page {page} of {totalPages}
+  </span>
+
+  <button
+    disabled={page === totalPages}
+    onClick={() => setPage((prev) => prev + 1)}
+    className={`px-5 py-2 rounded-lg font-medium transition
+      ${
+        page === totalPages
+          ? "bg-slate-700 cursor-not-allowed opacity-50"
+          : "bg-indigo-600 hover:bg-indigo-700"
+      }`}
+  >
+    Next →
+  </button>
+
+</div>
         {/* Floating Button */}
         <div className="fixed bottom-4 right-4">
           <button

@@ -10,7 +10,8 @@ export const usePasStore = create((set,get) => ({
    selectedpass: null,
    createdpass:null,
    generatedPassword: '',
-   setGeneratedPassword: (pwd) => set({ generatedPassword: pwd }),
+    setGeneratedPassword: (pwd) => set({ generatedPassword: pwd }),
+  totalPages: 1,
 
 
     createpass: async(data) =>{
@@ -66,14 +67,15 @@ export const usePasStore = create((set,get) => ({
         }
     },
 
-    getpass: async(id) =>{
-        try{
-            const res = await axiosinstance.get(`/pass/get/${id}`)
-            set({ passes: res.data.passwords })
-        }
-        catch(error){
-            toast.error(error.response.data.message)
-        }
+    getpass: async (userId, page = 1) => {
+        const res = await axiosinstance.get(
+            `/pass/get/${userId}?page=${page}&limit=10`
+        );
+
+        set({
+            passes: res.data.passwords,
+            totalPages: res.data.totalPages,
+        });
     },
 
     downloadpass: async (id) => {
