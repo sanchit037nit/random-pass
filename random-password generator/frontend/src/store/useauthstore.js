@@ -1,10 +1,8 @@
 import {create} from 'zustand';
 import { axiosinstance } from '../lib/axios.js';
 import { toast } from 'react-hot-toast';    
-import { usePasStore } from './usepasstore.js';
 
 
-// const {passes}=usePasStore.getState();
 export const useAuthStore = create((set,get) => ({
 
 
@@ -53,7 +51,6 @@ export const useAuthStore = create((set,get) => ({
 
       }
       catch(error){
-        // toast.error(error.message)
         set({authUser:null})
       }
   },

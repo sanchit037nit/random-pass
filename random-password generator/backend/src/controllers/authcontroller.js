@@ -2,6 +2,7 @@ import {generateToken} from "../lib/uteis.js"
 import User from "../models/user.model.js"
 import Password from "../models/pass.model.js"
 import bcrypt from "bcryptjs"
+import AuditLog from "../models/auditlogs.model.js";
 
 export const signup=async (req,res)=>{
     const {name,emailid,password} =req.body
@@ -69,6 +70,12 @@ export const login=async (req,res)=>{
             fullName:user.name,
             email:user.emailid,
         })
+
+        await AuditLog.create({
+         user:req.user._id,
+         action:"LOGIN SUCCESSFULL",
+         resourceId:id
+        });
     }
     catch (error){
         console.log("error in login controller",error.message)
@@ -76,9 +83,14 @@ export const login=async (req,res)=>{
     }
 };
 
-export const logout= (req,res)=>{
+export const logout= async(req,res)=>{
     try{
-        res.cookie("jwt","",{maxAge:0})
+        res.cookie("jwt", "", { maxAge: 0 })
+        await AuditLog.create({
+         user:req.user._id,
+         action:"LOGOUT SUCCESSFULL",
+         resourceId:id
+        });
         res.status(200).json({message:"logged out successfully"})
     }
     catch (error){
@@ -106,7 +118,12 @@ export const deleteaccount=async (req,res)=>{
         return res.status(400).json({message: "user id is required"})
     }
     await User.findByIdAndDelete(userid)
-    await Password.deleteMany({createdby:userid})
+    await Password.deleteMany({ createdby: userid })
+        await AuditLog.create({
+         user:req.user._id,
+         action:"ACCOUNT DELETION SUCCESSFULL",
+         resourceId:id
+        });
     res.status(200).json({message: "account deleted successfully"})
    } catch (error) {
     console.log("error in deleteaccount controller",error.message)

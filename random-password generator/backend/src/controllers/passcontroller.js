@@ -2,6 +2,8 @@ import {generateToken} from "../lib/uteis.js"
 import Password from "../models/pass.model.js"
 import User from "../models/user.model.js"
 import PDFDocument from "pdfkit";
+import AuditLog from "../models/auditlogs.model.js";
+
 
 const fetchPasswords = async (userId) => {
   return await Password.find({
@@ -32,6 +34,11 @@ export const createpass = async(req,res)=>{
                 _id:newpass._id,
                 name:newpass.name,
                 password:newpass.password,
+               })
+          await AuditLog.create({
+                user: req.user._id,
+                action: "CREATE_PASSWORD",
+                resourceId: password._id
             })
         }
         else { res.status(400).json({ message: "password cannot be created" });}
@@ -65,6 +72,12 @@ export const updatepass = async(req,res)=>{
             {new:true}
         )
 
+            await AuditLog.create({
+              user:req.user._id,
+              action:"DELETE_PASSWORD",
+              resourceId:id
+            });
+
         return res.status(200).json({message:"password updated"})
       } catch (error) {
         console.log("error in updating password",error)
@@ -82,6 +95,12 @@ export const deletepass = async (req, res) => {
     pass.deletedAt= new Date()
     await pass.save();
 
+    await AuditLog.create({
+    user:req.user._id,
+    action:"PASSWORD DELETED SUCCESSFULLY",
+    resourceId:id
+    });
+
     return res.status(200).json({ message: "Password moved to Recycle Bin" });
   } catch (error) {
     console.log("Error deleting password", error);
@@ -96,7 +115,13 @@ export const deleteforever = async (req, res) => {
     if (!pass) return res.status(400).json({ message: "Password not found" });
 
     const del = await Password.findByIdAndDelete(id);
-    
+
+    await AuditLog.create({
+    user:req.user._id,
+    action:"DELETE_PASSWORD",
+    resourceId:id
+    });
+
     return res.status(200).json({ message: "Password deleted successfully" });
   } catch (error) {
     console.log("Error deleting password", error);
@@ -178,6 +203,12 @@ export const restorePass = async (req, res) => {
     pass.deletedAt = null;
     await pass.save();
 
+        await AuditLog.create({
+    user:req.user._id,
+    action:"RESTORED_PASSWORD",
+    resourceId:id
+        });
+    
     res.status(200).json({ message: "Password restored" });
   } catch (error) {
     console.log("Error restoring password", error);
@@ -244,6 +275,12 @@ export const downloadpass = async (req, res) => {
     });
 
     doc.end();
+
+        await AuditLog.create({
+    user:req.user._id,
+    action:"DOWNLOADED_PASSWORD",
+    resourceId:id
+    });
     
   }catch (error) {
     console.log("Error downloading password", error);
