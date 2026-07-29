@@ -47,18 +47,18 @@ export const Homepage = () => {
   }, [id]);
 
   // ✅ FIXED
-  const handleView = (passId) => {
-    e.stopPropagation;
+  const handleView = (e,passId) => {
+    e.stopPropagation();
      viewpass(passId, navigate);
   };
 
   const handleDelete = (e, passId) => {
-    e.stopPropagation; // prevent card click
+    e.stopPropagation(); // prevent card click
     deletepass(passId);
   };
 
   const handleDownload = (e) => {
-    e.stopPropagation; 
+    e.stopPropagation(); 
     downloadpass(id);
   };
 const [page, setPage] = useState(1);
@@ -137,7 +137,7 @@ useEffect(() => {
                   .map((pass) => (
                     <motion.div
                       key={pass._id}
-                      onClick={() => handleView(pass._id)} // ✅ card click
+                      onClick={(e) => handleView(e,pass._id)} // ✅ card click
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="cursor-pointer bg-slate-900/60 backdrop-blur-md p-5 rounded-xl border border-slate-700 shadow-lg hover:shadow-indigo-500/20 hover:scale-[1.02] transition-all flex justify-between items-center"

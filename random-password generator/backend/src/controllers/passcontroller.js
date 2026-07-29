@@ -36,9 +36,9 @@ export const createpass = async(req,res)=>{
                 password:newpass.password,
                })
           await AuditLog.create({
-                user: req.user._id,
+                user: name,
                 action: "CREATE_PASSWORD",
-                resourceId: password._id
+                resourceId: newpass._id
             })
         }
         else { res.status(400).json({ message: "password cannot be created" });}
@@ -73,7 +73,7 @@ export const updatepass = async(req,res)=>{
         )
 
             await AuditLog.create({
-              user:req.user._id,
+              user:name,
               action:"DELETE_PASSWORD",
               resourceId:id
             });
@@ -96,7 +96,7 @@ export const deletepass = async (req, res) => {
     await pass.save();
 
     await AuditLog.create({
-    user:req.user._id,
+    user:id,
     action:"PASSWORD DELETED SUCCESSFULLY",
     resourceId:id
     });
@@ -112,15 +112,16 @@ export const deleteforever = async (req, res) => {
   const { id } = req.params;
   try {
     const pass = await Password.findById(id);
+    console.log(pass)
     if (!pass) return res.status(400).json({ message: "Password not found" });
 
     const del = await Password.findByIdAndDelete(id);
 
-    await AuditLog.create({
-    user:req.user._id,
-    action:"DELETE_PASSWORD",
-    resourceId:id
-    });
+    // await AuditLog.create({
+    // user:req.user._id,
+    // action:"DELETE_PASSWORD",
+    // resourceId:id
+    // });
 
     return res.status(200).json({ message: "Password deleted successfully" });
   } catch (error) {

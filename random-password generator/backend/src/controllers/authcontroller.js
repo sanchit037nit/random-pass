@@ -83,14 +83,9 @@ export const login=async (req,res)=>{
     }
 };
 
-export const logout= async(req,res)=>{
+export const logout= (req,res)=>{
     try{
         res.cookie("jwt", "", { maxAge: 0 })
-        await AuditLog.create({
-         user:req.user._id,
-         action:"LOGOUT SUCCESSFULL",
-         resourceId:id
-        });
         res.status(200).json({message:"logged out successfully"})
     }
     catch (error){
