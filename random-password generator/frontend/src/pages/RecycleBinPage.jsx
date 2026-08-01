@@ -10,7 +10,8 @@ const RecycleBinPage = () => {
 
   const { authUser } = useAuthStore();
   const id = authUser?._id;
-
+  
+  console.log(trashItems)
   useEffect(() => {
     if (id) getTrash(id);
   }, [id]);

@@ -130,8 +130,6 @@ export const deleteforever = async (req, res) => {
   }
 };
 
-
-
 export const viewpass= async(req,res)=>{
     const {id}=req.params
     try {
@@ -157,7 +155,8 @@ export const Dashpage = async (req, res) => {
     const user = await User.findById(userId);
     if (!user) return res.status(400).json({ message: "invalid user" });
 
-    const passwords = await Password.find({ createdby: userId });
+    const passwords = await Password.find({ createdby: userId ,deleted:false});
+
 
     // Count passwords per group
     const groupCounts = passwords.reduce((acc, pass) => {
@@ -195,7 +194,7 @@ export const getRecycleBin = async (req, res) => {
 
 export const restorePass = async (req, res) => {
   const { id } = req.params;
-  console.log(id)
+  
   try {
     const pass = await Password.findById(id);
     if (!pass) return res.status(400).json({ message: "Password not found" });

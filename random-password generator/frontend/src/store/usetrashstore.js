@@ -20,6 +20,7 @@ export const useTrashStore = create((set) => ({
 
   restoreItem: async (id) => {
     try {
+      
       await axiosinstance.patch(`/pass/restore/${id}`);
       set((state) => ({
         trashItems: state.trashItems.filter((item) => item._id !== id),
