@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import { axiosinstance } from "../lib/axios.js";
 import { Shield, Layers, Star } from "lucide-react";
+import { usePasStore } from "../store/usepasstore.js";
 
 export const Dashpage = () => {
   const { authUser } = useAuthStore();
@@ -17,6 +18,11 @@ export const Dashpage = () => {
 
   const id = authUser?._id;
   const [loading, setLoading] = useState(true);
+  const { securityAlerts, getSecurityAlerts } = usePasStore();
+
+useEffect(() => {
+  getSecurityAlerts();
+}, []);
 
   useEffect(() => {
     if (!authUser) {
@@ -188,6 +194,29 @@ export const Dashpage = () => {
               )}
             </div>
 
+<div className="bg-[#111827]/70 backdrop-blur-lg border border-[#1F2937] rounded-xl p-5">
+  <h2 className="font-mono text-sm tracking-widest uppercase text-[#FBBF24] mb-4">
+    Security Alerts
+  </h2>
+
+  {securityAlerts.length > 0 ? (
+    <div className="space-y-3">
+      {securityAlerts.map((item) => (
+        <div
+          key={item._id}
+          className="flex justify-between items-center border-b border-white/10 pb-2"
+        >
+          <span>{item.website}</span>
+          <span className="text-red-400">{item.age} days old</span>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <p className="text-[#8B93A7]">
+      🎉 All your passwords are up to date.
+    </p>
+  )}
+</div>
           </div>
         </div>
       </div>

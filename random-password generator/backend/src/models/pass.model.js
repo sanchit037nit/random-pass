@@ -17,10 +17,11 @@ const passchema=new mongoose.Schema({
         unique: true,
     },
 
-    group: {
-    type: String,
-    default: "General"
-    },
+group: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Group",
+    required: true
+},
     
     createdby:{
         type:mongoose.Schema.Types.ObjectId,
@@ -32,6 +33,13 @@ const passchema=new mongoose.Schema({
         type: Date,
         default: null,
     },
+
+    passwordUpdatedAt: {
+    type: Date,
+    default: Date.now
+    },
+
+
 },
 {timestamps:true})
 

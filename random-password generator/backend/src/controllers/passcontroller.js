@@ -3,6 +3,7 @@ import Password from "../models/pass.model.js"
 import User from "../models/user.model.js"
 import PDFDocument from "pdfkit";
 import AuditLog from "../models/auditlogs.model.js";
+import { Group } from "../models/group.model.js";
 
 
 const fetchPasswords = async (userId) => {
@@ -12,78 +13,158 @@ const fetchPasswords = async (userId) => {
   });
 };
 
-export const createpass = async(req,res)=>{
-      const {name,password,description,createdby,group}=req.body
+export const createpass = async (req, res) => {
+    try {
 
-      try {
-        if(!name || !password || !description){
-            return res.status(400).json({message:"all fields required"})
-        }
-
-        const newpass=new Password({
+        const {
             name,
             password,
             description,
-            group,
-            createdby
-        })
+            createdby,
+            group
+        } = req.body;
 
-        if(newpass){
-            await newpass.save()
-               res.status(201).json({
-                _id:newpass._id,
-                name:newpass.name,
-                password:newpass.password,
-               })
-          await AuditLog.create({
-                user: name,
-                action: "CREATE_PASSWORD",
-                resourceId: newpass._id
-            })
-        }
-        else { res.status(400).json({ message: "password cannot be created" });}
-
-      } catch (error) {
-        console.log("error in creating password",error)
-      }
-
-}
-
-export const updatepass = async(req,res)=>{
-      const {name,password,description,group}=req.body
-      const {id}=req.params
-   
-      try {
-           if(!id){
+        if (!name || !password || !description) {
             return res.status(400).json({
-                message:"no todo selected"
-            })
-           }
+                message: "All fields are required"
+            });
+        }
 
-        const newpass=await Password.findByIdAndUpdate(
-            id,
-            { $set:{
-                name:name,
-                password:password,
-                description: description,
-                group:group
-              }
-            },
-            {new:true}
-        )
+        // If no group is selected, use the user's General group
+        let groupId = group;
 
-            await AuditLog.create({
-              user:name,
-              action:"DELETE_PASSWORD",
-              resourceId:id
+        if (!groupId) {
+
+            const generalGroup = await Group.findOne({
+                user: req.User._id,
+                name: "General"
             });
 
-        return res.status(200).json({message:"password updated"})
-      } catch (error) {
-        console.log("error in updating password",error)
-      }
+            if (!generalGroup) {
+                return res.status(404).json({
+                    message: "Default group not found"
+                });
+            }
 
-}
+            groupId = generalGroup._id;
+        }
+
+        // Check that the selected group belongs to the logged-in user
+        const groupExists = await Group.findOne({
+            _id: groupId,
+            user: req.User._id
+        });
+
+        if (!groupExists) {
+            return res.status(404).json({
+                message: "Invalid group"
+            });
+        }
+
+        const newpass = await Password.create({
+            name,
+            password,
+            description,
+            group: groupId,
+            createdby
+        });
+
+        await AuditLog.create({
+            user: req.User._id,
+            action: "CREATE_PASSWORD",
+            resourceId: newpass._id
+        });
+
+        return res.status(201).json({
+            _id: newpass._id,
+            name: newpass.name,
+            password: newpass.password,
+            description: newpass.description,
+            group: newpass.group,
+            createdby: newpass.createdby
+        });
+
+    } catch (error) {
+
+        console.error("Error creating password:", error);
+
+        return res.status(500).json({
+            message: "Internal Server Error"
+        });
+    }
+};
+export const updatepass = async (req, res) => {
+    const { name, password, description, group } = req.body;
+    const { id } = req.params;
+
+    try {
+
+        if (!id) {
+            return res.status(400).json({
+                message: "No password selected"
+            });
+        }
+
+        // Verify group belongs to the logged-in user
+        if (group) {
+
+            const exists = await Group.findOne({
+                _id: group,
+                createdBy: req.User._id
+            });
+
+            if (!exists) {
+                return res.status(404).json({
+                    message: "Invalid group"
+                });
+            }
+        }
+
+        // Verify password belongs to the logged-in user
+        const existingPassword = await Password.findOne({
+            _id: id,
+            createdby: req.User._id
+        });
+
+        if (!existingPassword) {
+            return res.status(404).json({
+                message: "Password not found"
+            });
+        }
+
+        const updatedPassword = await Password.findByIdAndUpdate(
+            id,
+            {
+                $set: {
+                    name,
+                    password,
+                    description,
+                    group,
+                    passwordUpdatedAt: new Date(),
+                },
+            },
+            { new: true }
+        );
+
+        await AuditLog.create({
+            user: req.User._id,
+            action: "UPDATE_PASSWORD",
+            resourceId: id,
+        });
+
+        return res.status(200).json({
+            message: "Password updated successfully",
+            password: updatedPassword,
+        });
+
+    } catch (error) {
+        console.error("Error updating password:", error);
+
+        return res.status(500).json({
+            message: "Internal Server Error"
+        });
+    }
+};
 
 export const deletepass = async (req, res) => {
   const { id } = req.params;
@@ -117,11 +198,7 @@ export const deleteforever = async (req, res) => {
 
     const del = await Password.findByIdAndDelete(id);
 
-    // await AuditLog.create({
-    // user:req.user._id,
-    // action:"DELETE_PASSWORD",
-    // resourceId:id
-    // });
+
 
     return res.status(200).json({ message: "Password deleted successfully" });
   } catch (error) {
@@ -217,32 +294,41 @@ export const restorePass = async (req, res) => {
 };
 
 export const getpass = async (req, res) => {
-  const { userId } = req.params;
+  const { groupId } = req.params;
+  console.log("rew",req.User)
+    console.log(groupId)
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
 
-  const page = Number(req.query.page) || 1;
-  const limit = Number(req.query.limit) || 10;
+    try {
 
-  try {
-    const passwords = await Password.find({
-      createdby: userId,
-      deleted: false,
-    })
-      .skip((page - 1) * limit)
-      .limit(limit);
+        const passwords = await Password.find({
+            createdby: req.User._id,
+            group: groupId,
+            deleted: false,
+        })
+        .skip((page - 1) * limit)
+        .limit(limit);
 
-    const total = await Password.countDocuments({
-      createdby: userId,
-      deleted: false,
-    });
+        const total = await Password.countDocuments({
+            createdby: req.User._id,
+            group: groupId,
+            deleted: false,
+        });
 
-    res.status(200).json({
-      passwords,
-      totalPages: Math.ceil(total / limit),
-      currentPage: page,
-    });
-  } catch (error) {
-    console.log(error);
-  }
+        res.status(200).json({
+            passwords,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page,
+        });
+
+    } catch (error) {
+        console.log(error);
+
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+    }
 };
 
 export const downloadpass = async (req, res) => {
@@ -285,5 +371,54 @@ export const downloadpass = async (req, res) => {
   }catch (error) {
     console.log("Error downloading password", error);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+// controllers/password.controller.js
+
+export const getSecurityAlerts = async (req, res) => {
+  try {
+    const THRESHOLD_DAYS = 90;
+  
+    const passwords = await Password.find({
+      createdby: req.User._id,
+      deleted: false,
+    });
+
+    console.log(passwords)
+    const today = new Date();
+
+    const alerts = passwords
+      .filter((password) => {
+        const lastUpdated =
+          password.passwordUpdatedAt || password.createdAt;
+
+        const age =
+          Math.floor(
+            (today - new Date(lastUpdated)) /
+            (1000 * 60 * 60 * 24)
+          );
+
+        return age >= THRESHOLD_DAYS;
+      })
+      .map((password) => ({
+        _id: password._id,
+        website: password.website,
+        username: password.username,
+        age:
+          Math.floor(
+            (today - new Date(password.passwordUpdatedAt || password.createdAt)) /
+            (1000 * 60 * 60 * 24)
+          ),
+      }));
+
+    console.log(alerts)
+    return res.status(200).json(alerts);
+
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
   }
 };

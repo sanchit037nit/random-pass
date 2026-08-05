@@ -3,6 +3,7 @@ import User from "../models/user.model.js"
 import Password from "../models/pass.model.js"
 import bcrypt from "bcryptjs"
 import AuditLog from "../models/auditlogs.model.js";
+import { Group } from "../models/group.model.js";
 
 export const signup=async (req,res)=>{
     const {name,emailid,password} =req.body
@@ -28,10 +29,15 @@ export const signup=async (req,res)=>{
             name:name,emailid:emailid,password:hashpass
         })
 
+
+        
         if(newuser){
             generateToken(newuser._id,res)
             await newuser.save();
-
+await Group.create({
+    name: "General",
+    user: newuser._id,
+});
             res.status(201).json({
                 _id:newuser._id,
                 name:newuser.name,
@@ -72,7 +78,7 @@ export const login=async (req,res)=>{
         })
 
         await AuditLog.create({
-         user:req.user._id,
+         user:user._id,
          action:"LOGIN SUCCESSFULL",
          resourceId:id
         });
@@ -105,13 +111,14 @@ catch (error){
 }
 
 export const deleteaccount=async (req,res)=>{
-    const {userid}=req.params
+    const { userid } = req.params
+        if(!userid){
+        return res.status(400).json({message: "user id is required"})
+    }
    
    try {
   
-    if(!userid){
-        return res.status(400).json({message: "user id is required"})
-    }
+
     await User.findByIdAndDelete(userid)
     await Password.deleteMany({ createdby: userid })
         await AuditLog.create({

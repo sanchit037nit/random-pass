@@ -4,19 +4,14 @@ import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import { useAuthStore } from "../store/useauthstore.js";
 
-/**
- * THEME: "Cipher Vault"
- * Add this once to your index.html <head> if these fonts aren't already loaded:
- * <link rel="preconnect" href="https://fonts.googleapis.com">
- * <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
- */
+
 
 const CHARSET = "!<>-_\\/[]{}—=+*^?#________";
 
 // ===== Hash-stream marquee (replaces the emoji ticker) =====
 const HashStream = () => {
-  const text =
-    "AES-256 • ARGON2ID • CSPRNG • ZERO-KNOWLEDGE • ENTROPY 128-BIT • ";
+ const text =
+  "AES-256 • ARGON2ID • CSPRNG • ZERO-KNOWLEDGE • ENTROPY 128-BIT • STRONG PASSWORDS • PASSWORD STRENGTH • RANDOMIZED CHARACTERS • SECURE GENERATION • UNCRACKABLE COMBINATIONS • ";
 
   return (
     <div className="overflow-hidden w-full py-2 bg-[#111827] border-y border-[#1F2937]">
@@ -123,7 +118,7 @@ export const Firstpage = () => {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34D399] opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-[#34D399]" />
           </span>
-          Engine online — generating entropy
+      
         </motion.div>
 
         {/* Signature: decrypting headline */}

@@ -11,7 +11,8 @@ export const usePasStore = create((set,get) => ({
    createdpass:null,
    generatedPassword: '',
     setGeneratedPassword: (pwd) => set({ generatedPassword: pwd }),
-  totalPages: 1,
+    totalPages: 1,
+    securityAlerts: [],
 
 
     createpass: async(data) =>{
@@ -106,4 +107,34 @@ export const usePasStore = create((set,get) => ({
     console.error(error);
   }
     },
+
+      getSecurityAlerts: async () => {
+    try {
+      const res = await axiosinstance.get("/pass/security-alerts");
+       
+      set({
+        securityAlerts: res.data,
+      });
+
+    } catch (err) {
+      console.log(err);
+    }
+    },
+      
+      getPasswordsByGroup: async (groupId) => {
+    try {
+        // console.log("2131",groupId)
+        const res = await axiosinstance.get(`/groups/${groupId}/passwords`);
+
+        set({
+            passes: res.data,
+            totalPages: 1
+        });
+
+    } catch (error) {
+        toast.error(
+            error.response?.data?.message || "Failed to fetch passwords"
+        );
+    }
+},
 }))

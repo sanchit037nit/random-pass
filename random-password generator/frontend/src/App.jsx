@@ -12,7 +12,7 @@ import Createpage from './pages/Createpage'
 import './App.css'
 import { useAuthStore } from './store/useauthstore.js'
 import ViewPage from './pages/Viewpage.jsx'
-
+import GroupPage from "./pages/GroupPage";
 
 
 const App=()=>{
@@ -26,19 +26,55 @@ const App=()=>{
     // console.log( authUser)
   return (
     <div>
-    <Routes>
-      <Route path="/" element={<Firstpage />} />
-      <Route path="/signup" element={!authUser ?<Signuppage /> : <Navigate to="/ranpass" />} />
-      <Route path="/login" element={!authUser ? <Loginpage /> : <Navigate to="/ranpass" />} />
-      <Route path="/ranpass" element={authUser ? <Ranpass /> : <Navigate to="/" />} />
-      <Route path="/home" element={authUser ? <Homepage /> : <Navigate to="/" />} />
-      <Route path="/create" element={authUser ? <Createpage /> : <Navigate to="/" />} />
-      <Route path="/view" element={authUser ? <ViewPage /> : <Navigate to="/" />} />
-      <Route path="/dashboard" element={authUser ? <Dashpage /> : <Navigate to="/" />} />
-      <Route path="/recycle-bin" element={authUser ? <RecycleBinPage /> : <Navigate to="/" />} />
-   
-    </Routes>
 
+                  <Routes>
+<Route path="/" element={<Firstpage />} />
+
+<Route
+    path="/signup"
+    element={!authUser ? <Signuppage /> : <Navigate to="/ranpass" />}
+/>
+
+<Route
+    path="/login"
+    element={!authUser ? <Loginpage /> : <Navigate to="/ranpass" />}
+/>
+
+<Route
+    path="/ranpass"
+    element={authUser ? <Ranpass /> : <Navigate to="/" />}
+/>
+
+<Route
+    path="/home"
+    element={authUser ? <Homepage /> : <Navigate to="/" />}
+/>
+
+<Route
+    path="/groups/:groupId"
+    element={authUser ? <GroupPage /> : <Navigate to="/" />}
+/>
+
+<Route
+    path="/create"
+    element={authUser ? <Createpage /> : <Navigate to="/" />}
+/>
+
+<Route
+    path="/view"
+    element={authUser ? <ViewPage /> : <Navigate to="/" />}
+/>
+
+<Route
+    path="/dashboard"
+    element={authUser ? <Dashpage /> : <Navigate to="/" />}
+/>
+
+<Route
+    path="/recycle-bin"
+    element={authUser ? <RecycleBinPage /> : <Navigate to="/" />}
+/>
+</Routes>
     <Toaster />
     </div>
   )

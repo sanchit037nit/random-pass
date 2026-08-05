@@ -5,11 +5,14 @@ import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import "@splinetool/viewer";
+import { useEffect } from "react";
+import { useGroupStore } from "../store/useGroupStore";
 
 const Createpage = () => {
   const navigate = useNavigate();
   const { createpass, generatedPassword } = usePasStore();
   const { authUser } = useAuthStore();
+  const { groups, getGroups } = useGroupStore();
 
   const [show, setShow] = useState(false);
 
@@ -17,7 +20,7 @@ const Createpage = () => {
     name: "",
     password: generatedPassword || "",
     description: "",
-    group: "General",
+    group: "",
     createdby: authUser?._id,
   });
 
@@ -36,7 +39,7 @@ const Createpage = () => {
     setformdata({
       name: "",
       password: "",
-      group: "General",
+      group: "",
       description: "",
 
     });
@@ -46,7 +49,9 @@ const Createpage = () => {
     e.preventDefault();
     navigate("/ranpass");
   };
-
+useEffect(() => {
+    getGroups();
+}, []);
   return (
     <div className="min-h-screen flex items-center justify-center px-4 relative text-white">
 
@@ -139,19 +144,27 @@ const Createpage = () => {
     Group
   </label>
 
-  <select
-    value={formdata.group}
-    onChange={(e) =>
-      setformdata({ ...formdata, group: e.target.value })
-    }
-    className="w-full px-4 py-2 rounded-lg bg-black/40 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-  >
-    <option value="General">General</option>
-    <option value="Work">Work</option>
-    <option value="Social">Social</option>
-    <option value="Banking">Banking</option>
-    <option value="Shopping">Shopping</option>
-  </select>
+<select
+  value={formdata.group}
+  onChange={(e) =>
+    setformdata({ ...formdata, group: e.target.value })
+  }
+  disabled={groups.length === 0}
+  className="w-full px-4 py-2 rounded-lg bg-black/40 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+>
+  {groups.length === 0 ? (
+    <option>No groups available</option>
+  ) : (
+    <>
+      <option value="">Select a Group</option>
+      {groups.map((group) => (
+        <option key={group._id} value={group._id}>
+          {group.name}
+        </option>
+      ))}
+    </>
+  )}
+</select>
           </div>
           
           {/* Button */}
