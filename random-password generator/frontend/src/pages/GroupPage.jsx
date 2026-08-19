@@ -130,7 +130,7 @@ useEffect(() => {
 
                     <button
                         className="btn btn-outline"
-                        onClick={() => navigate("/")}
+                        onClick={() => navigate("/home")}
                     >
                         <ArrowLeft size={18}/>
                         Back

@@ -62,6 +62,8 @@ useEffect(() => {
   const mostPopulatedGroup =
     Object.entries(groupCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
 
+  console.log(mostPopulatedGroup)
+
   return (
     <div className="min-h-screen relative text-[#E6E8EC] overflow-hidden bg-[#0A0E14]">
 
@@ -120,7 +122,7 @@ useEffect(() => {
                 </p>
               </div>
 
-              <div className="bg-[#111827]/70 backdrop-blur-xl border border-[#1F2937] rounded-2xl p-6 shadow-lg
+              {/* <div className="bg-[#111827]/70 backdrop-blur-xl border border-[#1F2937] rounded-2xl p-6 shadow-lg
                               hover:border-[#34D399]/40 hover:shadow-[0_0_24px_rgba(52,211,153,0.15)] transition-all">
                 <div className="flex items-center gap-3">
                   <Star className="text-[#34D399]" size={20} />
@@ -129,7 +131,7 @@ useEffect(() => {
                 <p className="text-2xl mt-4 font-bold font-mono text-[#E6E8EC]">
                   {mostPopulatedGroup}
                 </p>
-              </div>
+              </div> */}
 
             </div>
 
