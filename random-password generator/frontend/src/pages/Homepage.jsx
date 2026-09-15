@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Plus, Search } from "lucide-react";
 
 import Navbar from "../components/Navbar";
-import GroupGrid from "../components/groups/GroupGrid";
-import CreateGroupModal from "../components/groups/CreateGroupModal";
+import GroupGrid from "../components/Groups/GroupGrid";
+import CreateGroupModal from "../components/Groups/CreateGroupModal";
 
 import { useGroupStore } from "../store/useGroupStore";
 
