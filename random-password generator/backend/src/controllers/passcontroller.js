@@ -93,6 +93,7 @@ export const createpass = async (req, res) => {
         });
     }
 };
+
 export const updatepass = async (req, res) => {
     const { name, password, description, group } = req.body;
     const { id } = req.params;
@@ -374,8 +375,6 @@ export const downloadpass = async (req, res) => {
   }
 };
 
-// controllers/password.controller.js
-
 export const getSecurityAlerts = async (req, res) => {
   try {
     const THRESHOLD_DAYS = 90;
@@ -385,7 +384,7 @@ export const getSecurityAlerts = async (req, res) => {
       deleted: false,
     });
 
-    console.log(passwords)
+    // console.log(passwords)
     const today = new Date();
 
     const alerts = passwords
