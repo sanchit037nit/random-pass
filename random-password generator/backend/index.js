@@ -17,10 +17,15 @@ const port=process.env.PORT
 app.use(express.json()) 
 app.use(cookieParser())
 
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://ranpass.vercel.app"
+];
+
 app.use(cors({
-    origin:"http://localhost:5173",
-    credentials:true,
-}))
+    origin: allowedOrigins,
+    credentials: true
+}));
 
 app.use("/api/auth",useroutes)
 app.use("/api/pass",passroutes)
