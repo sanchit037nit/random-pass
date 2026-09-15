@@ -1,7 +1,7 @@
 import express from "express"
 import { login,logout,signup,checkauth,deleteaccount } from "../controllers/authcontroller.js";
 import { protectroute } from "../middleware/authmiddleware.js"
-import { loginLimiter , signupLimiter } from "../middleware/rateLimiter.js";
+import { loginLimiter , signupLimiter } from "../middleware/ratelimiter.js";
 
 
 const router = express.Router();

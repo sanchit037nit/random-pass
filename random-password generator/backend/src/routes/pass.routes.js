@@ -1,7 +1,7 @@
 import express from "express"
 import { createpass,updatepass,deletepass, viewpass, getpass,Dashpage,getRecycleBin,restorePass,deleteforever,downloadpass,getSecurityAlerts } from "../controllers/passcontroller.js"
 import { protectroute } from "../middleware/authmiddleware.js"
-import { createPasswordLimiter ,updatePasswordLimiter, deletePasswordLimiter, exportLimiter } from "../middleware/rateLimiter.js";
+import { createPasswordLimiter ,updatePasswordLimiter, deletePasswordLimiter, exportLimiter } from "../middleware/ratelimiter.js";
 
 
 const router = express.Router();
