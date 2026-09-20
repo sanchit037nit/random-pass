@@ -8,9 +8,9 @@ import dotenv from "dotenv";
 import Passkey from "../models/paskey.model.js";
 
 dotenv.config();
-const rpName = process.env.WEBAUTHN_RP_NAME;
-const rpID = process.env.WEBAUTHN_RP_ID;
-const origin = process.env.WEBAUTHN_ORIGIN;
+const rpName = "PassGen";
+const rpID = "ranpass.vercel.app";
+const origin = "https://ranpass.vercel.app";
 
 export const registerOptions = async (req, res) => {
   try {
