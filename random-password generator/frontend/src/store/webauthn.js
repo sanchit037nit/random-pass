@@ -60,7 +60,7 @@ export async function authenticateWithBiometric() {
   }
 
   const optionsResponse = await axiosinstance.post("/webauthn/login/options");
-
+  console.log("WebAuthn options:",  optionsResponse.data);
   const options = optionsResponse.data;
 
   if (!options) {
