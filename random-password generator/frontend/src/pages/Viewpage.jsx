@@ -34,7 +34,6 @@ const Viewpage = () => {
 
   return (
     <div className="min-h-screen relative text-[#E6E8EC] overflow-hidden bg-[#0A0E14]">
-
       {/* Ambient glow field — matches Cipher Vault theme */}
       <div className="pointer-events-none absolute -top-32 -left-24 w-[420px] h-[420px] rounded-full bg-[#34D399]/10 blur-[120px]" />
       <div className="pointer-events-none absolute bottom-0 -right-24 w-[420px] h-[420px] rounded-full bg-[#7C6FF0]/10 blur-[120px]" />
@@ -53,9 +52,10 @@ const Viewpage = () => {
         <Navbar />
 
         {/* Card */}
-        <div className="mt-24 mb-16 w-full max-w-md bg-[#111827]/80 backdrop-blur-xl border border-[#1F2937]
-                        shadow-2xl rounded-2xl p-8 hover:shadow-[#7C6FF0]/10 transition">
-
+        <div
+          className="mt-24 mb-16 w-full max-w-md bg-[#111827]/80 backdrop-blur-xl border border-[#1F2937]
+                        shadow-2xl rounded-2xl p-8 hover:shadow-[#7C6FF0]/10 transition"
+        >
           {/* Header */}
           <div className="flex justify-between items-center mb-6">
             <div>
@@ -77,10 +77,11 @@ const Viewpage = () => {
 
           {/* Form */}
           <form className="space-y-5">
-
             {/* Name */}
             <div>
-              <label className="font-mono text-xs tracking-widest uppercase text-[#8B93A7]">Name</label>
+              <label className="font-mono text-xs tracking-widest uppercase text-[#8B93A7]">
+                Name
+              </label>
               <input
                 type="text"
                 value={formdata.name}
@@ -94,7 +95,9 @@ const Viewpage = () => {
 
             {/* Password */}
             <div>
-              <label className="font-mono text-xs tracking-widest uppercase text-[#8B93A7]">Password</label>
+              <label className="font-mono text-xs tracking-widest uppercase text-[#8B93A7]">
+                Password
+              </label>
               <input
                 type="text"
                 value={formdata.password}
@@ -108,7 +111,9 @@ const Viewpage = () => {
 
             {/* Description */}
             <div>
-              <label className="font-mono text-xs tracking-widest uppercase text-[#8B93A7]">Description</label>
+              <label className="font-mono text-xs tracking-widest uppercase text-[#8B93A7]">
+                Description
+              </label>
               <textarea
                 value={formdata.description}
                 onChange={(e) =>
@@ -121,7 +126,9 @@ const Viewpage = () => {
 
             {/* Group */}
             <div>
-              <label className="font-mono text-xs tracking-widest uppercase text-[#8B93A7]">Group</label>
+              <label className="font-mono text-xs tracking-widest uppercase text-[#8B93A7]">
+                Group
+              </label>
               <select
                 value={formdata.group}
                 onChange={(e) =>

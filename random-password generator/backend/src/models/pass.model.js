@@ -1,47 +1,48 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
-const passchema=new mongoose.Schema({
-    name:{
-        type:String,
-        required:true,
-        
+const passchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
     },
-    password:{
-        type:String,
-        required:true,
-        unique: true,
+    password: {
+      type: String,
+      required: true,
+      unique: true,
     },
-    description:{
-        type:String,
-        required:true,
-        unique: true,
+    description: {
+      type: String,
+      required: true,
+      unique: true,
     },
 
-group: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Group",
-    required: true
-},
-    
-    createdby:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"User",
-        required: true,
+    group: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Group",
+      required: true,
     },
+
+    createdby: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
     deleted: { type: Boolean, default: false },
+
     deletedAt: {
-        type: Date,
-        default: null,
+      type: Date,
+      default: null,
     },
 
     passwordUpdatedAt: {
-    type: Date,
-    default: Date.now
+      type: Date,
+      default: Date.now,
     },
-
-
-},
-{timestamps:true})
+  },
+  { timestamps: true },
+);
 
 passchema.index({ createdby: 1 });
 
@@ -55,5 +56,5 @@ passchema.index({
   createdAt: -1,
 });
 
-const pass=mongoose.model("Password",passchema)
-export default pass
+const pass = mongoose.model("Password", passchema);
+export default pass;

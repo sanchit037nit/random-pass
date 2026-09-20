@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { axiosinstance } from "../lib/axios.js";
-import { toast } from 'react-hot-toast';
+import { toast } from "react-hot-toast";
 
 export const useTrashStore = create((set) => ({
   trashItems: [],
@@ -20,7 +20,6 @@ export const useTrashStore = create((set) => ({
 
   restoreItem: async (id) => {
     try {
-      
       await axiosinstance.patch(`/pass/restore/${id}`);
       set((state) => ({
         trashItems: state.trashItems.filter((item) => item._id !== id),
@@ -36,10 +35,9 @@ export const useTrashStore = create((set) => ({
       set((state) => ({
         trashItems: state.trashItems.filter((item) => item._id !== id),
       }));
-      toast.success("password deleted successfully")
+      toast.success("password deleted successfully");
     } catch (err) {
       console.error(err);
     }
   },
-
 }));

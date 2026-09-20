@@ -5,7 +5,12 @@ import Navbar from "../components/Navbar.jsx";
 import { RefreshCcw, Copy, Save } from "lucide-react";
 import "@splinetool/viewer";
 import zxcvbn from "zxcvbn";
-
+import {
+  isPlatformAuthenticatorAvailable,
+  authenticateWithBiometric,
+} from "../store/webauthn";
+import { registerBiometric } from "../store/webauthn";
+import toast from "react-hot-toast";
 
 export const Ranpass = () => {
   const navigate = useNavigate();
@@ -15,12 +20,12 @@ export const Ranpass = () => {
   const [charAllowed, setCharAllowed] = useState(false);
   const [password, setPassword] = useState("");
   const [Strength, setStrength] = useState("");
+  const [showVaultPassword, setShowVaultPassword] = useState(false);
 
   const { setGeneratedPassword } = usePasStore();
 
   const passwordRef = useRef(null);
 
-  // 🔐 Password Generator
   const passwordGenerator = useCallback(() => {
     let pass = "";
     let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -35,16 +40,41 @@ export const Ranpass = () => {
     const strength = zxcvbn(password);
     setPassword(pass);
     setGeneratedPassword(pass);
-    setStrength(strength)
+    setStrength(strength);
   }, [length, numberAllowed, charAllowed, setGeneratedPassword]);
 
-  // 📋 Copy Password
   const copyPasswordToClipboard = useCallback(() => {
     passwordRef.current?.select();
     window.navigator.clipboard.writeText(password);
   }, [password]);
 
-  // ⚡ Auto-generate on changes
+  const openVault = async () => {
+    try {
+      const available = await isPlatformAuthenticatorAvailable();
+
+      if (!available) {
+        toast.error("Unable to open vault.");
+        return;
+      }
+
+      try {
+        await authenticateWithBiometric();
+      } catch (error) {
+        if (error.message === "No biometric credential registered") {
+          await registerBiometric();
+          await authenticateWithBiometric();
+        } else {
+          throw error;
+        }
+      }
+
+      navigate("/home");
+    } catch (error) {
+      console.error("Vault authentication failed:", error);
+      toast.error("Unable to open vault. Please try again.");
+    }
+  };
+
   useEffect(() => {
     passwordGenerator();
   }, [length, numberAllowed, charAllowed, passwordGenerator]);
@@ -63,7 +93,6 @@ export const Ranpass = () => {
 
   return (
     <div className="min-h-screen relative text-[#E6E8EC] font-sans overflow-hidden bg-[#0A0E14]">
-
       {/* Ambient glow field — matches Cipher Vault theme */}
       <div className="pointer-events-none absolute -top-32 -left-24 w-[420px] h-[420px] rounded-full bg-[#34D399]/10 blur-[120px]" />
       <div className="pointer-events-none absolute bottom-0 -right-24 w-[420px] h-[420px] rounded-full bg-[#7C6FF0]/10 blur-[120px]" />
@@ -83,14 +112,12 @@ export const Ranpass = () => {
 
         <div className="flex justify-center items-center min-h-[calc(100vh-80px)] px-4 py-10">
           <div className="w-full max-w-xl backdrop-blur-xl bg-[#111827]/80 border border-[#1F2937] rounded-2xl shadow-2xl p-8">
-
             <h1 className="text-3xl font-bold font-mono text-center mb-8 text-[#E6E8EC]">
               Password generator
             </h1>
 
             {/* Password field */}
             <div className="flex gap-2 mb-6">
-
               <input
                 type="text"
                 value={password}
@@ -123,7 +150,6 @@ export const Ranpass = () => {
                   className="text-[#7C6FF0] hover:text-[#9C93F5] transition-colors"
                 />
               </button>
-
             </div>
 
             {/* Strength meter */}
@@ -169,7 +195,6 @@ export const Ranpass = () => {
 
             {/* Options */}
             <div className="flex gap-8 mb-8">
-
               <label className="flex items-center gap-2 text-sm text-[#E6E8EC]">
                 <input
                   type="checkbox"
@@ -189,20 +214,18 @@ export const Ranpass = () => {
                 />
                 Symbols
               </label>
-
             </div>
 
             {/* Navigation */}
             <div className="flex justify-center">
               <button
-                onClick={() => navigate("/home")}
+                onClick={openVault}
                 className="px-6 py-2 rounded-lg border border-[#1F2937] text-[#E6E8EC] font-semibold
-                           hover:border-[#7C6FF0] hover:shadow-[0_0_16px_rgba(124,111,240,0.3)] transition-all"
+               hover:border-[#7C6FF0] hover:shadow-[0_0_16px_rgba(124,111,240,0.3)] transition-all"
               >
                 Your password vault
               </button>
             </div>
-
           </div>
         </div>
       </div>

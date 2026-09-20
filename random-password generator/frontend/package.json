@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@simplewebauthn/browser": "^14.0.0",
     "@splinetool/react-spline": "^4.1.0",
     "@splinetool/viewer": "^1.10.38",
     "@tailwindcss/vite": "^4.1.6",

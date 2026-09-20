@@ -4,14 +4,12 @@ import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import { useAuthStore } from "../store/useauthstore.js";
 
-
-
 const CHARSET = "!<>-_\\/[]{}—=+*^?#________";
 
 // ===== Hash-stream marquee (replaces the emoji ticker) =====
 const HashStream = () => {
- const text =
-  "AES-256 • ARGON2ID • CSPRNG • ZERO-KNOWLEDGE • ENTROPY 128-BIT • STRONG PASSWORDS • PASSWORD STRENGTH • RANDOMIZED CHARACTERS • SECURE GENERATION • UNCRACKABLE COMBINATIONS • ";
+  const text =
+    "AES-256 • ARGON2ID • CSPRNG • ZERO-KNOWLEDGE • ENTROPY 128-BIT • STRONG PASSWORDS • PASSWORD STRENGTH • RANDOMIZED CHARACTERS • SECURE GENERATION • UNCRACKABLE COMBINATIONS • ";
 
   return (
     <div className="overflow-hidden w-full py-2 bg-[#111827] border-y border-[#1F2937]">
@@ -26,7 +24,6 @@ const HashStream = () => {
   );
 };
 
-// ===== Signature element: decrypting headline =====
 const DecryptText = ({ text, className }) => {
   const [display, setDisplay] = useState(text.split("").map(() => " "));
   const frame = useRef(0);
@@ -42,7 +39,7 @@ const DecryptText = ({ text, className }) => {
             if (char === " ") return " ";
             if (i < resolved.current) return char;
             return CHARSET[Math.floor(Math.random() * CHARSET.length)];
-          })
+          }),
         );
 
         if (frame.current % 3 === 0 && resolved.current <= text.length) {
@@ -118,7 +115,6 @@ export const Firstpage = () => {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34D399] opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-[#34D399]" />
           </span>
-      
         </motion.div>
 
         {/* Signature: decrypting headline */}
@@ -134,8 +130,8 @@ export const Firstpage = () => {
           transition={{ delay: 1.4, duration: 0.8 }}
           className="max-w-xl mb-10 text-lg text-[#8B93A7] leading-relaxed"
         >
-          Generate strong, random passwords and keep every credential
-          somewhere no one else can reach.
+          Generate strong, random passwords and keep every credential somewhere
+          no one else can reach.
         </motion.p>
 
         {/* CTA Buttons */}

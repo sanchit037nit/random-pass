@@ -1,140 +1,124 @@
-import {create} from 'zustand';
-import { axiosinstance } from '../lib/axios.js';
-import { toast } from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
-  
+import { create } from "zustand";
+import { axiosinstance } from "../lib/axios.js";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
-export const usePasStore = create((set,get) => ({
-    
-   passes: [],
-   selectedpass: null,
-   createdpass:null,
-   generatedPassword: '',
-    setGeneratedPassword: (pwd) => set({ generatedPassword: pwd }),
-    totalPages: 1,
-    securityAlerts: [],
+export const usePasStore = create((set, get) => ({
+  passes: [],
+  selectedpass: null,
+  createdpass: null,
+  generatedPassword: "",
+  setGeneratedPassword: (pwd) => set({ generatedPassword: pwd }),
+  totalPages: 1,
+  securityAlerts: [],
 
+  createpass: async (data) => {
+    try {
+      const { passes } = get();
+      // console.log(passes)
+      const newpass = await axiosinstance.post("/pass/create", data);
+      set({ passes: [...passes, newpass.data] });
+      toast.success("password created successfully");
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  },
 
-    createpass: async(data) =>{
-        try{
-            const {passes} = get();
-            // console.log(passes)
-            const newpass=await axiosinstance.post("/pass/create",data)
-            set({passes:[...passes,newpass.data]})
-            toast.success("password created successfully")
-        }
-        catch(error){
-            toast.error(error.response.data.message)
-        }
-    },
+  updatepass: async (data, id) => {
+    try {
+      await axiosinstance.patch(`/pass/update/${id}`, data);
 
-    updatepass: async(data,id) =>{
-       
-        try{
-            await axiosinstance.patch(`/pass/update/${id}`,data)
-            
-            toast.success("password updated successfully")
-        }
-        catch(error){
-            toast.error(error.response.data.message)
-        }
-    },
+      toast.success("password updated successfully");
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  },
 
-    deletepass: async(id) =>{
-        try{
-            const {passes} = get();
-            await axiosinstance.delete(`/pass/delete/${id}`)
-            const npas=passes.filter((pass) => pass._id !== id)
-            set({ passes: npas })
-            toast.success("password moved to recycle bin!")
-        }
-        catch(error){
-            toast.error(error.response.data.message)
-        }
-    },
+  deletepass: async (id) => {
+    try {
+      const { passes } = get();
+      await axiosinstance.delete(`/pass/delete/${id}`);
+      const npas = passes.filter((pass) => pass._id !== id);
+      set({ passes: npas });
+      toast.success("password moved to recycle bin!");
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  },
 
-    viewpass: async(id,navigate) =>{
-        try{
-          
-            const res = await axiosinstance.get(`/pass/view/${id}`)
-            console.log(res)
-            set({selectedpass:res.data})
-            navigate('/view');
-            // toast.success("password retrieved successfully")
-        }
-        catch(error){
-            console.log(error)
-            toast.error("error occurred")
-        }
-    },
+  viewpass: async (id, navigate) => {
+    try {
+      const res = await axiosinstance.get(`/pass/view/${id}`);
+      console.log(res);
+      set({ selectedpass: res.data });
+      navigate("/view");
+      // toast.success("password retrieved successfully")
+    } catch (error) {
+      console.log(error);
+      toast.error("error occurred");
+    }
+  },
 
-    getpass: async (userId, page = 1) => {
-        const res = await axiosinstance.get(
-            `/pass/get/${userId}?page=${page}&limit=10`
-        );
-
-        set({
-            passes: res.data.passwords,
-            totalPages: res.data.totalPages,
-        });
-    },
-
-    downloadpass: async (id) => {
-        try {
-    const response = await axiosinstance.get(
-      `/pass/download/${id}`,
-      {
-        responseType: "blob",
-      }
+  getpass: async (userId, page = 1) => {
+    const res = await axiosinstance.get(
+      `/pass/get/${userId}?page=${page}&limit=10`,
     );
 
-    const blob = new Blob([response.data], {
-      type: "application/pdf",
+    set({
+      passes: res.data.passwords,
+      totalPages: res.data.totalPages,
     });
+  },
 
-    const url = window.URL.createObjectURL(blob);
+  downloadpass: async (id) => {
+    try {
+      const response = await axiosinstance.get(`/pass/download/${id}`, {
+        responseType: "blob",
+      });
 
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "passwords.pdf";
+      const blob = new Blob([response.data], {
+        type: "application/pdf",
+      });
 
-    document.body.appendChild(link);
-    link.click();
+      const url = window.URL.createObjectURL(blob);
 
-    link.remove();
-    window.URL.revokeObjectURL(url);
-  } catch (error) {
-    console.error(error);
-  }
-    },
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "passwords.pdf";
 
-      getSecurityAlerts: async () => {
+      document.body.appendChild(link);
+      link.click();
+
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error(error);
+    }
+  },
+
+  getSecurityAlerts: async () => {
     try {
       const res = await axiosinstance.get("/pass/security-alerts");
-       
+
       set({
         securityAlerts: res.data,
       });
-
     } catch (err) {
       console.log(err);
     }
-    },
-      
-      getPasswordsByGroup: async (groupId) => {
+  },
+
+  getPasswordsByGroup: async (groupId) => {
     try {
-        // console.log("2131",groupId)
-        const res = await axiosinstance.get(`/groups/${groupId}/passwords`);
+      // console.log("2131",groupId)
+      const res = await axiosinstance.get(`/groups/${groupId}/passwords`);
 
-        set({
-            passes: res.data,
-            totalPages: 1
-        });
-
+      set({
+        passes: res.data,
+        totalPages: 1,
+      });
     } catch (error) {
-        toast.error(
-            error.response?.data?.message || "Failed to fetch passwords"
-        );
+      toast.error(error.response?.data?.message || "Failed to fetch passwords");
     }
-},
-}))
+  },
+}));

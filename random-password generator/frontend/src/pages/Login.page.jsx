@@ -30,7 +30,6 @@ export const Loginpage = () => {
 
   return (
     <div className="min-h-screen relative flex justify-center items-center overflow-hidden text-[#E6E8EC] bg-[#0A0E14]">
-
       {/* Ambient glow field — matches Cipher Vault theme */}
       <div className="pointer-events-none absolute -top-32 -left-24 w-[420px] h-[420px] rounded-full bg-[#34D399]/10 blur-[120px]" />
       <div className="pointer-events-none absolute bottom-0 -right-24 w-[420px] h-[420px] rounded-full bg-[#7C6FF0]/10 blur-[120px]" />
@@ -44,15 +43,6 @@ export const Loginpage = () => {
         }}
       />
 
-      {/* Optional Spline (uncomment if needed) */}
-      {/*
-      <spline-viewer
-        url="https://prod.spline.design/cwq814qIdbhTkjqB/scene.splinecode"
-        background="transparent"
-        class="absolute top-0 left-0 w-full h-full z-0"
-      ></spline-viewer>
-      */}
-
       {/* Form */}
       <form
         onSubmit={handleclick}
@@ -60,7 +50,6 @@ export const Loginpage = () => {
                    bg-[#111827]/80 backdrop-blur-xl border border-[#1F2937] 
                    shadow-2xl hover:shadow-[#34D399]/10 transition"
       >
-
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
@@ -138,7 +127,6 @@ export const Loginpage = () => {
             Sign up
           </span>
         </p>
-
       </form>
     </div>
   );

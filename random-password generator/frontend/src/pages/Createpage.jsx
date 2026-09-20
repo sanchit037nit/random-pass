@@ -7,6 +7,10 @@ import { motion } from "framer-motion";
 import "@splinetool/viewer";
 import { useEffect } from "react";
 import { useGroupStore } from "../store/useGroupStore";
+import {
+  isPlatformAuthenticatorAvailable,
+  authenticateWithBiometric,
+} from "../store/webauthn";
 
 const Createpage = () => {
   const navigate = useNavigate();
@@ -24,16 +28,47 @@ const Createpage = () => {
     createdby: authUser?._id,
   });
 
-  const handleclick = (e) => {
+  const openVault = async () => {
+    try {
+      const available = await isPlatformAuthenticatorAvailable();
+
+      if (!available) {
+        setVaultError("A device authenticator is required to open your vault.");
+        return;
+      }
+
+      try {
+        await authenticateWithBiometric();
+      } catch (error) {
+        if (error.message === "No biometric credential registered") {
+
+          await registerBiometric();
+
+
+          await authenticateWithBiometric();
+        } else {
+          throw error;
+        }
+      }
+
+      navigate("/home");
+    } catch (error) {
+      console.error("Vault authentication failed:", error);
+    }
+  };
+
+  const handleclick = async (e) => {
     e.preventDefault();
 
     if (!(formdata.name && formdata.password && formdata.description)) {
       return toast.error("All fields are required");
     }
 
-    createpass(formdata);
-    toast.success("Password saved!");
+    await openVault();
 
+    createpass(formdata);
+
+    toast.success("Password saved!");
     navigate("/home");
 
     setformdata({
@@ -41,7 +76,6 @@ const Createpage = () => {
       password: "",
       group: "",
       description: "",
-
     });
   };
 
@@ -49,12 +83,11 @@ const Createpage = () => {
     e.preventDefault();
     navigate("/ranpass");
   };
-useEffect(() => {
+  useEffect(() => {
     getGroups();
-}, []);
+  }, []);
   return (
     <div className="min-h-screen flex items-center justify-center px-4 relative text-white">
-
       {/* Card */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
@@ -63,9 +96,7 @@ useEffect(() => {
       >
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-bold tracking-wide">
-            🔐 Add Password
-          </h2>
+          <h2 className="text-3xl font-bold tracking-wide">🔐 Add Password</h2>
 
           <button
             onClick={handlecross}
@@ -76,12 +107,9 @@ useEffect(() => {
         </div>
 
         <form className="space-y-5">
-
           {/* Name */}
           <div>
-            <label className="text-gray-300 block mb-1">
-              Name
-            </label>
+            <label className="text-gray-300 block mb-1">Name</label>
 
             <input
               type="text"
@@ -96,12 +124,9 @@ useEffect(() => {
 
           {/* Password */}
           <div>
-            <label className="text-gray-300 block mb-1">
-              Password
-            </label>
+            <label className="text-gray-300 block mb-1">Password</label>
 
             <div className="flex gap-2">
-
               <input
                 type={show ? "text" : "password"}
                 placeholder="Enter password"
@@ -124,9 +149,7 @@ useEffect(() => {
 
           {/* Description */}
           <div>
-            <label className="text-gray-300 block mb-1">
-              Description
-            </label>
+            <label className="text-gray-300 block mb-1">Description</label>
 
             <textarea
               placeholder="Optional details..."
@@ -137,36 +160,34 @@ useEffect(() => {
               className="w-full px-4 py-2 rounded-lg bg-black/40 border border-gray-600 resize-none h-24 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          
+
           {/* Group section */}
           <div>
-  <label className="text-gray-300 block mb-1">
-    Group
-  </label>
+            <label className="text-gray-300 block mb-1">Group</label>
 
-<select
-  value={formdata.group}
-  onChange={(e) =>
-    setformdata({ ...formdata, group: e.target.value })
-  }
-  disabled={groups.length === 0}
-  className="w-full px-4 py-2 rounded-lg bg-black/40 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
->
-  {groups.length === 0 ? (
-    <option>No groups available</option>
-  ) : (
-    <>
-      <option value="">Select a Group</option>
-      {groups.map((group) => (
-        <option key={group._id} value={group._id}>
-          {group.name}
-        </option>
-      ))}
-    </>
-  )}
-</select>
+            <select
+              value={formdata.group}
+              onChange={(e) =>
+                setformdata({ ...formdata, group: e.target.value })
+              }
+              disabled={groups.length === 0}
+              className="w-full px-4 py-2 rounded-lg bg-black/40 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {groups.length === 0 ? (
+                <option>No groups available</option>
+              ) : (
+                <>
+                  <option value="">Select a Group</option>
+                  {groups.map((group) => (
+                    <option key={group._id} value={group._id}>
+                      {group.name}
+                    </option>
+                  ))}
+                </>
+              )}
+            </select>
           </div>
-          
+
           {/* Button */}
           <motion.button
             whileTap={{ scale: 0.95 }}
@@ -175,7 +196,6 @@ useEffect(() => {
           >
             Save Password
           </motion.button>
-
         </form>
       </motion.div>
     </div>

@@ -52,27 +52,20 @@ const CreateGroupModal = ({ open, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="w-full max-w-md rounded-xl bg-base-100 p-6 shadow-2xl">
-
         {/* Header */}
         <div className="mb-5 flex items-center justify-between">
           <h2 className="text-xl font-bold">Create Group</h2>
 
-          <button
-            onClick={onClose}
-            className="btn btn-sm btn-circle btn-ghost"
-          >
+          <button onClick={onClose} className="btn btn-sm btn-circle btn-ghost">
             <X size={18} />
           </button>
         </div>
 
         <form onSubmit={handleSubmit}>
-
           {/* Name */}
           <div className="mb-5">
             <label className="label">
-              <span className="label-text font-medium">
-                Group Name
-              </span>
+              <span className="label-text font-medium">Group Name</span>
             </label>
 
             <input
@@ -87,9 +80,7 @@ const CreateGroupModal = ({ open, onClose }) => {
           {/* Icons */}
           <div className="mb-5">
             <label className="label">
-              <span className="label-text font-medium">
-                Choose Icon
-              </span>
+              <span className="label-text font-medium">Choose Icon</span>
             </label>
 
             <div className="grid grid-cols-4 gap-2">
@@ -113,9 +104,7 @@ const CreateGroupModal = ({ open, onClose }) => {
           {/* Colors */}
           <div className="mb-6">
             <label className="label">
-              <span className="label-text font-medium">
-                Choose Color
-              </span>
+              <span className="label-text font-medium">Choose Color</span>
             </label>
 
             <div className="flex flex-wrap gap-3">
@@ -125,9 +114,7 @@ const CreateGroupModal = ({ open, onClose }) => {
                   type="button"
                   onClick={() => setColor(item)}
                   className={`h-9 w-9 rounded-full border-4 transition ${
-                    color === item
-                      ? "border-black"
-                      : "border-transparent"
+                    color === item ? "border-black" : "border-transparent"
                   }`}
                   style={{ backgroundColor: item }}
                 />
@@ -143,24 +130,15 @@ const CreateGroupModal = ({ open, onClose }) => {
             <span className="text-3xl">{icon}</span>
 
             <div>
-              <p className="font-semibold">
-                {name || "New Group"}
-              </p>
+              <p className="font-semibold">{name || "New Group"}</p>
 
-              <p className="text-sm text-gray-500">
-                0 Passwords
-              </p>
+              <p className="text-sm text-gray-500">0 Passwords</p>
             </div>
           </div>
 
           {/* Buttons */}
           <div className="flex justify-end gap-3">
-
-            <button
-              type="button"
-              className="btn btn-ghost"
-              onClick={onClose}
-            >
+            <button type="button" className="btn btn-ghost" onClick={onClose}>
               Cancel
             </button>
 
@@ -171,9 +149,7 @@ const CreateGroupModal = ({ open, onClose }) => {
             >
               {loading ? "Creating..." : "Create Group"}
             </button>
-
           </div>
-
         </form>
       </div>
     </div>

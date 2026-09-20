@@ -1,29 +1,29 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 const auditSchema = new mongoose.Schema({
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-    },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
 
-    action: {
-        type: String,
-        required: true
-    },
+  action: {
+    type: String,
+    required: true,
+  },
 
-    resourceId: {
-        type: mongoose.Schema.Types.ObjectId
-    },
+  resourceId: {
+    type: mongoose.Schema.Types.ObjectId,
+  },
 
-    details: {
-        type: Object
-    },
+  details: {
+    type: Object,
+  },
 
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-const AuditLog=mongoose.model("AuditLog",auditSchema)
-export default AuditLog
+const AuditLog = mongoose.model("AuditLog", auditSchema);
+export default AuditLog;

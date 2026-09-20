@@ -1,4 +1,3 @@
-
 import { ArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
@@ -11,18 +10,17 @@ import { debounce } from "lodash";
 import { useGroupStore } from "../store/useGroupStore.js";
 
 const GroupPage = () => {
-
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const {
-        getpass,
-        passes,
-        getPasswordsByGroup,
-        deletepass,
-        viewpass,
-        downloadpass,
-        totalPages,
-    } = usePasStore();
+    getpass,
+    passes,
+    getPasswordsByGroup,
+    deletepass,
+    viewpass,
+    downloadpass,
+    totalPages,
+  } = usePasStore();
 
   const { authUser } = useAuthStore();
   const { groups, getGroups } = useGroupStore();
@@ -31,7 +29,6 @@ const GroupPage = () => {
   const [sort, setsort] = useState(false);
 
   const orderedpasses = [...passes];
-
 
   if (sort) {
     orderedpasses.sort((a, b) => a.name.localeCompare(b.name));
@@ -46,42 +43,37 @@ const GroupPage = () => {
 
   const toggleView = (id) => {
     setVisibleIds((prev) =>
-      prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id],
     );
   };
-const [page, setPage] = useState(1);
+  const [page, setPage] = useState(1);
   const id = authUser?._id;
 
   const debouncedSearch = debounce((value) => {
-  setspass(value);
+    setspass(value);
   }, 500);
 
   const { groupId } = useParams();
 
-const currentGroup = groups.find(
-    (group) => group._id === groupId
-);
+  const currentGroup = groups.find((group) => group._id === groupId);
 
   useEffect(() => {
-      console.log("groupId:", groupId);
+    console.log("groupId:", groupId);
 
     if (groupId) {
-        getPasswordsByGroup(groupId, page);
+      getPasswordsByGroup(groupId, page);
     }
-}, [groupId, page]);
+  }, [groupId, page]);
 
+  useEffect(() => {
+    if (page > totalPages && totalPages > 0) {
+      setPage(totalPages);
+    }
+  }, [page, totalPages]);
 
-useEffect(() => {
-  if (page > totalPages && totalPages > 0) {
-    setPage(totalPages);
-  }
-}, [page, totalPages]);
-  
-
-
- const handleView = (e,passId) => {
+  const handleView = (e, passId) => {
     e.stopPropagation();
-     viewpass(passId, navigate);
+    viewpass(passId, navigate);
   };
 
   const handleDelete = (e, passId) => {
@@ -90,15 +82,12 @@ useEffect(() => {
   };
 
   const handleDownload = (e) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     downloadpass(id);
   };
 
-
-    return (
-
+  return (
     <div className="min-h-screen relative text-[#E6E8EC] font-sans overflow-hidden bg-[#0A0E14]">
-
       {/* Ambient glow field — matches Cipher Vault theme */}
       <div className="pointer-events-none absolute -top-32 -left-24 w-[420px] h-[420px] rounded-full bg-[#34D399]/10 blur-[120px]" />
       <div className="pointer-events-none absolute bottom-0 -right-24 w-[420px] h-[420px] rounded-full bg-[#7C6FF0]/10 blur-[120px]" />
@@ -112,10 +101,8 @@ useEffect(() => {
         }}
       />
 
-
-            <div className="relative z-10 flex flex-col min-h-screen">
-
-                <Navbar />
+      <div className="relative z-10 flex flex-col min-h-screen">
+        <Navbar />
         <div className="flex flex-col items-center mt-8">
           <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-[#8B93A7] mb-2">
             Encrypted storage
@@ -124,31 +111,22 @@ useEffect(() => {
             My password vault
           </h1>
         </div>
-                {/* ================= Header ================= */}
+        {/* ================= Header ================= */}
 
-                <div className="flex justify-between items-center px-8 mt-8">
+        <div className="flex justify-between items-center px-8 mt-8">
+          <button className="btn btn-outline" onClick={() => navigate("/home")}>
+            <ArrowLeft size={18} />
+            Back
+          </button>
 
-                    <button
-                        className="btn btn-outline"
-                        onClick={() => navigate("/home")}
-                    >
-                        <ArrowLeft size={18}/>
-                        Back
-                    </button>
+          <div>
+            <h1 className="text-3xl font-bold">
+              {currentGroup?.name || "Loading..."}
+            </h1>
 
-<div>
-
-    <h1 className="text-3xl font-bold">
-        {currentGroup?.name || "Loading..."}
-    </h1>
-
-    <p className="text-sm text-[#8B93A7]">
-        {passes.length} Passwords
-    </p>
-
-</div>
-
-                </div>
+            <p className="text-sm text-[#8B93A7]">{passes.length} Passwords</p>
+          </div>
+        </div>
 
         {/* Search + Sort */}
         <div className="flex flex-col sm:flex-row justify-between items-center gap-3 mx-6 sm:mx-10 mt-8">
@@ -182,76 +160,75 @@ useEffect(() => {
           </div>
         </div>
 
-                {/* ================= Password Cards ================= */}
+        {/* ================= Password Cards ================= */}
 
-<div className="space-y-10 p-6 sm:p-8">
-  {passes
-    .filter((pass) =>
-      pass.name.toLowerCase().includes(spass.toLowerCase())
-    )
-    .map((pass) => (
-      <motion.div
-        key={pass._id}
-        onClick={(e) => handleView(e, pass._id)}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="cursor-pointer bg-[#111827]/70 backdrop-blur-md p-5 rounded-xl border border-[#1F2937]
+        <div className="space-y-10 p-6 sm:p-8">
+          {passes
+            .filter((pass) =>
+              pass.name.toLowerCase().includes(spass.toLowerCase()),
+            )
+            .map((pass) => (
+              <motion.div
+                key={pass._id}
+                onClick={(e) => handleView(e, pass._id)}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="cursor-pointer bg-[#111827]/70 backdrop-blur-md p-5 rounded-xl border border-[#1F2937]
                    shadow-lg hover:border-[#34D399]/40 hover:shadow-[0_0_24px_rgba(52,211,153,0.15)]
                    transition-all flex justify-between items-center"
-      >
-        {/* Info */}
-        <div className="space-y-2">
-          <p>
-            <span className="font-mono text-xs uppercase tracking-widest text-[#8B93A7]">
-              Name
-            </span>{" "}
-            {pass.name}
-          </p>
+              >
+                {/* Info */}
+                <div className="space-y-2">
+                  <p>
+                    <span className="font-mono text-xs uppercase tracking-widest text-[#8B93A7]">
+                      Name
+                    </span>{" "}
+                    {pass.name}
+                  </p>
 
-          <p className="flex items-center gap-2">
-            <span className="font-mono text-xs uppercase tracking-widest text-[#8B93A7]">
-              Password
-            </span>
+                  <p className="flex items-center gap-2">
+                    <span className="font-mono text-xs uppercase tracking-widest text-[#8B93A7]">
+                      Password
+                    </span>
 
-            <span className="font-mono">
-              {visibleIds.includes(pass._id)
-                ? pass.password
-                : "••••••••"}
-            </span>
+                    <span className="font-mono">
+                      {visibleIds.includes(pass._id)
+                        ? pass.password
+                        : "••••••••"}
+                    </span>
 
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleView(pass._id);
-              }}
-              className="text-[#7C6FF0] hover:text-[#34D399] transition-colors"
-            >
-              {visibleIds.includes(pass._id) ? "🙈" : "👁️"}
-            </button>
-          </p>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleView(pass._id);
+                      }}
+                      className="text-[#7C6FF0] hover:text-[#34D399] transition-colors"
+                    >
+                      {visibleIds.includes(pass._id) ? "🙈" : "👁️"}
+                    </button>
+                  </p>
 
-          <p className="text-sm text-[#8B93A7]">
-            {new Date(pass.createdAt).toLocaleString()}
-          </p>
+                  <p className="text-sm text-[#8B93A7]">
+                    {new Date(pass.createdAt).toLocaleString()}
+                  </p>
+                </div>
+
+                {/* Delete */}
+                <button
+                  onClick={(e) => handleDelete(e, pass._id)}
+                  className="p-[2px] rounded-full bg-gradient-to-r from-red-500 to-pink-500 hover:scale-110 transition"
+                >
+                  <span className="flex items-center justify-center bg-[#0A0E14] rounded-full p-2 text-red-400">
+                    ❌
+                  </span>
+                </button>
+              </motion.div>
+            ))}
         </div>
 
-        {/* Delete */}
-        <button
-          onClick={(e) => handleDelete(e, pass._id)}
-          className="p-[2px] rounded-full bg-gradient-to-r from-red-500 to-pink-500 hover:scale-110 transition"
-        >
-          <span className="flex items-center justify-center bg-[#0A0E14] rounded-full p-2 text-red-400">
-            ❌
-          </span>
-        </button>
-      </motion.div>
-    ))}
-</div>
-
-                {/* ================= Pagination ================= */}
+        {/* ================= Pagination ================= */}
 
         <div className="flex justify-center items-center gap-4 py-8">
-
           <button
             disabled={page === 1}
             onClick={() => setPage((prev) => prev - 1)}
@@ -281,10 +258,9 @@ useEffect(() => {
           >
             Next →
           </button>
-
         </div>
 
-                {/* ================= Floating Add Button ================= */}
+        {/* ================= Floating Add Button ================= */}
 
         {/* Floating Button */}
         <div className="fixed bottom-6 right-6">
@@ -297,14 +273,9 @@ useEffect(() => {
             +
           </button>
         </div>
-
-
-            </div>
-
-        </div>
-
-    );
-
+      </div>
+    </div>
+  );
 };
 
 export default GroupPage;

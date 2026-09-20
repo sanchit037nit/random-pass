@@ -11,7 +11,6 @@ const Navbar = () => {
   return (
     <div className="fixed top-0 left-0 w-full backdrop-blur-md bg-[#0A0E14]/85 shadow-xl z-50 border-b border-[#1F2937]">
       <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-3">
-
         {/* Logo */}
         <div
           className="flex items-center gap-3 cursor-pointer"
@@ -28,7 +27,6 @@ const Navbar = () => {
 
         {/* Navigation */}
         <div className="flex items-center gap-3">
-
           {/* Auth Buttons */}
           {authUser && (
             <>
@@ -65,13 +63,14 @@ const Navbar = () => {
                 Account
                 <ChevronDown
                   size={16}
-                  className={`transition-transform ${dropdownOpen ? "rotate-180" : ""}`}
+                  className={`transition-transform ${
+                    dropdownOpen ? "rotate-180" : ""
+                  }`}
                 />
               </button>
 
               {dropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-[#111827]/95 backdrop-blur-xl border border-[#1F2937] rounded-xl shadow-2xl flex flex-col py-1 z-50">
-
                   <button
                     onClick={() => {
                       logout();
@@ -91,7 +90,6 @@ const Navbar = () => {
                   >
                     Delete account
                   </button>
-
                 </div>
               )}
             </div>
@@ -117,7 +115,6 @@ const Navbar = () => {
               </button>
             </>
           )}
-
         </div>
       </div>
     </div>
