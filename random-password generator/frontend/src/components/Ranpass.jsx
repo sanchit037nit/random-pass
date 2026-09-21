@@ -48,32 +48,26 @@ export const Ranpass = () => {
     window.navigator.clipboard.writeText(password);
   }, [password]);
 
-  const openVault = async () => {
+const openVault = async () => {
     try {
-      const available = await isPlatformAuthenticatorAvailable();
+        const available = await isPlatformAuthenticatorAvailable();
 
-      if (!available) {
-        toast.error("Unable to open vault.");
-        return;
-      }
-
-      try {
-        await authenticateWithBiometric();
-      } catch (error) {
-        if (error.message === "No biometric credential registered") {
-          await registerBiometric();
-          await authenticateWithBiometric();
-        } else {
-          throw error;
+        if (available) {
+            try {
+                await authenticateWithBiometric();
+                console.log("Biometric authentication successful");
+                return;
+            } catch (error) {
+                console.log("Biometric authentication unavailable:", error);
+            }
         }
-      }
 
-      navigate("/home");
+        await openVaultWithPassword();
+
     } catch (error) {
-      console.error("Vault authentication failed:", error);
-      toast.error("Unable to open vault. Please try again.");
+        console.error("Vault opening failed:", error);
     }
-  };
+};
 
   useEffect(() => {
     passwordGenerator();
