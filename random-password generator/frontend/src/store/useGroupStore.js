@@ -31,4 +31,37 @@ export const useGroupStore = create((set) => ({
       toast.error(error.response?.data?.message || "Failed to create group");
     }
   },
+
+  deleteGroup: async (groupId) => {
+    try {
+      // console.log(groupId)
+        const response = await axiosinstance.delete(
+            `/groups/${groupId}`
+        );
+
+        console.log(response)
+        set((state) => ({
+            groups: state.groups.filter(
+                (group) => group._id !== groupId
+            )
+        }));
+
+        toast.success(
+            "Group deleted. Passwords moved to recycle bin."
+        );
+
+        return response.data;
+
+    } catch (error) {
+        console.error("Error deleting group:", error);
+
+        toast.error(
+            error.response?.data?.message ||
+            "Failed to delete group"
+        );
+
+        throw error;
+    }
+  },
+  
 }));

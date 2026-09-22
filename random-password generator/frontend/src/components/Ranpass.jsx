@@ -56,12 +56,14 @@ export const Ranpass = () => {
         toast.error(
           "This device does not support biometric/passkey authentication.",
         );
+        navigate("/home");
         return;
       }
 
       try {
         await authenticateWithBiometric();
         console.log("Biometric authentication successful");
+        navigate("/home");
         return;
       } catch (error) {
         console.log("No existing biometric credential:", error);

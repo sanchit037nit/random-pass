@@ -126,7 +126,6 @@ export const Dashpage = () => {
                   {Object.keys(groupCounts).length}
                 </p>
               </div>
-
             </div>
 
             {/* Group Overview */}
@@ -135,26 +134,20 @@ export const Dashpage = () => {
                 Group overview
               </h2>
 
-              {Object.keys(groupCounts).length > 0 ? (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {Object.entries(groupCounts).map(([group, count]) => (
-                    <div
-                      key={group}
-                      className="bg-[#111827]/70 backdrop-blur-lg border border-[#1F2937] rounded-xl p-5 text-center
-                                 hover:border-[#7C6FF0]/40 transition-all"
-                    >
-                      <p className="font-mono text-xs tracking-widest uppercase text-[#8B93A7]">
-                        {group}
-                      </p>
-                      <p className="text-2xl font-bold mt-1 text-[#E6E8EC]">
-                        {count}
-                      </p>
-                    </div>
-                  ))}
+              {Object.entries(groupCounts).map(([groupId, group]) => (
+                <div
+                  key={groupId}
+                  className="bg-[#111827]/70 backdrop-blur-lg border border-[#1F2937] rounded-xl p-5 text-center hover:border-[#7C6FF0]/40 transition-all"
+                >
+                  <p className="font-mono text-xs tracking-widest uppercase text-[#8B93A7]">
+                    {group.name}
+                  </p>
+
+                  <p className="text-2xl font-bold mt-1 text-[#E6E8EC]">
+                    {group.count}
+                  </p>
                 </div>
-              ) : (
-                <p className="text-[#8B93A7]">No groups yet.</p>
-              )}
+              ))}
             </div>
 
             {/* Recent Passwords */}
@@ -176,7 +169,7 @@ export const Dashpage = () => {
                           {pass.name}
                         </p>
                         <p className="text-sm text-[#8B93A7]">
-                          {pass.group || "General"}
+                          {pass.group?.name || "General"}
                         </p>
                       </div>
 

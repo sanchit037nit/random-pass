@@ -5,7 +5,6 @@ import PDFDocument from "pdfkit";
 import AuditLog from "../models/auditlogs.model.js";
 import { Group } from "../models/group.model.js";
 
-
 const fetchPasswords = async (userId) => {
   return await Password.find({
     createdby: userId,
@@ -220,12 +219,22 @@ export const Dashpage = async (req, res) => {
     const passwords = await Password.find({
       createdby: userId,
       deleted: false,
-    });
+    }).populate("group", "name");
 
     // Count passwords per group
     const groupCounts = passwords.reduce((acc, pass) => {
-      const group = pass.group || "General";
-      acc[group] = (acc[group] || 0) + 1;
+      const groupId = pass.group?._id?.toString() || "general";
+      const groupName = pass.group?.name || "General";
+
+      if (!acc[groupId]) {
+        acc[groupId] = {
+          name: groupName,
+          count: 0,
+        };
+      }
+
+      acc[groupId].count += 1;
+
       return acc;
     }, {});
 
@@ -258,20 +267,21 @@ export const getRecycleBin = async (req, res) => {
 
 export const restorePass = async (req, res) => {
   const { id } = req.params;
-
+  // console.log(id)
   try {
     const pass = await Password.findById(id);
+
     if (!pass) return res.status(400).json({ message: "Password not found" });
 
     pass.deleted = false;
     pass.deletedAt = null;
     await pass.save();
 
-    await AuditLog.create({
-      user: req.user._id,
-      action: "RESTORED_PASSWORD",
-      resourceId: id,
-    });
+    // await AuditLog.create({
+    //   user: req.user._id,
+    //   action: "RESTORED_PASSWORD",
+    //   resourceId: id,
+    // });
 
     res.status(200).json({ message: "Password restored" });
   } catch (error) {

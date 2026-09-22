@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import { Plus, Search } from "lucide-react";
-
 import Navbar from "../components/Navbar";
 import GroupGrid from "../components/Groups/GroupGrid";
 import CreateGroupModal from "../components/Groups/CreateGroupModal";
-
 import { useGroupStore } from "../store/useGroupStore";
 
 export const Homepage = () => {
-  const { groups, getGroups } = useGroupStore();
+  const { groups, getGroups, deleteGroup } = useGroupStore();
 
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -71,7 +69,7 @@ export const Homepage = () => {
         </div>
 
         <div className="px-8 mt-10">
-          <GroupGrid groups={filteredGroups} />
+          <GroupGrid groups={filteredGroups} onDeleteGroup={deleteGroup} />
         </div>
 
         <CreateGroupModal open={open} onClose={() => setOpen(false)} />
