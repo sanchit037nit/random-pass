@@ -9,12 +9,10 @@ const passchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
-      unique: true,
     },
     description: {
       type: String,
       required: true,
-      unique: true,
     },
 
     group: {

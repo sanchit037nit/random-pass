@@ -1,5 +1,6 @@
 import { generateToken } from "../lib/uteis.js";
 import Password from "../models/pass.model.js";
+import { encryptText, decryptText } from "../lib/encryption.js";
 import User from "../models/user.model.js";
 import PDFDocument from "pdfkit";
 import AuditLog from "../models/auditlogs.model.js";
@@ -54,7 +55,7 @@ export const createpass = async (req, res) => {
 
     const newpass = await Password.create({
       name,
-      password,
+      password: encryptText(password),
       description,
       group: groupId,
       createdby,
@@ -120,17 +121,19 @@ export const updatepass = async (req, res) => {
       });
     }
 
+    const updateData = {
+      name,
+      description,
+      group,
+      passwordUpdatedAt: new Date(),
+    };
+    if (password) {
+      updateData.password = encryptText(password);
+    }
+
     const updatedPassword = await Password.findByIdAndUpdate(
       id,
-      {
-        $set: {
-          name,
-          password,
-          description,
-          group,
-          passwordUpdatedAt: new Date(),
-        },
-      },
+      { $set: updateData },
       { new: true },
     );
 
@@ -195,13 +198,18 @@ export const deleteforever = async (req, res) => {
 export const viewpass = async (req, res) => {
   const { id } = req.params;
   try {
-    const password = await Password.findById(id);
+    const pass = await Password.findById(id);
 
-    if (!password) {
+    if (!pass) {
       return res.status(400).json({ message: "click valid password" });
     }
 
-    return res.status(200).json({ password });
+    const decryptedPass = {
+      ...pass.toObject(),
+      password: decryptText(pass.password)
+    };
+
+    return res.status(200).json({ password: decryptedPass });
   } catch (error) {
     console.log("error in viewing password", error);
   }
@@ -241,7 +249,12 @@ export const Dashpage = async (req, res) => {
     // Recent passwords (last 5)
     const recentPasswords = passwords
       .sort((a, b) => b.createdAt - a.createdAt)
-      .slice(0, 5);
+      .slice(0, 5)
+      .map(p => {
+        const pObj = p.toObject();
+        pObj.password = decryptText(pObj.password);
+        return pObj;
+      });
 
     return res.status(200).json({
       totalPasswords: passwords.length,
@@ -306,6 +319,12 @@ export const getpass = async (req, res) => {
       .skip((page - 1) * limit)
       .limit(limit);
 
+    const decryptedPasswords = passwords.map(p => {
+      const pObj = p.toObject();
+      pObj.password = decryptText(pObj.password);
+      return pObj;
+    });
+
     const total = await Password.countDocuments({
       createdby: req.User._id,
       group: groupId,
@@ -313,7 +332,7 @@ export const getpass = async (req, res) => {
     });
 
     res.status(200).json({
-      passwords,
+      passwords: decryptedPasswords,
       totalPages: Math.ceil(total / limit),
       currentPage: page,
     });
@@ -349,7 +368,7 @@ export const downloadpass = async (req, res) => {
 
     passwords.forEach((pass, index) => {
       doc.text(`${index + 1}. Name: ${pass.name}`);
-      doc.text(`Password: ${pass.password}`);
+      doc.text(`Password: ${decryptText(pass.password)}`);
       doc.text(`Description: ${pass.description}`);
       doc.moveDown();
     });
@@ -357,9 +376,9 @@ export const downloadpass = async (req, res) => {
     doc.end();
 
     await AuditLog.create({
-      user: req.user._id,
+      user: req.User._id,
       action: "DOWNLOADED_PASSWORD",
-      resourceId: id,
+      resourceId: userId,
     });
   } catch (error) {
     console.log("Error downloading password", error);

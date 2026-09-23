@@ -81,9 +81,10 @@ const GroupPage = () => {
     deletepass(passId);
   };
 
-  const handleDownload = (e) => {
+  const handleDownload = (e, sort) => {
     e.stopPropagation();
     downloadpass(id);
+    setsort(sort)
   };
 
   return (
@@ -145,7 +146,7 @@ const GroupPage = () => {
             <button
               className="px-4 py-2 rounded-lg border border-[#1F2937] text-[#E6E8EC] font-semibold
                          hover:border-[#7C6FF0] hover:shadow-[0_0_16px_rgba(124,111,240,0.3)] transition-all"
-              onClick={() => handleDownload(!sort)}
+              onClick={(e) => handleDownload(e, !sort)}
             >
               Download
             </button>
@@ -233,10 +234,9 @@ const GroupPage = () => {
             disabled={page === 1}
             onClick={() => setPage((prev) => prev - 1)}
             className={`px-5 py-2 rounded-lg font-medium transition
-              ${
-                page === 1
-                  ? "bg-[#111827] border border-[#1F2937] text-[#8B93A7] cursor-not-allowed opacity-50"
-                  : "bg-[#34D399] text-[#0A0E14] hover:shadow-[0_0_20px_rgba(52,211,153,0.4)]"
+              ${page === 1
+                ? "bg-[#111827] border border-[#1F2937] text-[#8B93A7] cursor-not-allowed opacity-50"
+                : "bg-[#34D399] text-[#0A0E14] hover:shadow-[0_0_20px_rgba(52,211,153,0.4)]"
               }`}
           >
             ← Previous
@@ -250,10 +250,9 @@ const GroupPage = () => {
             disabled={page === totalPages}
             onClick={() => setPage((prev) => prev + 1)}
             className={`px-5 py-2 rounded-lg font-medium transition
-              ${
-                page === totalPages
-                  ? "bg-[#111827] border border-[#1F2937] text-[#8B93A7] cursor-not-allowed opacity-50"
-                  : "bg-[#34D399] text-[#0A0E14] hover:shadow-[0_0_20px_rgba(52,211,153,0.4)]"
+              ${page === totalPages
+                ? "bg-[#111827] border border-[#1F2937] text-[#8B93A7] cursor-not-allowed opacity-50"
+                : "bg-[#34D399] text-[#0A0E14] hover:shadow-[0_0_20px_rgba(52,211,153,0.4)]"
               }`}
           >
             Next →
