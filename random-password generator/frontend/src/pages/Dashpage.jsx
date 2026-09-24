@@ -7,7 +7,7 @@ import { Shield, Layers, Star } from "lucide-react";
 import { usePasStore } from "../store/usepasstore.js";
 
 export const Dashpage = () => {
-  const { authUser } = useAuthStore();
+  const { authUser, masterKey } = useAuthStore();
   const navigate = useNavigate();
 
   const [stats, setStats] = useState({
@@ -34,10 +34,23 @@ export const Dashpage = () => {
       try {
         const res = await axiosinstance.get(`/pass/dashboard/${id}`);
 
+        let recentDecrypted = res.data?.recentPasswords || [];
+        if (masterKey) {
+          const { decryptData } = await import("../lib/crypto.js");
+          recentDecrypted = await Promise.all(
+            recentDecrypted.map(async (p) => ({
+              ...p,
+              name: await decryptData(p.name, masterKey),
+              password: await decryptData(p.password, masterKey),
+              description: await decryptData(p.description, masterKey),
+            }))
+          );
+        }
+
         setStats({
           totalPasswords: res.data?.totalPasswords || 0,
           groupCounts: res.data?.groupCounts || {},
-          recentPasswords: res.data?.recentPasswords || [],
+          recentPasswords: recentDecrypted,
         });
       } catch (err) {
         console.log("Dashboard API error:", err);
@@ -47,7 +60,7 @@ export const Dashpage = () => {
     };
 
     fetchDashboard();
-  }, [authUser, navigate]);
+  }, [authUser, navigate, masterKey]);
 
   if (loading) {
     return (
