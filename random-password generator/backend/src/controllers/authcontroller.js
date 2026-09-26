@@ -62,17 +62,44 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
   const { emailid, password } = req.body;
   try {
-    // console.log(typeof(emailid),typeof(password))
     const user = await User.findOne({ emailid });
-    //   console.log(user)
     if (!user) {
       return res.status(400).json({ message: "invalid credentials" });
     }
+
+    // Check if account is locked
+    if (user.lockUntil && user.lockUntil > Date.now()) {
+      return res.status(403).json({ 
+        message: "Account is temporarily locked due to too many failed login attempts. Please try again later." 
+      });
+    }
+
     const ispassc = await bcrypt.compare(String(password), user.password);
 
     if (!ispassc) {
-      return res.status(400).json({ message: "invalid credentials" });
+      // Increment login attempts
+      user.loginAttempts += 1;
+      let message = "invalid credentials";
+
+      // Lock out if 5 or more failed attempts
+      if (user.loginAttempts >= 5) {
+        user.lockUntil = Date.now() + 15 * 60 * 1000; // 15 minutes
+        message = "Account locked due to 5 failed login attempts. Try again in 15 minutes.";
+        
+        // Log the lockout
+        await AuditLog.create({
+          user: user._id,
+          action: "ACCOUNT LOCKED",
+        });
+      }
+      await user.save();
+      return res.status(400).json({ message });
     }
+
+    // Successful login: reset attempts and lock
+    user.loginAttempts = 0;
+    user.lockUntil = undefined;
+    await user.save();
 
     generateToken(user._id, res);
 

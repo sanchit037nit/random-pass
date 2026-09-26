@@ -17,6 +17,16 @@ const userschema = new mongoose.Schema(
       unique: true,
     },
 
+    loginAttempts: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    
+    lockUntil: {
+      type: Date,
+    },
+
     webauthnChallenge: {
       type: String,
       default: null,
