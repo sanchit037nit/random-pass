@@ -21,6 +21,7 @@ export const Ranpass = () => {
   const [password, setPassword] = useState("");
   const [Strength, setStrength] = useState("");
   const [showVaultPassword, setShowVaultPassword] = useState(false);
+  const [isScrambling, setIsScrambling] = useState(false);
 
   const { setGeneratedPassword } = usePasStore();
 
@@ -37,16 +38,46 @@ export const Ranpass = () => {
       let char = Math.floor(Math.random() * str.length);
       pass += str.charAt(char);
     }
-    const strength = zxcvbn(password);
-    setPassword(pass);
-    setGeneratedPassword(pass);
-    setStrength(strength);
+    
+    setIsScrambling(true);
+    let iterations = 0;
+    const interval = setInterval(() => {
+      let scramblePass = "";
+      for (let i = 0; i < length; i++) {
+        scramblePass += str.charAt(Math.floor(Math.random() * str.length));
+      }
+      setPassword(scramblePass);
+      
+      iterations++;
+      if (iterations > 10) {
+        clearInterval(interval);
+        setPassword(pass);
+        setIsScrambling(false);
+        // Fixed a bug where zxcvbn was checking the old password state instead of the newly generated one
+        const strength = zxcvbn(pass);
+        setGeneratedPassword(pass);
+        setStrength(strength);
+      }
+    }, 30);
   }, [length, numberAllowed, charAllowed, setGeneratedPassword]);
 
   const copyPasswordToClipboard = useCallback(() => {
+    if (isScrambling) return;
     passwordRef.current?.select();
     window.navigator.clipboard.writeText(password);
-  }, [password]);
+    toast.success("Password copied!", {
+      style: {
+        borderRadius: '10px',
+        background: '#111827',
+        color: '#34D399',
+        border: '1px solid #34D399',
+      },
+      iconTheme: {
+        primary: '#34D399',
+        secondary: '#111827',
+      },
+    });
+  }, [password, isScrambling]);
 
   const openVault = async () => {
     try {
@@ -97,8 +128,14 @@ export const Ranpass = () => {
   return (
     <div className="min-h-screen relative text-[#E6E8EC] font-sans overflow-hidden bg-[#0A0E14]">
       {/* Ambient glow field — matches Cipher Vault theme */}
-      <div className="pointer-events-none absolute -top-32 -left-24 w-[420px] h-[420px] rounded-full bg-[#34D399]/10 blur-[120px]" />
-      <div className="pointer-events-none absolute bottom-0 -right-24 w-[420px] h-[420px] rounded-full bg-[#7C6FF0]/10 blur-[120px]" />
+      <div 
+        className="pointer-events-none absolute -top-32 -left-24 w-[420px] h-[420px] rounded-full blur-[120px] transition-colors duration-700" 
+        style={{ backgroundColor: Strength ? `${strengthColor}20` : '#34D39910' }}
+      />
+      <div 
+        className="pointer-events-none absolute bottom-0 -right-24 w-[420px] h-[420px] rounded-full blur-[120px] transition-colors duration-700" 
+        style={{ backgroundColor: Strength ? `${strengthColor}15` : '#7C6FF010' }}
+      />
 
       {/* Subtle dot-grid texture */}
       <div
@@ -131,10 +168,10 @@ export const Ranpass = () => {
               />
 
               {/* Refresh */}
-              <button onClick={passwordGenerator} className="p-2 group">
+              <button onClick={passwordGenerator} disabled={isScrambling} className="p-2 group">
                 <RefreshCcw
                   size={22}
-                  className="text-[#34D399] group-hover:text-[#34D399] group-hover:rotate-180 transition-transform duration-300"
+                  className={`text-[#34D399] group-hover:text-[#34D399] transition-transform duration-300 ${isScrambling ? 'animate-spin' : 'group-hover:rotate-180'}`}
                 />
               </button>
 
