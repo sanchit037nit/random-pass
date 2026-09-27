@@ -1,164 +1,279 @@
-# 🔐 PassGen — Secure Password Generator & Vault
+# 🔐 PassGen — Secure Password Generator & Intelligent Credential Vault
 
 <p align="center">
 
-### A full-stack password generator and secure credential management platform
-
-Generate strong passwords, securely store credentials, organize them into groups, recover accidentally deleted entries, and monitor your password vault through a centralized dashboard.
-
-<br>
-
-
+### A security-focused full-stack password manager with biometric authentication, encrypted credentials, security analytics, audit logging, and AI-assisted password insights.
 
 </p>
 
 <p align="center">
 
-<img src="https://img.shields.io/badge/Frontend-React.js-blue" />
+**Generate → Protect → Organize → Monitor → Recover → Secure**
+
+</p>
+
+<p align="center">
+
+<img src="https://img.shields.io/badge/Frontend-React%2019-blue" />
 <img src="https://img.shields.io/badge/Backend-Node.js-green" />
-<img src="https://img.shields.io/badge/API-Express.js-orange" />
+<img src="https://img.shields.io/badge/API-Express%205-orange" />
 <img src="https://img.shields.io/badge/Database-MongoDB-brightgreen" />
 <img src="https://img.shields.io/badge/Auth-JWT-purple" />
-<img src="https://img.shields.io/badge/Security-AES--256-red" />
-<a href="https://ranpass.vercel.app/"><img src="https://img.shields.io/badge/Live%20Demo-Visit%20Site-blue?style=flat" /></a>
+<img src="https://img.shields.io/badge/Biometric-WebAuthn-red" />
+<img src="https://img.shields.io/badge/Encryption-AES--GCM-critical" />
+<img src="https://img.shields.io/badge/AI-Groq-black" />
+
 </p>
 
 ---
+
+<a name="table-of-contents"></a>
 
 # 📌 Table of Contents
 
-- [Overview](#overview)
-- [Problem Statement](#problem-statement)
-- [Solution](#solution)
-- [Key Features](#key-features)
-- [System Architecture](#system-architecture)
-- [Security Architecture](#security-architecture)
-- [Authentication Flow](#authentication-flow)
-- [Password Vault Flow](#password-vault-flow)
-- [Database Design](#database-design)
-- [Technology Stack](#technology-stack)
-- [Project Structure](#project-structure)
-- [REST API](#rest-api)
-- [Performance & Scalability](#performance--scalability)
-- [Installation](#installation)
-- [Environment Variables](#environment-variables)
-- [Screenshots](#screenshots)
-- [Engineering Challenges](#engineering-challenges)
-- [Future Improvements](#future-improvements)
-- [Contributing](#contributing)
-- [License](#license)
-- [Author](#author)
+* [Overview](#overview)
+* [Why PassGen?](#why-passgen)
+* [Problem Statement](#problem-statement)
+* [Solution](#solution)
+* [Key Features](#key-features)
+
+  * [Password Generator](#password-generator)
+  * [Secure Credential Vault](#secure-credential-vault)
+  * [Password Groups](#password-groups)
+  * [Recycle Bin](#recycle-bin)
+  * [Dashboard & Vault Analytics](#dashboard--vault-analytics)
+  * [Password Strength Analysis](#password-strength-analysis)
+  * [Biometric Authentication](#biometric-authentication)
+  * [Login Security & Account Lockout](#login-security--account-lockout)
+  * [Audit Logging](#audit-logging)
+  * [Security Alerts](#security-alerts)
+  * [Password Export](#password-export)
+  * [AI-Powered Password Insights](#ai-powered-password-insights)
+* [System Architecture](#system-architecture)
+* [Security Architecture](#security-architecture)
+* [Encryption Architecture](#encryption-architecture)
+* [Authentication Architecture](#authentication-architecture)
+* [Biometric Authentication Flow](#biometric-authentication-flow)
+* [Login Lockout Flow](#login-lockout-flow)
+* [Password Vault Flow](#password-vault-flow)
+* [Password Lifecycle](#password-lifecycle)
+* [Audit Logging Flow](#audit-logging-flow)
+* [AI Security Insights Flow](#ai-security-insights-flow)
+* [Database Design](#database-design)
+* [Database Indexing](#database-indexing)
+* [API Architecture](#api-architecture)
+* [API Endpoints](#api-endpoints)
+* [Rate Limiting](#rate-limiting)
+* [Frontend Architecture](#frontend-architecture)
+* [State Management](#state-management)
+* [Project Structure](#project-structure)
+* [Technology Stack](#technology-stack)
+* [Security Design Decisions](#security-design-decisions)
+* [Performance & Scalability](#performance--scalability)
+* [Production-Scale Architecture](#production-scale-architecture)
+* [Environment Variables](#environment-variables)
+* [Installation](#installation)
+* [Running the Application](#running-the-application)
+* [Screenshots](#screenshots)
+* [Engineering Challenges](#engineering-challenges)
+* [Future Improvements](#future-improvements)
+* [Contributing](#contributing)
+* [License](#license)
+* [Author](#author)
+* [Project Summary](#project-summary)
 
 ---
 
-# Overview
+<a name="overview"></a>
 
-**PassGen** is a full-stack password generation and credential-management application.
+# 🚀 Overview
 
-It allows users to:
+**PassGen** is a full-stack password generation and credential-management platform designed around practical application security.
 
-- Generate strong random passwords
-- Customize password length and character types
-- Store credentials inside an authenticated vault
-- Organize credentials into groups
-- Edit and manage stored entries
-- Recover accidentally deleted passwords
-- Permanently remove credentials
-- Monitor vault statistics through a dashboard
+The project started as a password generator and evolved into a complete credential-management system with:
 
-The project focuses on combining **modern web development with practical security concepts**, including password hashing, encryption at rest, JWT authentication, protected APIs, and soft deletion.
+* Secure password generation
+* Password vault
+* Custom credential groups
+* JWT authentication
+* Biometric/WebAuthn authentication
+* Password hashing
+* Client-side cryptographic utilities
+* AES-GCM encryption
+* Login attempt tracking
+* Temporary account lockout
+* Audit logs
+* Security alerts
+* Password strength analysis
+* Vault analytics
+* Password recovery through soft deletion
+* Permanent deletion
+* Password export
+* API rate limiting
+* AI-assisted password insights
 
----
-
-# Problem Statement
-
-Managing passwords becomes increasingly difficult as the number of online accounts grows.
-
-Users commonly rely on:
-
-- Reusing passwords
-- Simple memorable passwords
-- Browser notes
-- Text files
-- Unorganized documents
-- Scattered credential storage
-
-These approaches introduce multiple risks.
-
-| Problem | Impact |
-|---|---|
-| Weak passwords | Easier for attackers to compromise accounts |
-| Password reuse | One compromised credential can affect multiple accounts |
-| Scattered credentials | Difficult to manage and retrieve passwords |
-| Accidental deletion | Important credentials may be permanently lost |
-| No organization | Difficult to manage large numbers of credentials |
-| No security visibility | Users cannot easily understand their password distribution |
+The application follows a modular **React + Node.js + Express + MongoDB** architecture.
 
 ---
 
-# Solution
+<a name="why-passgen"></a>
 
-PassGen addresses these problems by combining two major capabilities:
+# 💡 Why PassGen?
+
+Password managers have two fundamentally different responsibilities:
 
 ```text
-                 PassGen
-                    │
-          ┌─────────┴─────────┐
-          │                   │
-   Password Generator    Secure Vault
-          │                   │
-   Strong Credentials    Encrypted Storage
-          │                   │
-          └─────────┬─────────┘
-                    │
-              User Dashboard
+                PASSGEN
+                   │
+        ┌──────────┴──────────┐
+        │                     │
+        ▼                     ▼
+  Generate Secrets       Protect Secrets
+        │                     │
+        ▼                     ▼
+ Strong Randomness       Authentication
+ Password Strength       Encryption
+                         Access Control
+                         Audit Logs
+                         Recovery
 ```
 
-The platform provides a centralized location for generating, storing, organizing, recovering, and managing credentials.
+PassGen therefore focuses not only on generating passwords, but also on the **entire lifecycle of credentials**.
+
+```text
+Generate
+   ↓
+Store
+   ↓
+Organize
+   ↓
+Access Securely
+   ↓
+Monitor
+   ↓
+Update
+   ↓
+Delete
+   ↓
+Recover / Permanently Delete
+```
 
 ---
 
-#  Key Features
+<a name="problem-statement"></a>
+
+# 🎯 Problem Statement
+
+As users create more online accounts, password management becomes increasingly difficult.
+
+Common approaches include:
+
+* Reusing passwords
+* Using simple passwords
+* Saving credentials in notes
+* Maintaining text files
+* Keeping credentials in browser notes
+* Scattering credentials across multiple systems
+
+These approaches introduce several problems.
+
+| Problem                  | Impact                                                     |
+| ------------------------ | ---------------------------------------------------------- |
+| Weak passwords           | Easier credential compromise                               |
+| Password reuse           | One compromised password can affect multiple accounts      |
+| Scattered credentials    | Difficult retrieval and organization                       |
+| Accidental deletion      | Important credentials can be lost                          |
+| No password analysis     | Users may not know which credentials are weak              |
+| No audit history         | Suspicious account activity becomes harder to investigate  |
+| Weak authentication      | Password-only access creates a single authentication layer |
+| Unlimited login attempts | Increases exposure to brute-force attacks                  |
+
+PassGen addresses these problems through a combination of **secure credential storage, authentication controls, monitoring, recovery mechanisms, and security-oriented backend design**.
+
+---
+
+<a name="solution"></a>
+
+# 🧩 Solution
+
+PassGen combines several security-oriented subsystems into a single platform.
+
+```text
+                           PASSGEN
+                              │
+          ┌───────────────────┼───────────────────┐
+          │                   │                   │
+          ▼                   ▼                   ▼
+    Password Engine       Secure Vault       Security Layer
+          │                   │                   │
+          ▼                   ▼                   ▼
+     Generation          Encryption          JWT / WebAuthn
+     Strength            Groups              Rate Limiting
+     Analysis            Recovery            Lockout
+                                             Audit Logs
+          │                   │                   │
+          └───────────────────┼───────────────────┘
+                              ▼
+                       Security Dashboard
+```
+
+---
+
+<a name="key-features"></a>
+
+# ✨ Key Features
+
+<a name="password-generator"></a>
 
 ## 🔑 Password Generator
 
-Generate secure random passwords with customizable options.
+PassGen generates random passwords with configurable options.
 
 Features include:
 
-- Custom password length
-- Numbers toggle
-- Symbols toggle
-- One-click regeneration
-- Instant password generation
+* Custom password length
+* Numbers
+* Symbols
+* One-click regeneration
+* Clipboard copy
+* Password strength evaluation
 
-Current supported password length:
+The original UI supports password lengths from **6–20 characters**.
+
+---
+
+<a name="secure-credential-vault"></a>
+
+## 💾 Secure Credential Vault
+
+Authenticated users can:
+
+* Create credentials
+* View credentials
+* Update credentials
+* Delete credentials
+* Organize credentials
+* Restore deleted credentials
+* Permanently delete credentials
+
+A credential contains information such as:
 
 ```text
-6 → 20 characters
+Credential
+│
+├── Name
+├── Password
+├── Description
+├── Group
+├── Owner
+├── Created At
+├── Updated At
+└── Deleted State
 ```
 
 ---
 
-## 📋 Copy to Clipboard
-
-Generated passwords can be copied directly to the clipboard for convenient use.
-
----
-
-## 💾 Secure Password Vault
-
-Users can:
-
-- Add credentials
-- Edit credentials
-- View stored entries
-- Delete credentials
-- Organize credentials into groups
-
-Vault entries are encrypted before being stored in the database.
-
----
+<a name="password-groups"></a>
 
 ## 🗂️ Password Groups
 
@@ -169,10 +284,10 @@ Example:
 ```text
 My Vault
 │
-├── Work
+├── Development
 │   ├── GitHub
-│   ├── Jira
-│   └── Slack
+│   ├── AWS
+│   └── Jira
 │
 ├── Personal
 │   ├── Gmail
@@ -184,647 +299,1317 @@ My Vault
     └── Payments
 ```
 
-This provides a structured way to manage large vaults.
+Groups can also be deleted, allowing users to maintain the vault hierarchy over time.
 
 ---
 
-# 🗑️ Recycle Bin
+<a name="recycle-bin"></a>
 
-Instead of immediately deleting credentials, PassGen uses **soft deletion**.
+## 🗑️ Recycle Bin
+
+PassGen uses **soft deletion** instead of immediately destroying credentials.
 
 ```text
-Delete Entry
-     │
-     ▼
-isDeleted = true
-     │
-     ▼
+Delete Credential
+       │
+       ▼
+deleted = true
+       │
+       ▼
 Recycle Bin
-     │
-     ├── Restore
-     │
-     └── Permanently Delete
+       │
+       ├──────────────┐
+       ▼              ▼
+    Restore      Delete Forever
+       │              │
+       ▼              ▼
+   Active Vault    Permanent Removal
 ```
 
-This protects users against accidental deletion.
-
-The vault entry remains recoverable until the user explicitly chooses permanent deletion.
+This provides protection against accidental deletion.
 
 ---
 
-# 📊 Dashboard
+<a name="dashboard--vault-analytics"></a>
 
-The dashboard provides an overview of the user's vault.
+## 📊 Dashboard & Vault Analytics
 
-It can display:
+The dashboard provides a centralized view of vault activity.
 
-- Total password count
-- Group-wise password distribution
-- Recently added credentials
-- Overall vault activity
+It can expose information such as:
 
-This gives users a quick overview without manually browsing every credential.
+* Total credentials
+* Group distribution
+* Recently created credentials
+* Password activity
+* Security-related information
 
----
-
-# 👤 Authentication
-
-PassGen implements authenticated user accounts.
-
-Users can:
-
-- Register
-- Login
-- Access protected resources
-- Manage their account
-- Delete their account
-
-Authentication is implemented using **JWT-based stateless authentication**. fileciteturn0file0L118-L125
+The project includes a dedicated dashboard page and vault analytics implementation.
 
 ---
 
-# System Architecture
+<a name="password-strength-analysis"></a>
+
+## 📈 Password Strength Analysis
+
+PassGen integrates `zxcvbn` to estimate password strength.
+
+```text
+Password
+   │
+   ▼
+zxcvbn
+   │
+   ├── Strength Score
+   ├── Pattern Analysis
+   ├── Guessability
+   └── Feedback
+```
+
+This allows the application to provide more meaningful strength feedback than simply checking password length.
+
+---
+
+<a name="biometric-authentication"></a>
+
+## 👆 Biometric Authentication
+
+PassGen has evolved beyond password-only authentication.
+
+The latest authentication work integrates **WebAuthn/passkey-style browser authentication** using:
+
+* `@simplewebauthn/browser`
+* `@simplewebauthn/server`
+
+This enables supported devices to authenticate using platform authenticators such as:
+
+* Fingerprint
+* Device biometric authentication
+* Platform passkeys
+
+Conceptually:
+
+```text
+User
+ │
+ ▼
+Browser WebAuthn API
+ │
+ ▼
+Platform Authenticator
+ │
+ ▼
+Fingerprint / Device Authentication
+ │
+ ▼
+Cryptographic Assertion
+ │
+ ▼
+Backend Verification
+ │
+ ▼
+Authenticated Session
+```
+
+The user model stores a WebAuthn challenge used during the authentication process.
+
+---
+
+<a name="login-security--account-lockout"></a>
+
+## 🛡️ Login Security & Account Lockout
+
+PassGen tracks failed login attempts.
+
+The current authentication model includes:
+
+```text
+loginAttempts
+lockUntil
+```
+
+After repeated failed attempts, the account can be temporarily locked.
+
+The current implementation locks an account after **5 failed attempts for 15 minutes**.
+
+```text
+Login Attempt
+     │
+     ▼
+Password Verification
+     │
+     ├── Success ───────► Reset / Continue
+     │
+     └── Failure
+          │
+          ▼
+     Increment Attempts
+          │
+          ▼
+      Attempts >= 5?
+          │
+       ┌──┴──┐
+       │     │
+      No    Yes
+       │     │
+       ▼     ▼
+    Retry   Lock 15 min
+```
+
+This adds an additional layer against repeated credential-guessing attempts.
+
+---
+
+<a name="audit-logging"></a>
+
+## 📝 Audit Logging
+
+PassGen maintains audit records for important security-related events.
+
+An audit record contains:
+
+```text
+AuditLog
+│
+├── User
+├── Action
+├── Resource ID
+├── Details
+└── Created At
+```
+
+Examples of logged actions include:
+
+```text
+LOGIN SUCCESSFULL
+LOGOUT SUCCESSFULL
+ACCOUNT LOCKED
+```
+
+This provides a foundation for security investigation and account activity tracking.
+
+---
+
+<a name="security-alerts"></a>
+
+## 🚨 Security Alerts
+
+The application exposes a security-alert endpoint for authenticated users.
+
+Security monitoring can be used to surface potentially important events related to the user's credentials.
+
+```text
+User
+ │
+ ▼
+Security Alerts API
+ │
+ ▼
+Analyze Vault Activity
+ │
+ ▼
+Security Findings
+ │
+ ▼
+Dashboard
+```
+
+---
+
+<a name="password-export"></a>
+
+## 📄 Password Export
+
+PassGen provides a protected password-download/export endpoint.
+
+The backend uses `pdfkit` as part of the current dependency set, supporting document-based password export functionality.
+
+Export operations are also rate-limited to prevent uncontrolled repeated requests.
+
+---
+
+<a name="ai-powered-password-insights"></a>
+
+## 🤖 AI-Powered Password Insights
+
+The latest backend includes the **Groq SDK** and an AI-related password-analysis endpoint.
+
+PassGen exposes a `/roast` operation that can be used to generate AI-assisted commentary about password/security characteristics.
+
+Conceptually:
+
+```text
+Password / Security Context
+          │
+          ▼
+       Backend
+          │
+          ▼
+      Groq SDK
+          │
+          ▼
+      LLM Analysis
+          │
+          ▼
+ Security Feedback
+```
+
+The AI functionality is treated as an additional insight layer rather than as the underlying security mechanism.
+
+---
+
+<a name="system-architecture"></a>
+
+# 🏗️ System Architecture
 
 ```mermaid
 flowchart TB
 
-    USER[👤 User]
+    USER["👤 User"]
 
-    subgraph CLIENT["Client - React SPA"]
-        UI[React Components]
-        GEN[Password Generator]
-        VAULT[Vault Dashboard]
-        STORE[Zustand Store]
+    subgraph FRONTEND["🖥️ Frontend — React 19"]
+        UI["React UI"]
+        ROUTER["React Router"]
+        STORE["Zustand Stores"]
+        CRYPTO["Client Crypto Utilities"]
+        WEB_AUTHN["WebAuthn Browser API"]
+        ANALYTICS["Dashboard"]
     end
 
-    subgraph SERVER["Server - Express.js"]
-        API[REST API]
-        AUTH[JWT Authentication Middleware]
-        AC[Auth Controller]
-        VC[Vault Controller]
-        RC[Recycle Bin Controller]
-        DC[Dashboard Controller]
-        ENC[Encryption Service]
+    subgraph BACKEND["🟢 Backend — Node.js + Express 5"]
+        API["REST API"]
+        AUTH["Authentication Middleware"]
+        RATE["Rate Limiting"]
+        AUTHCTRL["Auth Controller"]
+        PASSCTRL["Password Controller"]
+        GROUPCTRL["Group Controller"]
+        AUDIT["Audit Logging"]
+        SECURITY["Security Alerts"]
+        AI["AI / Groq"]
+        EXPORT["PDF Export"]
     end
 
-    subgraph DATABASE["Data Layer - MongoDB"]
+    subgraph DATABASE["🍃 MongoDB"]
         USERS[(Users)]
         PASSWORDS[(Passwords)]
         GROUPS[(Groups)]
+        AUDITLOGS[(Audit Logs)]
+    end
+
+    subgraph AUTH_SYSTEM["🔐 Authentication"]
+        JWT["JWT"]
+        WEBAUTHN["WebAuthn / Passkeys"]
+        LOCKOUT["Login Lockout"]
     end
 
     USER --> UI
 
+    UI --> ROUTER
+    ROUTER --> STORE
+
     UI --> API
+    UI --> CRYPTO
+    UI --> WEB_AUTHN
 
-    API --> AUTH
+    API --> RATE
+    RATE --> AUTH
 
-    AUTH --> AC
-    AUTH --> VC
-    AUTH --> RC
-    AUTH --> DC
+    AUTH --> AUTHCTRL
+    AUTH --> PASSCTRL
+    AUTH --> GROUPCTRL
+    AUTH --> SECURITY
+    AUTH --> AI
+    AUTH --> EXPORT
 
-    AC --> USERS
+    AUTHCTRL --> JWT
+    AUTHCTRL --> WEBAUTHN
+    AUTHCTRL --> LOCKOUT
 
-    VC --> ENC
-    ENC --> PASSWORDS
+    AUTHCTRL --> USERS
+    PASSCTRL --> PASSWORDS
+    GROUPCTRL --> GROUPS
 
-    VC --> GROUPS
+    AUTHCTRL --> AUDIT
+    PASSCTRL --> AUDIT
+    GROUPCTRL --> AUDIT
 
-    RC --> PASSWORDS
-    DC --> PASSWORDS
-```
+    AUDIT --> AUDITLOGS
 
-### Architecture Layers
+    AI --> GROQ["Groq LLM"]
+    EXPORT --> PDF["PDFKit"]
 
-| Layer | Responsibility |
-|---|---|
-| React | User interface |
-| Zustand | Client-side state management |
-| Express | REST API |
-| JWT Middleware | Authentication |
-| Controllers | Business logic |
-| Encryption Service | Vault data encryption/decryption |
-| MongoDB | Persistent storage |
-
----
-
-# Security Architecture
-
-Security is one of the core design considerations of PassGen.
-
-The application uses different security mechanisms for different types of data.
-
-```mermaid
-flowchart LR
-
-    USER[User]
-
-    LOGIN[Account Password]
-    VAULT[Vault Password]
-
-    HASH[bcrypt Hashing]
-    AES[AES-256 Encryption]
-
-    DB1[(User Database)]
-    DB2[(Vault Database)]
-
-    USER --> LOGIN
-    USER --> VAULT
-
-    LOGIN --> HASH
-    HASH --> DB1
-
-    VAULT --> AES
-    AES --> DB2
+    ANALYTICS --> API
 ```
 
 ---
 
-# 🔐 Hashing vs Encryption
+<a name="security-architecture"></a>
 
-PassGen deliberately uses **different mechanisms for different types of secrets**.
+# 🔐 Security Architecture
 
-### User Account Password
-
-Account passwords are hashed using **bcrypt**.
+Security is implemented as multiple independent layers.
 
 ```text
-Plain Password
-      ↓
-   bcrypt
-      ↓
-Password Hash
-      ↓
-   MongoDB
+                         PASSGEN SECURITY
+                               │
+          ┌────────────────────┼────────────────────┐
+          │                    │                    │
+          ▼                    ▼                    ▼
+   Authentication         Credential Data       API Protection
+          │                    │                    │
+          ├── JWT              ├── Encryption      ├── Rate Limits
+          ├── WebAuthn         ├── Client Crypto   ├── Protected Routes
+          └── Lockout          └── Secure Storage  └── Validation
+                               │
+                               ▼
+                       Security Monitoring
+                               │
+                  ┌────────────┼────────────┐
+                  ▼            ▼            ▼
+              Audit Logs   Alerts       Analytics
 ```
 
-The original password is not stored.
+---
+
+<a name="encryption-architecture"></a>
+
+# 🔒 Encryption Architecture
+
+A key architectural distinction is made between:
+
+### Authentication Passwords
+
+Passwords used to authenticate the account should be represented using a password-hashing mechanism.
+
+```text
+Account Password
+      │
+      ▼
+    bcrypt
+      │
+      ▼
+Password Hash
+      │
+      ▼
+MongoDB
+```
+
+The original password is not recovered from the hash.
 
 ### Vault Credentials
 
-Vault passwords need to be retrieved by the application, so they are **encrypted rather than hashed**.
+Vault credentials must eventually be recoverable by the authorized user, so encryption is used rather than one-way password hashing.
+
+The current frontend includes a cryptographic utility using the browser Web Crypto API with:
+
+* PBKDF2
+* SHA-256
+* AES-GCM
+* 256-bit derived keys
+
+Conceptually:
 
 ```text
-Vault Password
-      ↓
-   AES-256
-      ↓
-Encrypted Value
-      ↓
-   MongoDB
+User Secret
+    │
+    ▼
+PBKDF2 + SHA-256
+    │
+    ▼
+Derived AES-256 Key
+    │
+    ▼
+AES-GCM
+    │
+    ▼
+Encrypted Credential
 ```
 
-This distinction is important because hashing is one-way, whereas encryption supports controlled decryption.
+The implementation derives the cryptographic key from user material and an email-derived salt, with PBKDF2 configured for 100,000 iterations and AES-GCM using a 256-bit key.
 
 ---
 
-# 🔐 Encryption at Rest
+<a name="authentication-architecture"></a>
 
-Vault credentials are encrypted before being persisted in MongoDB.
+# 🔑 Authentication Architecture
 
-```mermaid
-sequenceDiagram
-
-    participant User
-    participant React
-    participant Express
-    participant Encryption
-    participant MongoDB
-
-    User->>React: Enter Password
-    React->>Express: Save Vault Entry
-    Express->>Encryption: Encrypt Password
-    Encryption-->>Express: Encrypted Value
-    Express->>MongoDB: Store Encrypted Value
-    MongoDB-->>Express: Success
-    Express-->>React: 201 Created
-```
-
-Therefore, the database stores:
+PassGen supports multiple authentication mechanisms.
 
 ```text
-Encrypted Password
+                    Authentication
+                          │
+             ┌────────────┴────────────┐
+             │                         │
+             ▼                         ▼
+       Password Login            WebAuthn Login
+             │                         │
+             ▼                         ▼
+          bcrypt                 Device Authenticator
+             │                         │
+             ▼                         ▼
+           JWT                  Cryptographic Assertion
+             │                         │
+             └────────────┬────────────┘
+                          ▼
+                   Authenticated User
 ```
 
-rather than:
+JWT is used for stateless authenticated API access.
 
-```text
-Plaintext Password
-```
-
-The encryption key should remain server-side and must never be exposed to the client. fileciteturn0file0L120-L127
+WebAuthn provides an additional passwordless/biometric-capable authentication mechanism on supported devices.
 
 ---
 
-# Authentication Flow
+<a name="biometric-authentication-flow"></a>
 
-PassGen uses JWT-based authentication.
-
-```mermaid
-sequenceDiagram
-
-    actor User
-    participant Client as React
-    participant API as Express API
-    participant DB as MongoDB
-
-    User->>Client: Enter credentials
-
-    Client->>API: POST /api/auth/login
-
-    API->>DB: Find user
-
-    DB-->>API: User record
-
-    API->>API: Verify bcrypt hash
-
-    API->>API: Generate JWT
-
-    API-->>Client: JWT
-
-    Client->>API: Protected Request + JWT
-
-    API->>API: Verify JWT
-
-    API-->>Client: Protected Resource
-```
-
----
-
-# 🛡️ Protected API Flow
-
-```text
-Client
-   │
-   │ HTTP Request + JWT
-   ▼
-Express API
-   │
-   ▼
-JWT Middleware
-   │
-   ├── Invalid → 401 Unauthorized
-   │
-   └── Valid
-         │
-         ▼
-      Controller
-         │
-         ▼
-      MongoDB
-```
-
-This prevents unauthenticated users from accessing private vault resources.
-
----
-
-# Database Design
-
-The database consists of three major collections:
-
-- Users
-- Groups
-- Password Entries
-
-```mermaid
-erDiagram
-
-    USER ||--o{ GROUP : creates
-    USER ||--o{ PASSWORD_ENTRY : owns
-    GROUP ||--o{ PASSWORD_ENTRY : contains
-
-    USER {
-        ObjectId id PK
-        string username
-        string email
-        string passwordHash
-        date createdAt
-    }
-
-    GROUP {
-        ObjectId id PK
-        ObjectId userId FK
-        string name
-        string colorTag
-    }
-
-    PASSWORD_ENTRY {
-        ObjectId id PK
-        ObjectId userId FK
-        ObjectId groupId FK
-        string title
-        string encryptedPassword
-        string siteUrl
-        boolean isDeleted
-        date deletedAt
-        date createdAt
-    }
-```
-
----
-
-# 🧩 Data Relationships
-
-```text
-USER
- │
- ├───────────────┐
- │               │
- ▼               ▼
-GROUP        PASSWORD_ENTRY
- │               ▲
- │               │
- └───────────────┘
-```
-
-A user can:
-
-- Create multiple groups
-- Own multiple password entries
-- Organize password entries into groups
-
-Each password entry belongs to a specific user.
-
----
-
-# Password Vault Flow
+# 👆 Biometric Authentication Flow
 
 ```mermaid
 sequenceDiagram
 
     actor User
-    participant Frontend as React
-    participant API as Express
-    participant Auth as JWT Middleware
-    participant Encryption as AES Service
+    participant Browser
+    participant Authenticator
+    participant Backend
     participant DB as MongoDB
 
-    User->>Frontend: Create Vault Entry
+    User->>Browser: Choose biometric login
 
-    Frontend->>API: POST /api/vault
+    Browser->>Backend: Request authentication challenge
+
+    Backend->>DB: Store / validate WebAuthn challenge
+
+    Backend-->>Browser: Challenge
+
+    Browser->>Authenticator: Request credential
+
+    User->>Authenticator: Fingerprint / Device Auth
+
+    Authenticator-->>Browser: Cryptographic Assertion
+
+    Browser->>Backend: Assertion
+
+    Backend->>Backend: Verify WebAuthn Assertion
+
+    Backend->>DB: Resolve User
+
+    Backend-->>Browser: Authenticated Session
+```
+
+The current user schema contains a `webauthnChallenge` field for the authentication flow.
+
+---
+
+<a name="login-lockout-flow"></a>
+
+# 🚫 Login Lockout Flow
+
+```mermaid
+flowchart TD
+
+    A["Login Request"]
+
+    B["Find User"]
+
+    C{"Account Locked?"}
+
+    D["Reject Request"]
+
+    E["Compare Password"]
+
+    F{"Password Correct?"}
+
+    G["Authenticate"]
+
+    H["Increment Failed Attempts"]
+
+    I{"Attempts >= 5?"}
+
+    J["Set lockUntil = now + 15 min"]
+
+    K["Return Invalid Credentials"]
+
+    A --> B
+    B --> C
+
+    C -->|Yes| D
+    C -->|No| E
+
+    E --> F
+
+    F -->|Yes| G
+    F -->|No| H
+
+    H --> I
+
+    I -->|No| K
+    I -->|Yes| J
+
+    J --> K
+```
+
+---
+
+<a name="password-vault-flow"></a>
+
+# 💾 Password Vault Flow
+
+```mermaid
+sequenceDiagram
+
+    actor User
+    participant Frontend
+    participant API
+    participant Auth
+    participant Crypto
+    participant DB
+
+    User->>Frontend: Create Credential
+
+    Frontend->>API: POST /password/create
 
     API->>Auth: Validate JWT
 
     Auth-->>API: Authorized
 
-    API->>Encryption: Encrypt Password
+    Frontend->>Crypto: Encrypt Secret
 
-    Encryption-->>API: Encrypted Password
+    Crypto-->>Frontend: Ciphertext
 
-    API->>DB: Insert Entry
+    Frontend->>API: Submit Protected Credential
+
+    API->>DB: Store Credential
 
     DB-->>API: Created
 
-    API-->>Frontend: 201 Created
+    API-->>Frontend: Success
 
-    Frontend-->>User: Entry Saved
+    Frontend-->>User: Credential Saved
 ```
 
 ---
 
-# 🗑️ Delete & Recovery Flow
+<a name="password-lifecycle"></a>
 
-PassGen uses soft deletion for safer credential management.
+# 🔄 Password Lifecycle
 
 ```mermaid
-flowchart TD
+stateDiagram-v2
 
-    USER[User Deletes Entry]
+    [*] --> Active
 
-    API[DELETE /api/vault/:id]
+    Active --> Updated: Edit Credential
 
-    DB[(MongoDB)]
+    Updated --> Active
 
-    FLAG[Set isDeleted = true]
+    Active --> Deleted: Delete
 
-    BIN[Recycle Bin]
+    Deleted --> Active: Restore
 
-    RESTORE[Restore]
+    Deleted --> PermanentlyDeleted: Delete Forever
 
-    PERMANENT[Permanent Delete]
+    PermanentlyDeleted --> [*]
+```
 
-    USER --> API
-    API --> DB
-    DB --> FLAG
-    FLAG --> BIN
+The underlying password model tracks:
 
-    BIN --> RESTORE
-    BIN --> PERMANENT
+* `deleted`
+* `deletedAt`
+* `passwordUpdatedAt`
+* `createdAt`
+* `updatedAt`
 
-    RESTORE --> ACTIVE[Active Vault]
-    PERMANENT --> DESTROY[Remove Permanently]
+The model also contains indexes supporting user-based retrieval and deleted-state filtering.
+
+---
+
+<a name="audit-logging-flow"></a>
+
+# 📝 Audit Logging Flow
+
+```mermaid
+flowchart LR
+
+    USER["User Action"]
+
+    AUTH["Authentication"]
+
+    PASS["Password Operation"]
+
+    GROUP["Group Operation"]
+
+    AUDIT["Audit Logger"]
+
+    DB[(Audit Logs)]
+
+    ALERT["Security Monitoring"]
+
+    USER --> AUTH
+    USER --> PASS
+    USER --> GROUP
+
+    AUTH --> AUDIT
+    PASS --> AUDIT
+    GROUP --> AUDIT
+
+    AUDIT --> DB
+    DB --> ALERT
+```
+
+Audit records contain:
+
+```text
+user
+action
+resourceId
+details
+createdAt
+```
+
+This allows the platform to retain a structured history of security-relevant actions.
+
+---
+
+<a name="ai-security-insights-flow"></a>
+
+# 🤖 AI Security Insights Flow
+
+```mermaid
+flowchart LR
+
+    USER["User"]
+
+    FRONTEND["React"]
+
+    API["Express API"]
+
+    CONTROLLER["Password Controller"]
+
+    GROQ["Groq SDK / LLM"]
+
+    RESPONSE["Security Insight"]
+
+    USER --> FRONTEND
+    FRONTEND --> API
+    API --> CONTROLLER
+    CONTROLLER --> GROQ
+    GROQ --> RESPONSE
+    RESPONSE --> FRONTEND
+    FRONTEND --> USER
+```
+
+The AI layer is supplementary.
+
+Security-critical operations should remain deterministic and enforced by the backend rather than delegated to an LLM.
+
+---
+
+<a name="database-design"></a>
+
+# 🗄️ Database Design
+
+The application uses MongoDB with Mongoose.
+
+The core data model consists of:
+
+```text
+User
+ │
+ ├── Passwords
+ │
+ ├── Groups
+ │
+ └── Audit Logs
+```
+
+```mermaid
+erDiagram
+
+    USER ||--o{ PASSWORD : owns
+    USER ||--o{ GROUP : creates
+    USER ||--o{ AUDIT_LOG : generates
+
+    GROUP ||--o{ PASSWORD : contains
+
+    USER {
+        ObjectId _id PK
+        string name
+        string emailid
+        string password
+        number loginAttempts
+        date lockUntil
+        string webauthnChallenge
+        date createdAt
+        date updatedAt
+    }
+
+    PASSWORD {
+        ObjectId _id PK
+        string name
+        string password
+        string description
+        ObjectId group FK
+        ObjectId createdby FK
+        boolean deleted
+        date deletedAt
+        date passwordUpdatedAt
+        date createdAt
+        date updatedAt
+    }
+
+    GROUP {
+        ObjectId _id PK
+        ObjectId userId FK
+        string name
+        string color
+    }
+
+    AUDIT_LOG {
+        ObjectId _id PK
+        ObjectId user FK
+        string action
+        ObjectId resourceId
+        object details
+        date createdAt
+    }
 ```
 
 ---
 
-# Technology Stack
+<a name="database-indexing"></a>
 
-| Category | Technology | Purpose |
-|---|---|---|
-| Frontend | React.js | Component-based UI |
-| Styling | Tailwind CSS | Responsive styling |
-| Routing | React Router | Client-side navigation |
-| State Management | Zustand | Lightweight global state |
-| Backend | Node.js | Server runtime |
-| API | Express.js | REST API framework |
-| Authentication | JWT | Stateless authentication |
-| Password Hashing | bcrypt | Secure account-password hashing |
-| Encryption | Node.js crypto / AES | Vault credential encryption |
-| Database | MongoDB | Persistent document storage |
-| ODM | Mongoose | MongoDB schema/model management |
+# ⚡ Database Indexing
 
-The original project specification identifies React, Tailwind CSS, React Router, Zustand, Node.js, Express, JWT, bcrypt, AES-based crypto, and MongoDB as the core technologies. fileciteturn0file0L208-L220
+The password model currently includes indexes around common access patterns.
+
+```text
+Index 1:
+createdby
+
+Index 2:
+createdby + deleted
+
+Index 3:
+createdby + createdAt DESC
+```
+
+These indexes support operations such as:
+
+```text
+Get user's credentials
+        ↓
+Filter active/deleted credentials
+        ↓
+Sort recent credentials
+```
+
+This is particularly useful for dashboard and vault queries.
 
 ---
 
-# Project Structure
+<a name="api-architecture"></a>
+
+# 🌐 API Architecture
+
+The backend follows a modular REST API architecture.
 
 ```text
-passgen/
+HTTP Request
+     │
+     ▼
+Express Router
+     │
+     ▼
+Rate Limiter
+     │
+     ▼
+Authentication Middleware
+     │
+     ▼
+Controller
+     │
+     ├── MongoDB
+     ├── Audit Log
+     ├── Encryption
+     ├── PDF Export
+     └── Groq
+     │
+     ▼
+JSON Response
+```
+
+---
+
+<a name="api-endpoints"></a>
+
+# 📡 API Endpoints
+
+## Authentication
+
+| Method | Endpoint                  | Purpose        | Protected |
+| ------ | ------------------------- | -------------- | --------- |
+| POST   | `/api/auth/signup`        | Create account | ❌         |
+| POST   | `/api/auth/login`         | Login          | ❌         |
+| POST   | `/api/auth/logout`        | Logout         | ✅         |
+| DELETE | `/api/auth/deleteaccount` | Delete account | ✅         |
+
+---
+
+## Passwords
+
+| Method | Endpoint                      | Purpose                | Protected |
+| ------ | ----------------------------- | ---------------------- | --------- |
+| POST   | `/api/pass/create`            | Create password        | ✅         |
+| GET    | `/api/pass/get/:userId`       | Retrieve credentials   | ✅         |
+| GET    | `/api/pass/view/:id`          | View credential        | ✅         |
+| PATCH  | `/api/pass/update/:id`        | Update credential      | ✅         |
+| DELETE | `/api/pass/delete/:id`        | Soft-delete credential | ✅         |
+| DELETE | `/api/pass/deleteforever/:id` | Permanent deletion     | ✅         |
+| PATCH  | `/api/pass/restore/:id`       | Restore credential     | ✅         |
+
+---
+
+## Recycle Bin
+
+| Method | Endpoint                      | Purpose                 |
+| ------ | ----------------------------- | ----------------------- |
+| GET    | `/api/pass/recycle/:userId`   | Get deleted credentials |
+| PATCH  | `/api/pass/restore/:id`       | Restore credential      |
+| DELETE | `/api/pass/deleteforever/:id` | Permanently delete      |
+
+---
+
+## Dashboard
+
+| Method | Endpoint                      | Purpose             |
+| ------ | ----------------------------- | ------------------- |
+| GET    | `/api/pass/dashboard/:userId` | Dashboard analytics |
+
+---
+
+## Security
+
+| Method | Endpoint                    | Purpose                               |
+| ------ | --------------------------- | ------------------------------------- |
+| GET    | `/api/pass/security-alerts` | Retrieve security alerts              |
+| POST   | `/api/pass/roast`           | Generate AI-assisted password insight |
+
+---
+
+## Export
+
+| Method | Endpoint                     | Purpose           |
+| ------ | ---------------------------- | ----------------- |
+| GET    | `/api/pass/download/:userId` | Export vault data |
+
+---
+
+<a name="rate-limiting"></a>
+
+# 🛡️ Rate Limiting
+
+The current password routes include dedicated rate limiters for sensitive operations.
+
+Examples include:
+
+```text
+createPasswordLimiter
+updatePasswordLimiter
+deletePasswordLimiter
+exportLimiter
+```
+
+Architecture:
+
+```text
+Request
+   │
+   ▼
+Rate Limiter
+   │
+   ├── Limit Exceeded → 429
+   │
+   └── Allowed
+          │
+          ▼
+      JWT Middleware
+          │
+          ▼
+       Controller
+```
+
+Rate limiting is particularly useful for:
+
+* Credential creation
+* Credential modification
+* Credential deletion
+* Export operations
+
+---
+
+<a name="frontend-architecture"></a>
+
+# 🖥️ Frontend Architecture
+
+The frontend is built using React 19 and Vite.
+
+Major technologies include:
+
+* React 19
+* React Router 7
+* Zustand
+* Tailwind CSS 4
+* Framer Motion
+* Axios
+* Lucide React
+* React Hot Toast
+* WebAuthn Browser API
+* Web Crypto API
+
+The frontend is responsible for:
+
+```text
+UI
 │
-├── client/
-│   │
-│   ├── components/
-│   │   ├── Navbar/
-│   │   ├── PasswordGenerator/
-│   │   ├── Vault/
-│   │   ├── Dashboard/
-│   │   └── UI/
-│   │
-│   ├── pages/
-│   │   ├── Login/
-│   │   ├── Register/
-│   │   ├── Dashboard/
-│   │   ├── Vault/
-│   │   └── RecycleBin/
-│   │
-│   └── store/
-│       └── Zustand Stores
+├── Authentication
+├── Password Generator
+├── Password Vault
+├── Groups
+├── Dashboard
+├── Recycle Bin
+├── Security Alerts
+├── Password Export
+└── Biometric Authentication
+```
+
+---
+
+<a name="state-management"></a>
+
+# ⚡ State Management
+
+PassGen uses Zustand for lightweight global state management.
+
+The current frontend contains dedicated stores for authentication and password state.
+
+Conceptually:
+
+```text
+Zustand
 │
-├── server/
+├── Auth Store
+│   ├── User
+│   ├── Authentication State
+│   └── Session
+│
+└── Password Store
+    ├── Passwords
+    ├── Groups
+    ├── Recycle Bin
+    └── Dashboard Data
+```
+
+This keeps shared application state separate from individual React components.
+
+---
+
+<a name="project-structure"></a>
+
+# 📂 Project Structure
+
+```text
+random-pass/
+│
+├── random-password generator/
 │   │
-│   ├── controllers/
-│   │   ├── authController.js
-│   │   ├── vaultController.js
-│   │   ├── recycleBinController.js
-│   │   └── dashboardController.js
+│   ├── frontend/
+│   │   ├── src/
+│   │   │   ├── components/
+│   │   │   ├── pages/
+│   │   │   ├── store/
+│   │   │   ├── lib/
+│   │   │   │   └── crypto.js
+│   │   │   └── ...
+│   │   │
+│   │   ├── package.json
+│   │   └── vite.config.js
 │   │
-│   ├── routes/
-│   │   ├── authRoutes.js
-│   │   ├── vaultRoutes.js
-│   │   ├── groupRoutes.js
-│   │   └── dashboardRoutes.js
+│   ├── backend/
+│   │   ├── src/
+│   │   │   ├── controllers/
+│   │   │   │   ├── authcontroller.js
+│   │   │   │   ├── passcontroller.js
+│   │   │   │   └── group.controller.js
+│   │   │   │
+│   │   │   ├── middleware/
+│   │   │   │   ├── authmiddleware.js
+│   │   │   │   └── ratelimiter.js
+│   │   │   │
+│   │   │   ├── models/
+│   │   │   │   ├── user.model.js
+│   │   │   │   ├── pass.model.js
+│   │   │   │   └── auditlogs.model.js
+│   │   │   │
+│   │   │   └── routes/
+│   │   │       └── pass.routes.js
+│   │   │
+│   │   ├── unlock.js
+│   │   ├── test_or.js
+│   │   ├── package.json
+│   │   └── index.js
 │   │
-│   ├── models/
-│   │   ├── User.js
-│   │   ├── Password.js
-│   │   └── Group.js
-│   │
-│   ├── middleware/
-│   │   └── authMiddleware.js
-│   │
-│   └── utils/
-│       └── encryption.js
+│   └── ...
+│
+├── screenshots/
+│
+├── .gitignore
 │
 └── README.md
 ```
 
 ---
 
-# REST API
+<a name="technology-stack"></a>
 
-## Authentication
+# 🛠️ Technology Stack
 
-| Method | Endpoint | Description | Auth |
-|---|---|---|---|
-| POST | `/api/auth/register` | Register user | ❌ |
-| POST | `/api/auth/login` | Authenticate user | ❌ |
-| DELETE | `/api/auth/account` | Delete account | ✅ |
-
----
-
-## Vault
-
-| Method | Endpoint | Description | Auth |
-|---|---|---|---|
-| GET | `/api/vault` | Get active vault entries | ✅ |
-| POST | `/api/vault` | Create vault entry | ✅ |
-| PUT | `/api/vault/:id` | Update vault entry | ✅ |
-| DELETE | `/api/vault/:id` | Soft-delete entry | ✅ |
-
----
-
-## Recycle Bin
-
-| Method | Endpoint | Description | Auth |
-|---|---|---|---|
-| GET | `/api/vault/bin` | Get deleted entries | ✅ |
-| POST | `/api/vault/bin/:id/restore` | Restore entry | ✅ |
-| DELETE | `/api/vault/bin/:id` | Permanently delete entry | ✅ |
-
----
-
-## Groups
-
-| Method | Endpoint | Description | Auth |
-|---|---|---|---|
-| GET | `/api/groups` | Get user groups | ✅ |
-| POST | `/api/groups` | Create group | ✅ |
+| Category             | Technology             |
+| -------------------- | ---------------------- |
+| UI                   | React 19               |
+| Build Tool           | Vite                   |
+| Routing              | React Router 7         |
+| State Management     | Zustand 5              |
+| Styling              | Tailwind CSS 4         |
+| Animation            | Framer Motion          |
+| HTTP Client          | Axios                  |
+| Icons                | Lucide React           |
+| Notifications        | React Hot Toast        |
+| Backend              | Node.js                |
+| API Framework        | Express 5              |
+| Database             | MongoDB                |
+| ODM                  | Mongoose 8             |
+| Authentication       | JWT                    |
+| Password Hashing     | bcryptjs               |
+| Biometric Auth       | WebAuthn               |
+| WebAuthn Client      | SimpleWebAuthn Browser |
+| WebAuthn Server      | SimpleWebAuthn Server  |
+| Client Crypto        | Web Crypto API         |
+| Key Derivation       | PBKDF2                 |
+| Symmetric Encryption | AES-GCM                |
+| Password Analysis    | zxcvbn                 |
+| API Protection       | express-rate-limit     |
+| AI                   | Groq SDK               |
+| PDF Export           | PDFKit                 |
+| Development          | Nodemon                |
+| Deployment           | Vercel + Render        |
 
 ---
 
-## Dashboard
+<a name="security-design-decisions"></a>
 
-| Method | Endpoint | Description | Auth |
-|---|---|---|---|
-| GET | `/api/dashboard/stats` | Retrieve vault statistics | ✅ |
+# 🧠 Security Design Decisions
 
-The API surface above follows the project's existing endpoint design. fileciteturn0file0L297-L313
+## Why bcrypt for account passwords?
 
----
+Account passwords are used only for authentication.
 
-# Performance & Scalability
-
-Although PassGen is designed as a monolithic full-stack application, several architectural decisions make it suitable for further scaling.
-
-## 1. Stateless Authentication
-
-JWT authentication allows backend instances to remain stateless.
+Therefore, they should be stored as one-way password hashes.
 
 ```text
-                 Load Balancer
-                 /     |     \
-                /      |      \
-           API #1    API #2    API #3
-              \        |        /
-               \       |       /
-                 MongoDB
+Password
+   ↓
+bcrypt
+   ↓
+Hash
+   ↓
+Database
 ```
 
-Any API server can process an authenticated request because authentication information is contained in the token.
-
----
-
-## 2. Database Indexing
-
-Frequently queried fields can be indexed to reduce query latency.
-
-Potential indexes include:
+During login:
 
 ```text
-userId
-groupId
-isDeleted
-createdAt
-email
+Input Password
+      ↓
+bcrypt.compare()
+      ↓
+Stored Hash
+      ↓
+Match?
 ```
-
-For example, retrieving active vault entries can benefit from a compound index around the user and deletion state.
 
 ---
 
-## 3. Pagination
+## Why encryption for vault credentials?
 
-Large vaults should not be returned in a single request.
+Unlike account passwords, vault credentials need to be recovered for authorized use.
 
-Instead:
+Therefore:
 
 ```text
-GET /api/vault?page=2&limit=20
+Hashing
+→ One-way
+→ Cannot recover original secret
+
+Encryption
+→ Reversible with key
+→ Suitable for recoverable vault credentials
 ```
-
-This reduces:
-
-- Response size
-- Database workload
-- Network usage
-- Frontend rendering cost
 
 ---
 
-# Scalable Architecture
+## Why WebAuthn?
 
-For a production-scale deployment, the architecture could evolve into:
+Password authentication creates a dependency on a memorized secret.
+
+WebAuthn allows the browser/device authenticator to perform cryptographic authentication.
+
+```text
+User
+ ↓
+Device Authenticator
+ ↓
+Cryptographic Signature
+ ↓
+Server Verification
+```
+
+The server does not need to receive the user's raw biometric data.
+
+---
+
+## Why account lockout?
+
+Without a login-attempt limit:
+
+```text
+Attacker
+   ↓
+Password Guess
+   ↓
+Password Guess
+   ↓
+Password Guess
+   ↓
+...
+```
+
+With lockout:
+
+```text
+Failed Login
+    ↓
+Attempt Counter
+    ↓
+5 Failures
+    ↓
+15-Minute Lock
+```
+
+---
+
+## Why audit logs?
+
+Authentication and credential-management applications benefit from traceability.
+
+Audit records provide:
+
+```text
+Who?
+What?
+Which Resource?
+When?
+Additional Details?
+```
+
+This creates a foundation for security monitoring and incident investigation.
+
+---
+
+## Why rate limiting?
+
+Authentication and credential APIs are security-sensitive.
+
+Rate limiting reduces uncontrolled request volume against endpoints such as:
+
+```text
+Create Password
+Update Password
+Delete Password
+Export Vault
+```
+
+---
+
+<a name="performance--scalability"></a>
+
+# ⚡ Performance & Scalability
+
+PassGen is currently a modular monolithic application, but its architecture allows incremental scaling.
+
+### Current optimization mechanisms
+
+* MongoDB indexes
+* Stateless JWT authentication
+* Dedicated rate limiters
+* Efficient client-side state management
+* Paginated/filtered data patterns
+* Separation of frontend and backend
+* Database query optimization
+
+---
+
+## Database Query Optimization
+
+The password model includes indexes for:
+
+```text
+createdby
+createdby + deleted
+createdby + createdAt DESC
+```
+
+These support common operations such as:
+
+```text
+User Vault
+   ↓
+Filter by User
+   ↓
+Filter Active/Deleted
+   ↓
+Sort by Creation Time
+```
+
+---
+
+<a name="production-scale-architecture"></a>
+
+# 🏗️ Production-Scale Architecture
+
+A larger deployment could evolve into:
 
 ```mermaid
 flowchart TD
 
-    USER[Users]
+    USER["Users"]
 
-    CDN[CDN]
+    CDN["CDN"]
 
-    LB[Load Balancer]
+    LB["Load Balancer"]
 
-    API1[API Server]
-    API2[API Server]
-    API3[API Server]
+    API1["API Instance 1"]
+    API2["API Instance 2"]
+    API3["API Instance N"]
 
-    CACHE[(Redis)]
+    REDIS["Redis"]
 
-    DB[(MongoDB)]
+    MONGO[("MongoDB Atlas")]
 
-    SECRETS[Secrets Manager]
+    SECRETS["Secrets Manager"]
+
+    AUDIT["Audit / Security Pipeline"]
+
+    AI["AI Service"]
 
     USER --> CDN
     CDN --> LB
@@ -833,190 +1618,107 @@ flowchart TD
     LB --> API2
     LB --> API3
 
-    API1 --> CACHE
-    API2 --> CACHE
-    API3 --> CACHE
+    API1 --> REDIS
+    API2 --> REDIS
+    API3 --> REDIS
 
-    API1 --> DB
-    API2 --> DB
-    API3 --> DB
+    API1 --> MONGO
+    API2 --> MONGO
+    API3 --> MONGO
 
     API1 --> SECRETS
     API2 --> SECRETS
     API3 --> SECRETS
+
+    API1 --> AUDIT
+    API2 --> AUDIT
+    API3 --> AUDIT
+
+    API1 --> AI
+    API2 --> AI
+    API3 --> AI
 ```
 
-Potential additions:
+Potential infrastructure additions:
 
-- Redis caching
-- Load balancing
-- Docker containers
-- Centralized logging
-- Secrets management
-- Rate limiting
-- Monitoring
-- Horizontal API scaling
+* Redis
+* Load balancing
+* Centralized logging
+* Secrets Manager
+* Monitoring
+* Alerting
+* Containerization
+* Background workers
+* Message queues
+* Dedicated AI service
 
 ---
 
-# Engineering Challenges
+<a name="environment-variables"></a>
 
-## Challenge 1 — Secure Credential Storage
+# 🔑 Environment Variables
 
-The application needs to store credentials while preventing plaintext storage.
-
-### Approach
-
-Use two different mechanisms:
+Create:
 
 ```text
-Account Password → bcrypt → Hash
-Vault Password   → AES    → Ciphertext
+random-password generator/backend/.env
 ```
 
-This is because account passwords only need verification, whereas vault passwords must eventually be recovered for the user.
+Example:
 
----
+```env
+MONGODB_URL=your_mongodb_connection_string
 
-## Challenge 2 — Accidental Deletion
+JWT_SECRET=your_jwt_secret
 
-Immediately deleting credentials creates a poor recovery experience.
+ENCRYPTION_KEY=your_encryption_key
 
-### Approach
+GROQ_API_KEY=your_groq_api_key
 
-Implement soft deletion:
-
-```text
-isDeleted = false
-       ↓
-     Delete
-       ↓
-isDeleted = true
-       ↓
-Recycle Bin
+PORT=5000
 ```
 
-Users can then restore or permanently delete entries.
+> Use the exact environment-variable names expected by the current implementation. Never commit secrets to GitHub.
 
----
+Recommended `.gitignore`:
 
-## Challenge 3 — Organizing Credentials
-
-As the number of credentials increases, a flat list becomes difficult to navigate.
-
-### Approach
-
-Introduce user-defined groups:
-
-```text
-User
- ├── Work
- ├── Personal
- ├── Finance
- └── Development
+```gitignore
+.env
+node_modules/
+dist/
 ```
 
 ---
 
-## Challenge 4 — Secure API Access
+<a name="installation"></a>
 
-Vault APIs should never be publicly accessible.
-
-### Approach
-
-Every protected request passes through JWT authentication middleware before reaching the controller.
-
----
-
-# Future Improvements
-
-## 🔐 Password Strength Analyzer
-
-Add a password-strength meter based on:
-
-- Length
-- Character diversity
-- Repetition
-- Common-password detection
-
----
-
-## 👁️ Secure Password Visibility
-
-Allow users to temporarily reveal stored passwords through a controlled UI interaction.
-
----
-
-## 🔔 Notifications
-
-Add notifications for:
-
-- Password updates
-- Security events
-- Account changes
-
----
-
-## 🔑 OAuth / Google Authentication
-
-Support additional authentication providers.
-
----
-
-## 🌍 Cross-Device Synchronization
-
-Synchronize encrypted vault data across devices.
-
----
-
-## 🔒 End-to-End Encryption
-
-A future architecture could move toward client-side encryption where the server never receives plaintext vault credentials.
-
-```text
-Client
-   │
-   │ Encrypt
-   ▼
-Ciphertext
-   │
-   ▼
-Server
-   │
-   ▼
-Database
-```
-
-This would provide a stronger security model than server-side encryption alone.
-
----
-
-# Installation
+# ⚙️ Installation
 
 ## Prerequisites
 
 Install:
 
-- Node.js 18+
-- npm
-- MongoDB or MongoDB Atlas
+* Node.js
+* npm
+* MongoDB / MongoDB Atlas
+* A browser supporting WebAuthn for biometric authentication
 
 ---
 
 ## Clone Repository
 
 ```bash
-git clone https://github.com/your-username/passgen.git
+git clone https://github.com/sanchit037nit/random-pass.git
 
-cd passgen
+cd random-pass
 ```
 
 ---
 
-## Install Frontend
+## Frontend Setup
 
 ```bash
-cd client
+cd "random-password generator/frontend"
 
 npm install
 
@@ -1025,56 +1727,70 @@ npm run dev
 
 ---
 
-## Install Backend
+## Backend Setup
 
 Open another terminal:
 
 ```bash
-cd server
+cd "random-password generator/backend"
 
 npm install
 
+npm run dev
+```
+
+For production-style startup:
+
+```bash
 npm start
 ```
 
 ---
 
-# Environment Variables
+<a name="running-the-application"></a>
 
-Create:
+# ▶️ Running the Application
+
+The development architecture runs two services:
 
 ```text
-server/.env
+Frontend
+   │
+   │ HTTP
+   ▼
+Backend
+   │
+   ▼
+MongoDB
 ```
 
-```env
-MONGO_URI=your_mongodb_connection_string
+Typical development setup:
 
-JWT_SECRET=your_jwt_secret
+```text
+React / Vite
+http://localhost:5173
 
-ENCRYPTION_KEY=your_aes_encryption_key
+        ↓
 
-PORT=5000
+Express API
+http://localhost:5000
+
+        ↓
+
+MongoDB Atlas
 ```
 
-### ⚠️ Important
-
-Never commit `.env` to Git.
-
-Add:
-
-```gitignore
-.env
-node_modules/
-```
+For WebAuthn functionality, ensure the application is served in an environment compatible with browser credential APIs and the configured WebAuthn origin/RP settings.
 
 ---
 
-# Screenshots
-
-Add screenshots of the major application interfaces here.
+<a name="screenshots"></a>
 
 # 📸 Screenshots
+
+The repository contains application screenshots under the `screenshots/` directory.
+
+Suggested README presentation:
 
 <table>
   <tr>
@@ -1086,12 +1802,12 @@ Add screenshots of the major application interfaces here.
     <td align="center">
       <img src="screenshots/home.png" width="300"/>
       <br/>
-      <b>HomePage</b>
+      <b>Home</b>
     </td>
     <td align="center">
       <img src="screenshots/dashboard.png" width="300"/>
       <br/>
-      <b> Dashboard</b>
+      <b>Dashboard</b>
     </td>
   </tr>
 
@@ -1104,100 +1820,230 @@ Add screenshots of the major application interfaces here.
     <td align="center">
       <img src="screenshots/passlists.png" width="300"/>
       <br/>
-      <b> Password Vault</b>
+      <b>Password Vault</b>
     </td>
     <td align="center">
       <img src="screenshots/recyclebin.png" width="300"/>
       <br/>
-      <b> Recycle Bin</b>
+      <b>Recycle Bin</b>
     </td>
   </tr>
 </table>
 
-# 📊 Project Highlights
+---
 
-| Category | Implementation |
-|---|---|
-| Architecture | Client-Server / MVC |
-| Frontend | React.js |
-| Backend | Node.js + Express.js |
-| Database | MongoDB |
-| Authentication | JWT |
-| Account Security | bcrypt |
-| Vault Security | AES-256 |
-| State Management | Zustand |
-| Routing | React Router |
-| Styling | Tailwind CSS |
-| Data Protection | Encryption at Rest |
-| Deletion Strategy | Soft Delete |
-| Organization | Custom Groups |
-| Analytics | Dashboard Statistics |
-| API Style | REST |
-| Scalability | Stateless API + Indexing + Pagination |
+<a name="engineering-challenges"></a>
+
+# 🧪 Engineering Challenges
+
+## Challenge 1 — Protecting Recoverable Credentials
+
+A password manager cannot simply hash every password because vault credentials need to be recovered by the authorized user.
+
+### Approach
+
+Separate authentication secrets from vault secrets:
+
+```text
+Account Password
+      ↓
+bcrypt
+      ↓
+One-way Hash
+```
+
+versus:
+
+```text
+Vault Credential
+      ↓
+Encryption
+      ↓
+Ciphertext
+      ↓
+Authorized Decryption
+```
 
 ---
 
-# 🏆 What This Project Demonstrates
+## Challenge 2 — Client-Side Cryptography
 
-PassGen demonstrates practical experience with:
+The project introduced browser-side cryptographic utilities using the Web Crypto API.
 
-- Full-stack web development
-- REST API design
-- Authentication and authorization
-- Password hashing
-- Symmetric encryption
-- Secure credential storage
-- MongoDB schema design
-- Soft deletion
-- State management
-- CRUD operations
-- Protected API routes
-- Database indexing
-- Pagination
-- Scalable backend architecture
-- Security-oriented system design
+The key derivation flow is:
+
+```text
+User Password
+      +
+User Email
+      ↓
+SHA-256 Derived Salt
+      ↓
+PBKDF2
+      ↓
+AES-256 Key
+      ↓
+AES-GCM
+      ↓
+Encrypted Credential
+```
+
+This moves part of the cryptographic workflow toward the client.
 
 ---
 
-# Contributing
+## Challenge 3 — Brute-Force Protection
+
+Repeated incorrect login attempts are tracked.
+
+```text
+Failed Login
+    ↓
+loginAttempts++
+    ↓
+5 Attempts
+    ↓
+lockUntil
+    ↓
+Temporary Account Lock
+```
+
+This is complemented by API rate limiting.
+
+---
+
+## Challenge 4 — Biometric Authentication
+
+Adding WebAuthn introduces a fundamentally different authentication model from traditional password login.
+
+The application must coordinate:
+
+```text
+Browser
+   ↕
+Authenticator
+   ↕
+WebAuthn Challenge
+   ↕
+Server Verification
+```
+
+This requires both client-side and server-side WebAuthn support.
+
+---
+
+## Challenge 5 — Safe Credential Deletion
+
+Immediate deletion makes accidental recovery impossible.
+
+### Approach
+
+Use soft deletion:
+
+```text
+deleted = false
+       ↓
+     Delete
+       ↓
+deleted = true
+       ↓
+Recycle Bin
+```
+
+Users can then restore or permanently remove the credential.
+
+---
+
+## Challenge 6 — Security Observability
+
+Security events are difficult to investigate without historical information.
+
+### Approach
+
+Introduce audit logging:
+
+```text
+Authentication
+      │
+      ├── Login
+      ├── Logout
+      └── Lockout
+
+Credential Operations
+      │
+      ├── Create
+      ├── Update
+      ├── Delete
+      └── Restore
+
+           ↓
+
+       AuditLog
+```
+
+---
+
+<a name="contributing"></a>
+
+# 🤝 Contributing
 
 Contributions are welcome.
 
-### 1. Fork the repository
+## 1. Fork the Repository
 
 ```bash
-git fork https://github.com/your-username/passgen.git
+git fork https://github.com/sanchit037nit/random-pass.git
 ```
 
-### 2. Create a branch
+## 2. Create a Feature Branch
 
 ```bash
 git checkout -b feature/your-feature
 ```
 
-### 3. Commit changes
+## 3. Make Your Changes
+
+Ensure that:
+
+* Secrets are not committed
+* Existing authentication behavior is preserved
+* Security-sensitive changes are reviewed carefully
+* API changes are documented
+
+## 4. Commit
 
 ```bash
 git commit -m "Add your feature"
 ```
 
-### 4. Push changes
+## 5. Push
 
 ```bash
 git push origin feature/your-feature
 ```
 
-### 5. Open a Pull Request
+## 6. Open a Pull Request
+
+Explain:
+
+* What changed
+* Why it was needed
+* How it was implemented
+* How it was tested
 
 ---
 
-# License
+<a name="license"></a>
+
+# 📄 License
 
 This project is licensed under the **MIT License**.
 
 ---
 
-# Author
+<a name="author"></a>
+
+# 👨‍💻 Author
 
 ## Sanchit Virdi
 
@@ -1205,14 +2051,106 @@ This project is licensed under the **MIT License**.
 
 **NIT Srinagar**
 
-PassGen was developed to explore full-stack application development while applying practical concepts in **authentication, encryption, database design, API architecture, and secure credential management**.
+PassGen was developed as a full-stack engineering project exploring:
+
+> **Web Development + Authentication + Cryptography + Database Design + Security Engineering + AI Integration**
 
 ---
 
-<p align="center">
+<a name="project-summary"></a>
 
-### ⭐ If you found PassGen useful, consider giving the repository a star!
+# 🏁 Project Summary
 
-**Built with ❤️ and a focus on security.**
+```text
+                              PASSGEN
+                                 │
+        ┌────────────────────────┼────────────────────────┐
+        │                        │                        │
+        ▼                        ▼                        ▼
+ PASSWORD GENERATOR        SECURE VAULT           AUTHENTICATION
+        │                        │                        │
+        │                        │                ┌───────┴───────┐
+        │                        │                │               │
+        │                        │               JWT           WebAuthn
+        │                        │                │               │
+        ▼                        ▼                ▼               ▼
+  Strong Passwords         Encryption         Lockout       Biometrics
+                                 │
+                                 ▼
+                         Credential Lifecycle
+                                 │
+                ┌────────────────┼────────────────┐
+                │                │                │
+                ▼                ▼                ▼
+             Groups          Recycle Bin      Analytics
+                │                │                │
+                └────────────────┼────────────────┘
+                                 ▼
+                         Security Monitoring
+                                 │
+                  ┌──────────────┼──────────────┐
+                  ▼              ▼              ▼
+             Audit Logs    Security Alerts      AI
+                  │              │              │
+                  └──────────────┼──────────────┘
+                                 ▼
+                        Secure User Experience
+```
 
-</p>
+## Core Engineering Concepts
+
+| Area                     | Implementation      |
+| ------------------------ | ------------------- |
+| Frontend                 | React 19 + Vite     |
+| Routing                  | React Router 7      |
+| State                    | Zustand             |
+| Backend                  | Node.js + Express 5 |
+| Database                 | MongoDB + Mongoose  |
+| Authentication           | JWT                 |
+| Biometric Authentication | WebAuthn            |
+| Password Hashing         | bcryptjs            |
+| Client Cryptography      | Web Crypto API      |
+| Key Derivation           | PBKDF2 + SHA-256    |
+| Encryption               | AES-GCM 256-bit     |
+| Password Strength        | zxcvbn              |
+| API Security             | Rate Limiting       |
+| Account Protection       | Login Lockout       |
+| Security Monitoring      | Audit Logs          |
+| Security Insights        | Security Alerts     |
+| AI                       | Groq SDK            |
+| Export                   | PDFKit              |
+| Data Recovery            | Soft Delete         |
+| Database Optimization    | MongoDB Indexes     |
+| Architecture             | Modular Monolith    |
+
+---
+
+<a name="final-note"></a>
+
+# ⭐ Final Note
+
+PassGen started as a password generator and evolved into a broader **security-focused credential-management platform**.
+
+The current architecture demonstrates practical engineering across:
+
+```text
+Frontend Development
+        +
+Backend APIs
+        +
+Authentication
+        +
+Cryptography
+        +
+Database Design
+        +
+Security Engineering
+        +
+WebAuthn
+        +
+AI Integration
+        +
+System Scalability
+```
+
+> **Built with ❤️, JavaScript, cryptography, and a strong focus on application security.**
