@@ -1,5 +1,6 @@
 import { Group } from "../models/group.model.js";
 import Password from "../models/pass.model.js";
+import { decryptText } from "../lib/encryption.js";
 
 
 export const createGroup = async (req, res) => {
@@ -106,7 +107,13 @@ export const getPasswordsByGroup = async (req, res) => {
       deleted: false,
     }).populate("group", "name color icon");
 
-    res.status(200).json(passwords);
+    const decryptedPasswords = passwords.map(p => {
+      const pObj = p.toObject();
+      pObj.password = decryptText(pObj.password);
+      return pObj;
+    });
+
+    res.status(200).json(decryptedPasswords);
   } catch (error) {
     console.log("error in getpassbygroups", error);
     res.status(500).json({

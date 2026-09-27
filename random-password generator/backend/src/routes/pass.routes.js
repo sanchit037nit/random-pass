@@ -1,5 +1,5 @@
 import express from "express"
-import { createpass,updatepass,deletepass, viewpass, getpass,Dashpage,getRecycleBin,restorePass,deleteforever,downloadpass,getSecurityAlerts } from "../controllers/passcontroller.js"
+import { createpass,updatepass,deletepass, viewpass, getpass,Dashpage,getRecycleBin,restorePass,deleteforever,downloadpass,getSecurityAlerts,generateRoast } from "../controllers/passcontroller.js"
 import { protectroute } from "../middleware/authmiddleware.js"
 import { createPasswordLimiter ,updatePasswordLimiter, deletePasswordLimiter, exportLimiter } from "../middleware/ratelimiter.js";
 
@@ -16,5 +16,6 @@ router.get("/recycle/:userId", protectroute, getRecycleBin);
 router.patch("/restore/:id", protectroute, restorePass);
 router.get("/download/:userId", protectroute, exportLimiter, downloadpass);
 router.get("/security-alerts", protectroute, getSecurityAlerts);
+router.post("/roast", protectroute, generateRoast);
 
 export default  router;

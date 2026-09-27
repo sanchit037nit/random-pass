@@ -21,6 +21,8 @@ export const usePasStore = create((set, get) => ({
       
       let payload = { ...data };
       if (masterKey) {
+        payload.plainName = data.name;
+        payload.plainDescription = data.description;
         payload.name = await encryptData(data.name, masterKey);
         payload.password = await encryptData(data.password, masterKey);
         payload.description = await encryptData(data.description, masterKey);

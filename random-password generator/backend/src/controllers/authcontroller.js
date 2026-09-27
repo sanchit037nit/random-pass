@@ -72,6 +72,10 @@ export const login = async (req, res) => {
       return res.status(403).json({ 
         message: "Account is temporarily locked due to too many failed login attempts. Please try again later." 
       });
+    } else if (user.lockUntil && user.lockUntil <= Date.now()) {
+      // Lock has expired, reset login attempts
+      user.loginAttempts = 0;
+      user.lockUntil = undefined;
     }
 
     const ispassc = await bcrypt.compare(String(password), user.password);

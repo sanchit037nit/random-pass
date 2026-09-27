@@ -1,4 +1,5 @@
 import { generateToken } from "../lib/uteis.js";
+import Groq from "groq-sdk";
 import Password from "../models/pass.model.js";
 import { encryptText, decryptText } from "../lib/encryption.js";
 import User from "../models/user.model.js";
@@ -15,7 +16,7 @@ const fetchPasswords = async (userId) => {
 
 export const createpass = async (req, res) => {
   try {
-    const { name, password, description, createdby, group } = req.body;
+    const { name, password, description, createdby, group, plainName, plainDescription } = req.body;
 
     if (!name || !password || !description) {
       return res.status(400).json({
@@ -23,18 +24,75 @@ export const createpass = async (req, res) => {
       });
     }
 
-    // If no group is selected, use the user's General group
     let groupId = group;
 
+    // AI AUTO-CATEGORIZATION logic if no group is provided
+    if (!groupId && process.env.GROQ_API_KEY) {
+      try {
+        
+        // Fetch user's existing groups
+        const userGroups = await Group.find({ user: req.User._id });
+        const existingGroupNames = userGroups.map(g => g.name);
+        
+        const prompt = `You are a smart password categorizer.
+The user is saving a password with:
+Name: "${plainName || name}"
+Description: "${plainDescription || description}"
+
+Their existing groups are: [${existingGroupNames.join(", ")}].
+Based on the Name and Description, decide which existing group this belongs to. 
+If none fit well, invent ONE short, logical new group name (e.g., "Finance", "Social", "Work", "Dev").
+Reply with ONLY the exact group name. Nothing else, no quotes.`;
+
+        const chatResponse = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: "openai/gpt-oss-120b", 
+            messages: [{ role: "user", content: prompt }],
+            temperature: 0.1,
+            max_tokens: 1000
+          })
+        });
+        
+        const chatCompletion = await chatResponse.json();
+        const suggestedGroup = chatCompletion.choices?.[0]?.message?.content?.trim();
+        
+        if (suggestedGroup) {
+          // See if it exists
+          let matchedGroup = await Group.findOne({
+            user: req.User._id,
+            name: { $regex: new RegExp(`^${suggestedGroup}$`, "i") }
+          });
+          
+          if (!matchedGroup) {
+            // Create the new group
+            matchedGroup = await Group.create({
+              user: req.User._id,
+              name: suggestedGroup,
+            });
+          }
+          groupId = matchedGroup._id;
+        }
+      } catch (aiError) {
+        console.error("Groq AI categorization failed, falling back to General:", aiError);
+      }
+    }
+
+    // Fallback if AI fails or no GROQ_API_KEY
     if (!groupId) {
-      const generalGroup = await Group.findOne({
+      let generalGroup = await Group.findOne({
         user: req.User._id,
         name: "General",
       });
 
       if (!generalGroup) {
-        return res.status(404).json({
-          message: "Default group not found",
+        generalGroup = await Group.create({
+          user: req.User._id,
+          name: "General",
         });
       }
 
@@ -55,7 +113,7 @@ export const createpass = async (req, res) => {
 
     const newpass = await Password.create({
       name,
-      password: encryptText(password),
+      password,
       description,
       group: groupId,
       createdby,
@@ -128,7 +186,7 @@ export const updatepass = async (req, res) => {
       passwordUpdatedAt: new Date(),
     };
     if (password) {
-      updateData.password = encryptText(password);
+      updateData.password = password;
     }
 
     const updatedPassword = await Password.findByIdAndUpdate(
@@ -425,5 +483,52 @@ export const getSecurityAlerts = async (req, res) => {
     return res.status(500).json({
       message: "Internal Server Error",
     });
+  }
+};
+
+export const generateRoast = async (req, res) => {
+  const { score } = req.body; 
+  
+  if (score === undefined) {
+    return res.status(400).json({ message: "Score is required" });
+  }
+
+  try {
+    if (!process.env.GROQ_API_KEY) {
+      return res.status(200).json({ roast: "Add your OpenRouter key to .env to unlock AI roasts!", emoji: "🤖" });
+    }
+    
+    let instructions = "";
+    if (score === 0) instructions = "The password is weak like '123456'. Roast them brutally.";
+    else if (score === 1) instructions = "The password is weak. Sarcastic roast.";
+    else if (score === 2) instructions = "The password is okay, but mediocre. Backhanded compliment.";
+    else if (score === 3) instructions = "The password is strong. Reluctant praise.";
+    else if (score === 4) instructions = "The password is very strong. Act intimidated.";
+
+    const prompt = `You are a sarcastic AI password meter.
+${instructions}
+Return ONLY a valid JSON object with EXACTLY two string fields: "roast" (a short 1-sentence funny comment) and "emoji" (a single relevant emoji). Do not wrap in markdown tags like \`\`\`json.`;
+
+    const chatResponse = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "openai/gpt-oss-120b", 
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.8,
+        max_tokens: 1000
+      })
+    });
+    
+    const chatCompletion = await chatResponse.json();
+    const content = chatCompletion.choices?.[0]?.message?.content?.trim() || '{"roast": "AI took a nap.", "emoji": "😴"}';
+    const result = JSON.parse(content.replace(/```json/g, "").replace(/```/g, ""));
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("Roast generation failed:", error);
+    return res.status(500).json({ roast: "AI is speechless...", emoji: "🤖" });
   }
 };

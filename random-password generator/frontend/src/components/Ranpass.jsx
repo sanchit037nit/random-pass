@@ -11,6 +11,7 @@ import {
 } from "../store/webauthn";
 import { registerBiometric } from "../store/webauthn";
 import toast from "react-hot-toast";
+import { axiosinstance } from "../lib/axios.js";
 
 export const Ranpass = () => {
   const navigate = useNavigate();
@@ -22,6 +23,8 @@ export const Ranpass = () => {
   const [Strength, setStrength] = useState("");
   const [showVaultPassword, setShowVaultPassword] = useState(false);
   const [isScrambling, setIsScrambling] = useState(false);
+  const [aiRoast, setAiRoast] = useState({ label: "", roast: "", emoji: "" });
+  const [isRoasting, setIsRoasting] = useState(false);
 
   const { setGeneratedPassword } = usePasStore();
 
@@ -53,10 +56,24 @@ export const Ranpass = () => {
         clearInterval(interval);
         setPassword(pass);
         setIsScrambling(false);
-        // Fixed a bug where zxcvbn was checking the old password state instead of the newly generated one
         const strength = zxcvbn(pass);
         setGeneratedPassword(pass);
         setStrength(strength);
+
+        // Fetch AI roast
+        setIsRoasting(true);
+        setAiRoast({ label: "", roast: "Thinking of a roast...", emoji: "🤔" });
+        axiosinstance.post("/pass/roast", { score: strength.score })
+          .then((res) => {
+            setAiRoast(res.data);
+          })
+          .catch((err) => {
+            console.error(err);
+            setAiRoast({ roast: "AI took a nap.", emoji: "😴" });
+          })
+          .finally(() => {
+            setIsRoasting(false);
+          });
       }
     }, 30);
   }, [length, numberAllowed, charAllowed, setGeneratedPassword]);
@@ -113,9 +130,25 @@ export const Ranpass = () => {
     passwordGenerator();
   }, [length, numberAllowed, charAllowed, passwordGenerator]);
 
-  const strengthLabel = Strength
-    ? ["Very weak", "Weak", "Fair", "Strong", "Very strong"][Strength.score]
-    : "";
+  const fallbackFeedback = (score) => {
+    switch (score) {
+      case 0: return { label: "Very Weak", roast: "My cat could guess this.", emoji: "😭" };
+      case 1: return { label: "Weak", roast: "Are you even trying?", emoji: "😬" };
+      case 2: return { label: "Fair", roast: "It's alright... for 2012.", emoji: "🤔" };
+      case 3: return { label: "Strong", roast: "Now we're talking!", emoji: "😎" };
+      case 4: return { label: "Very Strong", roast: "Okay, calm down Mr. Robot.", emoji: "🤖" };
+      default: return { label: "", roast: "", emoji: "" };
+    }
+  };
+
+  const fallback = Strength ? fallbackFeedback(Strength.score) : { label: "", roast: "", emoji: "" };
+  
+  // Use AI roast if available, otherwise fallback
+  const feedback = {
+    label: fallback.label,
+    roast: aiRoast.roast || fallback.roast,
+    emoji: aiRoast.emoji || fallback.emoji
+  };
 
   const strengthColor = !Strength
     ? "#8B93A7"
@@ -193,8 +226,8 @@ export const Ranpass = () => {
             </div>
 
             {/* Strength meter */}
-            <div className="mb-2">
-              <div className="w-full h-2 rounded-full bg-[#1F2937] overflow-hidden">
+            <div className="mb-6">
+              <div className="w-full h-2 rounded-full bg-[#1F2937] overflow-hidden mb-2">
                 <div
                   className="h-full rounded-full transition-all duration-300"
                   style={{
@@ -204,12 +237,24 @@ export const Ranpass = () => {
                 />
               </div>
 
-              <p
-                className="mt-2 font-mono text-xs tracking-widest uppercase"
-                style={{ color: strengthColor }}
-              >
-                {strengthLabel}
-              </p>
+              <div className="flex justify-between items-center h-8">
+                <p
+                  className="font-mono text-xs tracking-widest uppercase font-bold"
+                  style={{ color: strengthColor }}
+                >
+                  {feedback.label}
+                </p>
+                {feedback.roast && (
+                  <div className={`flex items-center gap-2 animate-fade-in ${isRoasting ? 'opacity-50' : 'opacity-100'} transition-opacity duration-300`}>
+                    <span className="text-sm italic text-[#8B93A7] hidden sm:inline-block">
+                      {isRoasting ? "AI is typing..." : feedback.roast}
+                    </span>
+                    <span className={`text-xl inline-block origin-bottom transition-transform hover:scale-125 hover:-rotate-12 cursor-default ${isRoasting ? 'animate-pulse' : ''}`}>
+                      {feedback.emoji}
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
 
             <label className="block mb-6 text-[#8B93A7]/70 text-xs italic">
