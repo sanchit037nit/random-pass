@@ -5,7 +5,7 @@ import { Trash2, User, ChevronDown } from "lucide-react";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { authUser, logout, deleteaccount } = useAuthStore();
+  const { authUser, logout } = useAuthStore();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
@@ -81,15 +81,7 @@ const Navbar = () => {
                     Logout
                   </button>
 
-                  <button
-                    onClick={() => {
-                      deleteaccount();
-                      setDropdownOpen(false);
-                    }}
-                    className="text-left px-4 py-2 text-[#E6E8EC] hover:bg-red-500/10 hover:text-red-400 transition rounded-md"
-                  >
-                    Delete account
-                  </button>
+
                 </div>
               )}
             </div>

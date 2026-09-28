@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { Plus, Search, Shield, Layers } from "lucide-react";
+import { Plus, Search, Shield, Layers, Trash2 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import GroupGrid from "../components/Groups/GroupGrid";
 import CreateGroupModal from "../components/Groups/CreateGroupModal";
 import { useGroupStore } from "../store/useGroupStore";
+import { useAuthStore } from "../store/useauthstore";
 
 export const Homepage = () => {
   const { groups, getGroups, deleteGroup } = useGroupStore();
+  const { deleteaccount } = useAuthStore();
 
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -67,6 +69,17 @@ export const Homepage = () => {
               >
                 <Plus size={18} />
                 New Group
+              </button>
+              <button
+                className="w-full sm:w-auto flex items-center justify-center gap-2 border border-[#1F2937] text-red-400 hover:bg-red-500/10 hover:border-red-500/30 px-6 py-3 rounded-xl font-medium transition-all shadow-sm"
+                onClick={() => {
+                  if (window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+                    deleteaccount();
+                  }
+                }}
+              >
+                <Trash2 size={18} />
+                Delete Account
               </button>
             </div>
           </div>
