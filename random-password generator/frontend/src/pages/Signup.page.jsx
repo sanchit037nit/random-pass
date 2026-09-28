@@ -3,6 +3,7 @@ import { useAuthStore } from "../store/useauthstore.js";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import "@splinetool/viewer";
+import { AlertTriangle } from "lucide-react";
 
 export const Signuppage = () => {
   const { signup } = useAuthStore();
@@ -146,6 +147,15 @@ export const Signuppage = () => {
               setformdata({ ...formdata, password: e.target.value })
             }
           />
+        </div>
+
+        {/* Biometric Warning */}
+        <div className="flex items-start gap-3 bg-amber-500/10 border border-amber-500/50 text-amber-200/90 p-4 rounded-xl text-xs md:text-sm shadow-sm backdrop-blur-sm">
+          <AlertTriangle size={18} className="text-amber-500 flex-shrink-0 mt-0.5" />
+          <p>
+            <strong className="text-amber-400 block mb-1">Important Security Notice</strong>
+            Only create an account if this device has <span className="font-semibold text-white">fingerprint, Face ID, or Windows Hello</span> capabilities. Biometric authentication is <strong>required</strong> to access your secure password vault.
+          </p>
         </div>
 
         {/* Button */}

@@ -37,7 +37,7 @@ export const Homepage = () => {
       />
 
       <div className="relative z-10 min-h-screen flex flex-col">
-        <Navbar />
+        <Navbar hideDashboard={true} />
 
         <div className="flex-1 max-w-7xl w-full mx-auto px-6 py-12 flex flex-col">
           

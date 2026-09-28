@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuthStore } from "../store/useauthstore.js";
 import { Trash2, User, ChevronDown } from "lucide-react";
 
-const Navbar = () => {
+const Navbar = ({ hideDashboard }) => {
   const navigate = useNavigate();
   const { authUser, logout } = useAuthStore();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -31,13 +31,15 @@ const Navbar = () => {
           {authUser && (
             <>
               {/* Dashboard */}
-              <button
-                onClick={() => navigate("/dashboard")}
-                className="px-4 py-2 rounded-lg border border-[#1F2937] text-[#E6E8EC] font-semibold
-                           hover:border-[#7C6FF0] hover:shadow-[0_0_16px_rgba(124,111,240,0.3)] transition-all"
-              >
-                Dashboard
-              </button>
+              {!hideDashboard && (
+                <button
+                  onClick={() => navigate("/dashboard")}
+                  className="px-4 py-2 rounded-lg border border-[#1F2937] text-[#E6E8EC] font-semibold
+                             hover:border-[#7C6FF0] hover:shadow-[0_0_16px_rgba(124,111,240,0.3)] transition-all"
+                >
+                  Dashboard
+                </button>
+              )}
 
               {/* Recycle Bin */}
               <button

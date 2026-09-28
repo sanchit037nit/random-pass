@@ -93,17 +93,17 @@ const GroupPage = () => {
       />
 
       <div className="relative z-10 flex flex-col min-h-screen">
-        <Navbar />
+        <Navbar hideDashboard={true} />
         
-        <div className="flex-1 max-w-6xl w-full mx-auto px-6 py-12 flex flex-col">
+        <div className="flex-1 max-w-6xl w-full mx-auto px-6 pt-24 pb-16 flex flex-col">
           
           <div className="flex justify-between items-center mb-8">
             <button 
               className="flex items-center gap-2 text-[#8B93A7] hover:text-white transition-colors"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/home")}
             >
               <ArrowLeft size={18} />
-              <span className="font-mono text-sm tracking-widest uppercase">Back to Groups</span>
+              <span className="font-mono text-sm tracking-widest uppercase">Back to Vault</span>
             </button>
           </div>
 

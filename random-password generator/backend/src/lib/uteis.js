@@ -18,3 +18,22 @@ export const generateToken = (userId, res) => {
 
     return token;
 };
+
+export const generateVaultToken = (userId, res) => {
+    const token = jwt.sign(
+        { userId, vaultUnlocked: true },
+        process.env.JWT_SECRET,
+        {
+            expiresIn: "1h"
+        }
+    );
+
+    res.cookie("vault_jwt", token, {
+        maxAge: 1 * 60 * 60 * 1000,
+        httpOnly: true,
+        secure: true,
+        sameSite: "none"
+    });
+
+    return token;
+};

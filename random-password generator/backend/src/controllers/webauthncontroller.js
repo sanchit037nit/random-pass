@@ -6,6 +6,7 @@ import {
 } from "@simplewebauthn/server";
 import dotenv from "dotenv";
 import Passkey from "../models/paskey.model.js";
+import { generateVaultToken } from "../lib/uteis.js";
 
 dotenv.config();
 const rpName = process.env.WEBAUTHN_RP_NAME;
@@ -122,6 +123,9 @@ export const registerVerify = async (req, res) => {
     user.webauthnChallenge = null;
 
     await user.save();
+
+    // Generate vault token for immediate access
+    generateVaultToken(user._id, res);
 
     res.status(200).json({
       success: true,
@@ -255,6 +259,9 @@ export const loginVerify = async (req, res) => {
     user.webauthnChallenge = null;
 
     await user.save();
+
+    // Generate vault token for access
+    generateVaultToken(user._id, res);
 
     res.status(200).json({
       success: true,
