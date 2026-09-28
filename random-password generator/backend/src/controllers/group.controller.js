@@ -145,12 +145,12 @@ export const deleteGroup = async (req, res) => {
     await Password.updateMany(
       {
         group: groupId,
-        user: userId,
-        isDeleted: false,
+        createdby: userId,
+        deleted: false,
       },
       {
         $set: {
-          isDeleted: true,
+          deleted: true,
           deletedAt: new Date(),
           group: null,
         },
