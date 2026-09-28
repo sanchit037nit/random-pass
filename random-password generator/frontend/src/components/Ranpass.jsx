@@ -12,6 +12,7 @@ import {
 import { registerBiometric } from "../store/webauthn";
 import toast from "react-hot-toast";
 import { axiosinstance } from "../lib/axios.js";
+import { debounce } from "lodash";
 
 export const Ranpass = () => {
   const navigate = useNavigate();
@@ -29,6 +30,25 @@ export const Ranpass = () => {
   const { setGeneratedPassword } = usePasStore();
 
   const passwordRef = useRef(null);
+
+  const fetchRoast = useCallback(
+    debounce((score) => {
+      setIsRoasting(true);
+      setAiRoast({ label: "", roast: "Thinking of a roast...", emoji: "🤔" });
+      axiosinstance.post("/pass/roast", { score })
+        .then((res) => {
+          setAiRoast(res.data);
+        })
+        .catch((err) => {
+          console.error(err);
+          setAiRoast({ roast: "AI took a nap.", emoji: "😴" });
+        })
+        .finally(() => {
+          setIsRoasting(false);
+        });
+    }, 800),
+    []
+  );
 
   const passwordGenerator = useCallback(() => {
     let pass = "";
@@ -61,19 +81,7 @@ export const Ranpass = () => {
         setStrength(strength);
 
         // Fetch AI roast
-        setIsRoasting(true);
-        setAiRoast({ label: "", roast: "Thinking of a roast...", emoji: "🤔" });
-        axiosinstance.post("/pass/roast", { score: strength.score })
-          .then((res) => {
-            setAiRoast(res.data);
-          })
-          .catch((err) => {
-            console.error(err);
-            setAiRoast({ roast: "AI took a nap.", emoji: "😴" });
-          })
-          .finally(() => {
-            setIsRoasting(false);
-          });
+        fetchRoast(strength.score);
       }
     }, 30);
   }, [length, numberAllowed, charAllowed, setGeneratedPassword]);
@@ -194,7 +202,14 @@ export const Ranpass = () => {
               <input
                 type="text"
                 value={password}
-                readOnly
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setPassword(val);
+                  setGeneratedPassword(val);
+                  const st = zxcvbn(val);
+                  setStrength(st);
+                  fetchRoast(st.score);
+                }}
                 ref={passwordRef}
                 className="flex-1 px-4 py-2 rounded-lg bg-[#0A0E14]/70 border border-[#1F2937] text-[#E6E8EC]
                            font-mono tracking-wide focus:outline-none focus:ring-2 focus:ring-[#34D399]/60"
