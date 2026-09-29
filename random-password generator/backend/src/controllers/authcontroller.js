@@ -135,7 +135,7 @@ export const logout = (req, res) => {
 
 export const checkauth = (req, res) => {
   try {
-    res.status(200).json(req.user);
+    res.status(200).json(req.User);
   } catch (error) {
     console.log("error in checkauth controller", error.message);
     res.status(500).json({ message: "internal server error" });
@@ -152,9 +152,9 @@ export const deleteaccount = async (req, res) => {
     await User.findByIdAndDelete(userid);
     await Password.deleteMany({ createdby: userid });
     await AuditLog.create({
-      user: req.user._id,
+      user: userid,
       action: "ACCOUNT DELETION SUCCESSFULL",
-      resourceId: id,
+      resourceId: userid,
     });
     res.status(200).json({ message: "account deleted successfully" });
   } catch (error) {

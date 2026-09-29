@@ -225,7 +225,7 @@ export const deletepass = async (req, res) => {
     await pass.save();
 
     await AuditLog.create({
-      user: id,
+      user: req.User._id,
       action: "PASSWORD DELETED SUCCESSFULLY",
       resourceId: id,
     });
@@ -348,11 +348,11 @@ export const restorePass = async (req, res) => {
     pass.deletedAt = null;
     await pass.save();
 
-    // await AuditLog.create({
-    //   user: req.user._id,
-    //   action: "RESTORED_PASSWORD",
-    //   resourceId: id,
-    // });
+    await AuditLog.create({
+      user: req.User._id,
+      action: "RESTORED_PASSWORD",
+      resourceId: id,
+    });
 
     res.status(200).json({ message: "Password restored" });
   } catch (error) {

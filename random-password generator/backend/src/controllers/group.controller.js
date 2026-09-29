@@ -1,6 +1,7 @@
 import { Group } from "../models/group.model.js";
 import Password from "../models/pass.model.js";
 import { decryptText } from "../lib/encryption.js";
+import AuditLog from "../models/auditlogs.model.js";
 
 
 export const createGroup = async (req, res) => {
@@ -159,10 +160,10 @@ export const deleteGroup = async (req, res) => {
 
     await Group.findByIdAndDelete(groupId);
 
-    // await AuditLog.create({
-    //   user: userId,
-    //   action: "GROUP DELETED",
-    // });
+    await AuditLog.create({
+      user: userId,
+      action: "GROUP DELETED",
+    });
 
     return res.status(200).json({
       message: "Group deleted and passwords moved to recycle bin",
